@@ -10,17 +10,17 @@ page-chamados {
 
     ion-card.danger
     {
-        border-top: 3px solid red;
+        border-top: 3px solid $vermelho;
 
         ion-item p
         {
             font-weight: bold;
-            color: red;
+            color: $vermelho;
         }
 
         ion-item button
         {
-            color: red;
+            color: $vermelho;
         }
     }
 
