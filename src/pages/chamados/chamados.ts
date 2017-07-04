@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AtendimentoPage } from "../atendimento/atendimento";
 
 /**
  * Generated class for the ChamadosPage page.
@@ -19,6 +20,13 @@ export class ChamadosPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChamadosPage');
+  }
+
+  detalhes(id: number)
+  {
+    // Ir para a pagina de detalhes do Atendimento
+
+    this.navCtrl.push(AtendimentoPage, { id : id });
   }
 
 }
