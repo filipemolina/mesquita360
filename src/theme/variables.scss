@@ -34,11 +34,12 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
+  primary:    #3D276B,
+  secondary:  #bfa15f,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  white:      #fff
 );
 
 
@@ -54,7 +55,13 @@ $colors: (
 // Material Design only Sass variables can go here
 
 
+$toolbar-background: color($colors, primary);
 
+$background-color: color($colors, light);
+
+$list-background-color: color($colors, white);
+
+$fab-list-button-background-color: color($colors, secondary);
 
 // App Windows Variables
 // --------------------------------------------------

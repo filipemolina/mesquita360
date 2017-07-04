@@ -1,14 +1,94 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
+	<ion-navbar>
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			Mesquita 360º
+		</ion-title>
+	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+	<!-- Cards -->
+
+	<ion-card>
+
+		<ion-item>
+			<ion-avatar item-start>
+				<img src="img/marty.png">
+			</ion-avatar>
+			<h2>Marty McFly</h2>
+			<p>3 de Julho de 2017</p>
+		</ion-item>
+
+		<img src="img/buraco.jpg">
+
+		<ion-card-content>
+			<p>Buraco na Avenida União na altura do número 1200. Está atrapalhando bastante o trânsito na região.</p>
+		</ion-card-content>
+
+		<ion-row>
+			<ion-col>
+				<button ion-button icon-left clear small>
+					<ion-icon name="add"></ion-icon>
+					<div>Apoiar</div>
+				</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button icon-left clear small>
+					<ion-icon name="text"></ion-icon>
+					<div>1 Resposta</div>
+				</button>
+			</ion-col>
+		</ion-row>
+
+	</ion-card>
+
+	<!-- Cards -->
+
+	<ion-card>
+
+		<ion-item>
+			<ion-avatar item-start>
+				<img src="img/ze_roela.jpg">
+			</ion-avatar>
+			<h2>José da Silva</h2>
+			<p>02 de Julho de 2017</p>
+		</ion-item>
+
+		<img src="img/arvore.jpg">
+
+		<ion-card-content>
+			<p>Árvore caída na rua da minha casa. A rua está fechada e os funcionários da prefeitura ainda não vieram removê-la.</p>
+		</ion-card-content>
+
+		<ion-row>
+			<ion-col>
+				<button ion-button icon-left clear small>
+					<ion-icon name="add"></ion-icon>
+					<div>Apoiar</div>
+				</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button icon-left clear small>
+					<ion-icon name="text"></ion-icon>
+					<div>Sem Resposta</div>
+				</button>
+			</ion-col>
+		</ion-row>
+
+	</ion-card>
+
+	<!-- FAB -->
+
+	<ion-fab right bottom>
+		<button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
+		<ion-fab-list side="top">
+			<button ion-fab><ion-icon name="camera"></ion-icon></button>
+			<button ion-fab><ion-icon name="images"></ion-icon></button>
+		</ion-fab-list>
+	</ion-fab>
+  
 </ion-content>
