@@ -1,0 +1,59 @@
+page-chamados {
+
+    // Personalização dos cards para indicar o status do atendimento
+
+    ion-card{
+        ion-row{
+            align-items: center;
+        }
+    }
+
+    ion-card.danger
+    {
+        border-top: 3px solid red;
+
+        ion-item p
+        {
+            font-weight: bold;
+            color: red;
+        }
+
+        ion-item button
+        {
+            color: red;
+        }
+    }
+
+    ion-card.warning
+    {
+        border-top: 3px solid color($colors, secondary);
+
+        ion-item p
+        {
+            font-weight: bold;
+            color: color($colors, secondary);
+        }
+
+        ion-item button
+        {
+            color: color($colors, secondary);
+        }
+    }
+
+    ion-card.success
+    {
+        border-top: 3px solid color($colors, primary);
+
+        ion-item p
+        {
+            font-weight: bold;
+            color: color($colors, primary);
+        }
+
+        ion-item button
+        {
+            color: color($colors, primary);
+        }
+    }
+
+}

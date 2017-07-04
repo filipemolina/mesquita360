@@ -6,17 +6,11 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <button ion-item (click)="openPage(homePage)">
-        Home
+      <button ion-item menuToggle (click)="goToPage(chamadosPage)">
+        Minhas Contribuições
       </button>
-      <button ion-item (click)="openPage(friendsPage)">
-        Friends
-      </button>
-      <button ion-item (click)="openPage(eventsPage)">
-        Events
-      </button>
-      <button ion-item (click)="closeMenu()">
-        Close Menu
+      <button ion-item menuToggle (click)="goToPage()">
+        Sair
       </button>
     </ion-list>
   </ion-content>
