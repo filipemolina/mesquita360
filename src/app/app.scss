@@ -14,3 +14,89 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+// Menu do Aplicativo
+
+ion-menu{
+
+    div.topo_menu{
+        height: 30%;
+        background-image: url("../assets/img/menu.jpg");
+        background-size: cover;
+    }
+
+    ion-content{
+        background-color: #fff !important;
+    }
+
+    ion-avatar{
+
+        img {
+            border-radius: 50%;
+            margin-top: 5%;
+            margin-left: 5%;
+            float: left;
+        }
+
+    }
+
+    .email, .nome{
+        color: #fff;
+        margin-left: 5%;
+    }
+
+    ion-icon, button{
+        color: color($colors, primary);
+    }
+
+}
+
+// Personalização dos cards para indicar o status do atendimento
+
+ion-card.danger
+{
+    border-top: 3px solid color($colors, danger);
+
+    p
+    {
+        font-weight: bold;
+        color: color($colors, danger);
+    }
+
+    button
+    {
+        color: color($colors, danger);
+    }
+}
+
+ion-card.warning
+{
+    border-top: 3px solid color($colors, secondary);
+
+    p
+    {
+        font-weight: bold;
+        color: color($colors, secondary);
+    }
+
+    button
+    {
+        color: color($colors, secondary);
+    }
+}
+
+ion-card.success
+{
+    border-top: 3px solid color($colors, primary);
+
+    p
+    {
+        font-weight: bold;
+        color: color($colors, primary);
+    }
+
+    button
+    {
+        color: color($colors, primary);
+    }
+}

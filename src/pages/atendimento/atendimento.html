@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Atendimento</ion-title>
+    <ion-title>Detalhes</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,13 +15,64 @@
 
 <ion-content padding>
 
-  <ion-card>
+  <!-- ------------ Card Superior  -------------- -->
+
+  <!-- Referencia uma variável chamada "classes" no arquivo atndimento.ts -->
+
+  <ion-card [ngClass]="classes">
     <ion-card-header>
-      <h2>Atendimento: {{ id }}</h2>
+        <p>Número da Solicitação: {{ solicitacao.numero }}</p>
     </ion-card-header>
+
+    <img [src]="solicitacao.imagem" alt="">
+
     <ion-card-content>
-      blá blá blá
+      {{ solicitacao.texto }}
     </ion-card-content>
+
+    <ion-item>
+      <ion-icon name="briefcase"></ion-icon>
+      {{ solicitacao.secretaria }}
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="stopwatch"></ion-icon>
+      Status:
+      <div item-end>{{ status }}</div>
+    </ion-item>
+
   </ion-card>
 
+  <!-- ------------ Chat  -------------- -->
+
+  <div class="chat">
+
+    <!-- Iterar por todas as mensagens dessa solicitação e mostrá-las diferenciando entre mensagens -->
+    <!-- enviadas pelo solicitante e respostas enviadas pelo usuário -->
+
+    <div *ngFor="let mensagem of solicitacao.mensagens" [ngClass]="{'parent-mensagem' : mensagem.user_id == 1 ? true : false, 'parent-resposta' : mensagem.user_id == 2 ? true : false}">
+      <span [ngClass]="{'mensagem' : mensagem.user_id == 1 ? true : false, 'resposta' : mensagem.user_id == 2 ? true : false}">
+        {{ mensagem.texto }}
+      </span>
+      <div style="clear: both"></div>
+    </div>
+
+  </div>
+
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+
+    <ion-row>
+      <ion-col col-10>
+        <ion-input></ion-input>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button item-end>
+          <ion-icon name="send"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

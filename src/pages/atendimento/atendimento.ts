@@ -14,17 +14,41 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AtendimentoPage {
 
-  public id : number;
+  public solicitacao;
+  public classes: any = { 
+    'danger'  : false,
+    'warning' : false,
+    'success' : false,
+  };
+  public status;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     
     // Obter o id enviado através do navController usando navParams
-    this.id = this.navParams.get('id');
+    this.solicitacao = this.navParams.data;
+
+    // Decidir qual classe utilizar dependendo do status
+
+    if(this.solicitacao.status == 0)
+    {
+      this.classes.danger = true;
+      this.status = "Solicitação Criada";
+    }
+    else if(this.solicitacao.status == 1)
+    {
+      this.classes.warning = true;
+      this.status = "Analisando Solicitação";
+    }
+    else if(this.solicitacao.status == 2)
+    {
+      this.classes.success = true;
+      this.status = "Solicitação Fechada";
+    }
 
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AtendimentoPage');
+
   }
 
 }

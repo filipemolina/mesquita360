@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Minhas Contribuições</ion-title>
+    <ion-title>Minhas Solicitações</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -20,16 +20,12 @@
   <ion-card class="success">
 
     <ion-item>
-      <p>Atendimento Nº 1425</p>
+      <p>Solicitação Nº 1001</p>
       <ion-note>Resposta Disponível!</ion-note>
     </ion-item>
-      
-    <ion-card-content>
-      Brinquedos danificados na praça João Pontes...
-    </ion-card-content>
 
     <ion-item>
-      <button clear ion-button item-right (click)="detalhes(1)">
+      <button clear ion-button item-right (click)="detalhes(0)">
         <ion-icon name="eye" item-start></ion-icon>
         Visualizar
       </button>
@@ -42,16 +38,12 @@
   <ion-card class="warning">
 
     <ion-item>
-      <p>Atendimento Nº 1384</p>
+      <p>Solicitação Nº 1384</p>
       <ion-note>Publicado.</ion-note>
     </ion-item>
-      
-    <ion-card-content>
-      Buraco na rua em frente ao meu trabalho atrapalhando o trânsito.
-    </ion-card-content>
 
     <ion-item>
-      <button clear ion-button item-right (click)="detalhes(2)">
+      <button clear ion-button item-right (click)="detalhes(1)">
         <ion-icon name="eye" item-start></ion-icon>
         Visualizar
       </button>
@@ -64,16 +56,12 @@
   <ion-card class="danger">
 
     <ion-item>
-      <p>Atendimento Nº 1001</p>
+      <p>Solicitação Nº 1425</p>
       <ion-note>Aguardando Moderação</ion-note>
     </ion-item>
-      
-    <ion-card-content>
-      Árvore caída na Rua Paraná em cima da fiação elétrica.
-    </ion-card-content>
 
     <ion-item>
-      <button clear ion-button item-right (click)="detalhes(3)">
+      <button clear ion-button item-right (click)="detalhes(2)">
         <ion-icon name="eye" item-start></ion-icon>
         Visualizar
       </button>

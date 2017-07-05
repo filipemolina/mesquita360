@@ -1,15 +1,27 @@
 <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
   <ion-content>
-    <ion-list>
+    <div class="topo_menu">
+      <ion-row>
+        <ion-col col-12>
+          <ion-avatar item-start>
+            <img src="img/marty.png" alt="">
+          </ion-avatar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+          <div class="nome">Marty MacFly</div>
+          <div class="email">martymacfly@twopeaks.com</div>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-list no-lines>
       <button ion-item menuToggle (click)="goToPage(chamadosPage)">
-        Minhas Contribuições
+        <ion-icon item-start name="clipboard"></ion-icon>
+        Minhas Solicitações
       </button>
       <button ion-item menuToggle (click)="goToPage()">
+        <ion-icon item-start name="exit"></ion-icon>
         Sair
       </button>
     </ion-list>

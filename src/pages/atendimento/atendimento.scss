@@ -1,3 +1,63 @@
 page-atendimento {
 
+    ion-card{
+
+        ion-icon
+        {
+            color: color($colors, primary);
+            margin-right: 5px;
+        }
+
+    }
+
+    // Chat
+
+    span.resposta {
+        background-color: #3d276b;
+        max-width: 80%;
+        display: block;
+        color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    span.mensagem {
+        background-color: #bfa15f;
+        color: #fff;
+        padding: 10px;
+        display: block;
+        max-width: 80%;
+        border-radius: 10px;
+        float: right;
+    }
+
+    .parent-resposta, .parent-mensagem {
+        padding: 5px;
+    }
+
+    .parent-mensage {
+        text-align: right;
+    }
+
+    // Footer
+
+    ion-footer{
+
+            ion-input{
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        button{
+            padding: 40% 31% !important;
+            background-color: #bfa15f !important;
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            border-radius: 25% !important;
+            font-size: 20px !important;
+        }
+
+    }
+
 }
