@@ -17,55 +17,40 @@
 
   <!-- Card de Atendimento -->
 
-  <ion-card class="success">
-
+  <ion-card tappable class="success" (tap)="detalhes(0)">
     <ion-item>
-      <p>Solicitação Nº 1001</p>
+      <p item-start>Solicitação Nº 1001</p>
+    </ion-item>
+
+    <ion-card-content>
       <ion-note>Resposta Disponível!</ion-note>
-    </ion-item>
-
-    <ion-item>
-      <button clear ion-button item-right (click)="detalhes(0)">
-        <ion-icon name="eye" item-start></ion-icon>
-        Visualizar
-      </button>
-    </ion-item>
+    </ion-card-content>
 
   </ion-card>
   
   <!-- Card de Atendimento -->
 
-  <ion-card class="warning">
-
+  <ion-card tappable class="warning" (tap)="detalhes(1)">
     <ion-item>
       <p>Solicitação Nº 1384</p>
-      <ion-note>Publicado.</ion-note>
     </ion-item>
 
-    <ion-item>
-      <button clear ion-button item-right (click)="detalhes(1)">
-        <ion-icon name="eye" item-start></ion-icon>
-        Visualizar
-      </button>
-    </ion-item>
+    <ion-card-content>
+      <ion-note>Publicado.</ion-note>
+    </ion-card-content>
 
   </ion-card>
 
   <!-- Card de Atendimento -->
 
-  <ion-card class="danger">
-
+  <ion-card tappable class="danger" (tap)="detalhes(2)">
     <ion-item>
       <p>Solicitação Nº 1425</p>
-      <ion-note>Aguardando Moderação</ion-note>
     </ion-item>
 
-    <ion-item>
-      <button clear ion-button item-right (click)="detalhes(2)">
-        <ion-icon name="eye" item-start></ion-icon>
-        Visualizar
-      </button>
-    </ion-item>
+    <ion-card-content>
+      <ion-note>Aguardando Moderação</ion-note>
+    </ion-card-content>
 
   </ion-card>
 

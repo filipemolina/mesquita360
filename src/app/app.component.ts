@@ -5,17 +5,23 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ChamadosPage } from '../pages/chamados/chamados';
+import { LoginPage } from '../pages/login/login';
+import { ConfigProvider } from "../providers/config/config";
 
 @Component({
   templateUrl: 'app.html',
 })
 export class MyApp {
-  
-  @ViewChild('content') nav: NavController;
-  rootPage:any = HomePage;
-  chamadosPage: any = ChamadosPage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  // Para acessar o navController no app.component é necessário usar o @ViewChild()
+  @ViewChild('content') nav: NavController;
+
+  // Páginas que serão navegadas através do Menu Principal
+  rootPage:any = LoginPage;
+  chamadosPage: any = ChamadosPage;
+  loginPage: any = LoginPage;
+
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public config: ConfigProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

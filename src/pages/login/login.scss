@@ -1,0 +1,37 @@
+page-login {
+    
+    ion-content{
+        background-image: url("../assets/img/menu.jpg");
+        background-size: cover;
+    }
+
+    h2{
+        text-align: center;
+        color: #fff;
+    }
+
+    div.spacer{
+        height: 20px;
+    }
+
+    .item-inner{
+        box-shadow: none !important;
+        border-bottom: none !important;
+    }
+
+    button.facebook{
+        background-color: $facebook-blue;
+    }
+
+    button.register{
+        background-color: color($colors, secondary);
+    }
+
+    div.login-form
+    {
+        position: absolute;
+        top: 50%;
+        margin-top: -200px;
+        width: 92%;
+    }
+}
