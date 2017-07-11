@@ -30,7 +30,7 @@ export class LoginPage {
 
   IonViewDidLoad()
   {
-    this.auth.getToken();
+    this.auth.getGesolToken();
   }
 
   logarFacebook()
@@ -45,26 +45,50 @@ export class LoginPage {
 
         // Armazenar a id do Usuário e o token de acesso
 
-        this.userID = res.authResponse.userID;
-        this.token = res.authResponse.accessToken;
+        this.config.setFbID(res.authResponse.userID);
+        this.config.setFbToken(res.authResponse.accessToken);
 
         // Fazer a chamada para a Graph API para obter os dados do usuário
 
-        this.fb.api("/" + this.userID + "?fields=id,name,email,picture,birthday,location,hometown",
+        this.fb.api("/" + this.config.fbID + "?fields=id,name,email,picture,birthday,location,hometown",
                  ['public_profile','user_birthday', 'user_hometown', 'user_location', 'email'])
 
           .then(resultado => {
 
+            console.log(resultado);
+
             // Alterar as informações do usuário no aplicativo
-            this.config.setUserEmail(resultado.email);
-            this.config.setUserName(resultado.name);
-            this.config.setUserPicture(resultado.picture.data.url);
+            this.config.setFbEmail(resultado.email);
+            this.config.setFbUserName(resultado.name);
+            this.config.setFbUserPicture(resultado.picture.data.url);
 
-            // Definir a tela inicial como a tela de solicitações
-            this.navCtrl.setRoot(HomePage);
+            // Enviar a token do Facebook para o Gesol, que verifićará se o usuário existe ou não e retornará um objeto com 
+            // username e senha
 
-            // Ir para a tela inicial
-            this.entrar();
+            this.auth.getGesolUser(this.config.fbToken).subscribe(res => {
+
+              // this.config.setGesolUsername(res.username);
+              // this.config.setGesolPassword(res.password);
+
+              console.log("Facebook");
+              console.log(res);
+
+            });
+
+            // Obter a token de acesso do Gesol e gravar nas configurações apenas quando o resultado estiver disponível
+
+            this.auth.getGesolToken().subscribe(res => {
+
+              // Gravar a token no ConfigProvider
+
+              this.config.setGesolToken(res.access_token);
+
+              // Nesse ponto, todas as informações necessárias para logar o usuário ou criá-lo no banco do Gesol
+              // já estão disponíveis no ConfigProvider.
+
+              // Realizar a chamada para o Gesol criar um usuário ou logar o usuário atual
+            
+            });
 
           })
           .catch(e => { 
@@ -84,15 +108,15 @@ export class LoginPage {
     this.fb.logout();
   }
 
-  entrar()
+  getGesolToken()
   {
-    // Obter a token de acesso do sistema e gravar nas configurações apenas quando o resultado estiver disponível
+    // Obter a token de acesso do Gesol e gravar nas configurações apenas quando o resultado estiver disponível
 
-    this.auth.getToken().subscribe(res => {
+    this.auth.getGesolToken().subscribe(res => {
 
       // Gravar a token no ConfigProvider
 
-      this.config.setAccessToken(res.access_token);
+      this.config.setGesolToken(res.access_token);
     
     });
   }

@@ -9,32 +9,62 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class ConfigProvider {
+
+  // Credenciais e Info do Facebook
   
-  userPicture: string;
-  userName: string;
-  userEmail: string;
-  accessToken: string;
+  fbUserPicture: string;
+  fbUserName: string;
+  fbUserEmail: string;
+  fbID: string;
+  fbToken: string;
+
+  // Credenciais e Info do Gesol
+
+  gesolToken: string;
+  gesolUserName: string;
+  gesolPassword: string;
 
   constructor() {
-    this.userName = "Marty MacFly";
-    this.userEmail = "martymacfly@twopeaks.com!";
-    this.userPicture = "assets/img/marty.png";
+    this.fbUserName = "Marty MacFly";
+    this.fbUserEmail = "martymacfly@twopeaks.com!";
+    this.fbUserPicture = "assets/img/marty.png";
   }
 
-  setUserName(nome: string){
-    this.userName = nome;
+  //////////////////////////////////////////////// Setters do Facebook
+
+  setFbUserName(nome: string){
+    this.fbUserName = nome;
   }
 
-  setUserEmail(email: string){
-    this.userEmail = email;
+  setFbEmail(email: string){
+    this.fbUserEmail = email;
   }
 
-  setUserPicture(picture: string){
-    this.userPicture = picture;
+  setFbUserPicture(picture: string){
+    this.fbUserPicture = picture;
   }
 
-  setAccessToken(token: string){
-    this.accessToken = token;
+  setFbID(id: string)
+  {
+    this.fbID = id;
+  }
+
+  setFbToken(token: string){
+    this.fbToken = token;
+  }
+
+  ////////////////////////////////////////////////////// Setters do Gesol
+
+  setGesolToken(token: string){
+    this.gesolToken = token;
+  }
+
+  setGesolUsername(name: string){
+    this.gesolUserName = name;
+  }
+
+  setGesolPassword(pass: string){
+    this.gesolPassword = pass;
   }
 
 }
