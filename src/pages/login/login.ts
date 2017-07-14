@@ -55,8 +55,6 @@ export class LoginPage {
 
           .then(resultado => {
 
-            console.log(resultado);
-
             // Alterar as informações do usuário no aplicativo
             this.config.setFbEmail(resultado.email);
             this.config.setFbUserName(resultado.name);
@@ -65,7 +63,7 @@ export class LoginPage {
             // Enviar a token do Facebook para o Gesol, que verifićará se o usuário existe ou não e retornará um objeto com 
             // username e senha
 
-            this.auth.getGesolUser(this.config.fbToken).subscribe(res => {
+            this.auth.getGesolUser().subscribe(res => {
 
               // this.config.setGesolUsername(res.username);
               // this.config.setGesolPassword(res.password);
