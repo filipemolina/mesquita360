@@ -68,24 +68,31 @@ export class LoginPage {
               // this.config.setGesolUsername(res.username);
               // this.config.setGesolPassword(res.password);
 
-              console.log("Facebook");
-              console.log(res);
+              this.config.setGesolUsername(res.email);
 
-            });
+              console.log("Config após ter setado o username");
+              console.log(this.config);
 
-            // Obter a token de acesso do Gesol e gravar nas configurações apenas quando o resultado estiver disponível
+              // Obter a token de acesso do Gesol e gravar nas configurações apenas quando o resultado estiver disponível
 
-            this.auth.getGesolToken().subscribe(res => {
+              this.auth.getGesolToken().subscribe(res => {
 
-              // Gravar a token no ConfigProvider
+                // Gravar a token no ConfigProvider
+                this.config.setGesolToken(res.access_token);
 
-              this.config.setGesolToken(res.access_token);
+                console.log("Config completo");
+                console.log(this.config);
 
-              // Nesse ponto, todas as informações necessárias para logar o usuário ou criá-lo no banco do Gesol
-              // já estão disponíveis no ConfigProvider.
+                // Nesse ponto, todas as informações necessárias para logar o usuário ou criá-lo no banco do Gesol
+                // já estão disponíveis no ConfigProvider.
 
-              // Realizar a chamada para o Gesol criar um usuário ou logar o usuário atual
-            
+                // Redirecionar para a página principal
+
+                this.navCtrl.setRoot(HomePage);
+                this.navCtrl.popToRoot();
+              
+              });
+
             });
 
           })

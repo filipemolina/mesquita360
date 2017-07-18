@@ -15,10 +15,6 @@ export class AuthProvider {
 
   private headers : Headers;
   private body : any;
-  private client_id: number = 2;
-  private client_secret: string = "DlUz2kwRBrSUMmNYfO8wgfdlduAijPuaI015cnpS";
-  private gesolUserName: string = 'filipemolina@live.com';
-  private gesolPassword: string = '123456';
 
   // Endpoint da API
 
@@ -49,10 +45,10 @@ export class AuthProvider {
 
     this.body = {
       'grant_type' : 'password',
-      'client_id' : this.client_id,
-      'client_secret' : this.client_secret,
-      'username' : this.gesolUserName,
-      'password' : this.gesolPassword,
+      'client_id' : this.config.gesolClientId,
+      'client_secret' : this.config.gesolClientSecret,
+      'username' : this.config.gesolUserName,
+      'password' : this.config.gesolPassword,
       'scope' : '',
     };
 
