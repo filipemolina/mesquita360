@@ -26,22 +26,23 @@ export class MyApp {
       statusBar: StatusBar, 
       splashScreen: SplashScreen, 
       public config: ConfigProvider) {
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
-      splashScreen.hide();
 
-      // Ir para a página de login (Caso o usuário não esteja logado)
-      if(this.config.gesolToken == null)
-      {
-        console.log("GesolToken é nula");
-        this.nav.setRoot(LoginPage);
-      }
-      else{
-        console.log("Gesol Token não é nula, ir direto para a HomePage");
-        this.nav.setRoot(HomePage);
-      }
+        platform.ready().then(() => {
+          // Okay, so the platform is ready and our plugins are available.
+          // Here you can do any higher level native things you might need.
+          statusBar.styleDefault();
+          splashScreen.hide();
+
+          // Ir para a página de login (Caso o usuário não esteja logado)
+          if(this.config.getGesolToken() == null)
+          {
+            console.log("GesolToken é nula");
+            this.nav.setRoot(LoginPage);
+          }
+          else{
+            console.log("Gesol Token não é nula, ir direto para a HomePage");
+            this.nav.setRoot(HomePage);
+          }
         
     });
   }

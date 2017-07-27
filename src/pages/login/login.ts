@@ -26,9 +26,7 @@ export class LoginPage {
               public navParams: NavParams, 
               public config: ConfigProvider, 
               private fb: Facebook,
-              public auth: AuthProvider) {
-                
-              }
+              public auth: AuthProvider) {}
 
   IonViewDidLoad()
   {
@@ -52,33 +50,38 @@ export class LoginPage {
 
         // Fazer a chamada para a Graph API para obter os dados do usuário
 
-        this.fb.api("/" + this.config.fbID + "?fields=id,name,email,picture,birthday,location,hometown",
+        this.fb.api("/" + res.authResponse.userID + "?fields=id,name,email,picture,birthday,location,hometown",
                  ['public_profile','user_birthday', 'user_hometown', 'user_location', 'email'])
 
           .then(resultado => {
 
             // Alterar as informações do usuário no aplicativo
-            this.config.setFbEmail(resultado.email);
+            this.config.setFbUserEmail(resultado.email);
             this.config.setFbUserName(resultado.name);
             this.config.setFbUserPicture(resultado.picture.data.url);
-            this.config.setGesolUsername(resultado.email);
+            this.config.setGesolUserName(resultado.email);
 
             // Enviar a token do Facebook para o Gesol, que verifićará se o usuário existe ou não e retornará um objeto com 
             // username e senha
 
-            this.auth.getGesolUser().subscribe(res => {
+            this.auth.getGesolUser(resultado.email,
+                                    resultado.name,
+                                    resultado.picture.data.url,
+                                    resultado.email,
+                                    res.authResponse.accessToken,
+                                    res.authResponse.userID).subscribe(res => {
 
-              // this.config.setGesolUsername(res.username);
-              // this.config.setGesolPassword(res.password);
+                                      // this.config.setGesolUsername(res.username);
+                                      // this.config.setGesolPassword(res.password);
 
-              // Gravar os dados recebidos no ConfigProvider
-              this.config.setGesolToken(res.accessToken);
+                                      // Gravar os dados recebidos no ConfigProvider
+                                      this.config.setGesolToken(res.accessToken);
 
-              console.log("Config após atualização dos dados");
-              console.log(this.config);
+                                      console.log("Config após atualização dos dados");
+                                      console.log(this.config);
 
-              // Redirecionar para a página principal
-              this.navCtrl.setRoot(HomePage);
+                                      // Redirecionar para a página principal
+                                      this.navCtrl.setRoot(HomePage);
 
             });
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from "@ionic/storage";
 import 'rxjs/add/operator/map';
 
 /*
@@ -12,47 +13,54 @@ export class ConfigProvider {
 
   // Credenciais e Info do Facebook
   
-  fbUserPicture: string;
-  fbUserName: string;
-  fbUserEmail: string;
-  fbID: string;
-  fbToken: string;
+  private fbUserPicture: string;
+  private fbUserName: string;
+  private fbUserEmail: string;
+  private fbID: string;
+  private fbToken: string;
 
   // Credenciais e Info do Gesol
 
-  gesolClientId: number = 1;
-  gesolClientSecret: string = "fKbmJiFYFyGWYBc0q5eQLl6x75G2yZKr3saFtENo";
-  gesolUserName: string = 'app@mesquita.rj.gov.br';
-  gesolPassword: string = '123456';
-  gesolToken: string;
+  private gesolClientId: number = 1;
+  private gesolClientSecret: string = "fKbmJiFYFyGWYBc0q5eQLl6x75G2yZKr3saFtENo";
+  private gesolUserName: string = 'app@mesquita.rj.gov.br';
+  private gesolPassword: string = '123456';
+  private gesolToken: string;
 
-  constructor() {
-    this.fbUserName = "Marty MacFly";
-    this.fbUserEmail = "martymacfly@twopeaks.com!";
-    this.fbUserPicture = "assets/img/marty.png";
+  constructor(private storage: Storage) {
+
+    // Ler os valores guardados no dispositivo
+
+    // Facebook
+
+    storage.get('fbUserPicture')    .then(dado => { this.fbUserPicture = dado });
+    storage.get('fbUserName')       .then(dado => { this.fbUserName = dado });
+    storage.get('fbUserEmail')      .then(dado => { this.fbUserEmail = dado });
+    storage.get('fbID')             .then(dado => { this.fbID = dado });
+    storage.get('fbToken')          .then(dado => { this.fbToken = dado });
+
+    // Gesol
+
+    storage.get('gesolClientId')    .then(dado => { this.gesolClientId = dado });
+    storage.get('gesolClientSecret').then(dado => { this.gesolClientSecret = dado });
+    storage.get('gesolUserName')    .then(dado => { this.gesolUserName = dado });
+    storage.get('gesolPassword')    .then(dado => { this.gesolPassword = dado });
+    storage.get('gesolToken')       .then(dado => { this.gesolToken = dado });
+
   }
 
-  //////////////////////////////////////////////// Facebook
+  /////////////////////////////////////////////////////////////// Mètodos de Get
+  // Simplesmente retornam o valor das variáveis
 
-  /////////////// Getters
+  //Facebook
 
-  getFbUserName()   { return this.fbUserName; }
-  getFbUserPicture(){ return this.fbUserPicture; }
-  getFbUserEmail()  { return this.fbUserEmail; }
-  getFbId()         { return this.fbID; }
-  getFbToken()      { return this.fbToken; }
+  getFbUserName()       { return this.fbUserName; }
+  getFbUserPicture()    { return this.fbUserPicture; }
+  getFbUserEmail()      { return this.fbUserEmail; }
+  getFbID()             { return this.fbID; }
+  getFbToken()          { return this.fbToken; }
 
-  /////////////// Setters
-
-  setFbUserName(nome: string)      { this.fbUserName = nome; }
-  setFbEmail(email: string)        { this.fbUserEmail = email; }
-  setFbUserPicture(picture: string){ this.fbUserPicture = picture; }
-  setFbID(id: string)              { this.fbID = id; }
-  setFbToken(token: string)        { this.fbToken = token; }
-
-  //////////////////////////////////////////////// Gesol
-
-  /////////////// Getters
+  // Gesol
 
   getGesolClientId()    { return this.gesolClientId; }
   getGesolClientSecret(){ return this.gesolClientSecret; }
@@ -60,10 +68,21 @@ export class ConfigProvider {
   getGesolPassword()    { return this.gesolPassword; }
   getGesolToken()       { return this.gesolToken; }
 
-  /////////////// Setters
+  /////////////////////////////////////////////////////////////// Mètodos de Set
+  // Primeiro mudam o valor da chave na storage. Assim que isso foi feito, mudam o valor da variável local.
 
-  setGesolToken(token: string)  { this.gesolToken = token; }
-  setGesolUsername(name: string){ this.gesolUserName = name; }
-  setGesolPassword(pass: string){ this.gesolPassword = pass; }
+  // Facebook
+
+  setFbUserName(dado: string)    { this.storage.set("fbUserName", dado)   .then(() => { this.fbUserName    = dado }) }
+  setFbUserPicture(dado: string) { this.storage.set("fbUserPicture", dado).then(() => { this.fbUserPicture = dado }) }
+  setFbUserEmail(dado: string)   { this.storage.set("fbUserEmail", dado)  .then(() => { this.fbUserEmail   = dado }) }
+  setFbID(dado: string)          { this.storage.set("fbID", dado)         .then(() => { this.fbID          = dado }) }
+  setFbToken(dado: string)       { this.storage.set("fbToken", dado)      .then(() => { this.fbToken       = dado }) }
+
+  // Gesol
+
+  setGesolToken(dado: string)    { this.storage.set("gesolToken", dado)   .then(() => { this.gesolToken    = dado }) }
+  setGesolUserName(dado: string) { this.storage.set("gesolUserName", dado).then(() => { this.gesolUserName = dado }) }
+  setGesolPassword(dado: string) { this.storage.set("gesolPassword", dado).then(() => { this.gesolPassword = dado }) }
 
 }
