@@ -59,6 +59,7 @@ export class LoginPage {
             this.config.setFbEmail(resultado.email);
             this.config.setFbUserName(resultado.name);
             this.config.setFbUserPicture(resultado.picture.data.url);
+            this.config.setGesolUsername(resultado.email);
 
             // Enviar a token do Facebook para o Gesol, que verifićará se o usuário existe ou não e retornará um objeto com 
             // username e senha
@@ -68,30 +69,16 @@ export class LoginPage {
               // this.config.setGesolUsername(res.username);
               // this.config.setGesolPassword(res.password);
 
-              this.config.setGesolUsername(res.email);
+              // Gravar os dados recebidos no ConfigProvider
+              this.config.setGesolToken(res.accessToken);
 
-              console.log("Config após ter setado o username");
+              console.log("Config após atualização dos dados");
               console.log(this.config);
 
-              // Obter a token de acesso do Gesol e gravar nas configurações apenas quando o resultado estiver disponível
+              // Redirecionar para a página principal
 
-              this.auth.getGesolToken().subscribe(res => {
-
-                // Gravar a token no ConfigProvider
-                this.config.setGesolToken(res.access_token);
-
-                console.log("Config completo");
-                console.log(this.config);
-
-                // Nesse ponto, todas as informações necessárias para logar o usuário ou criá-lo no banco do Gesol
-                // já estão disponíveis no ConfigProvider.
-
-                // Redirecionar para a página principal
-
-                this.navCtrl.setRoot(HomePage);
-                this.navCtrl.popToRoot();
-              
-              });
+              this.navCtrl.setRoot(HomePage);
+              this.navCtrl.popToRoot();
 
             });
 

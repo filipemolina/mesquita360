@@ -21,7 +21,11 @@ export class MyApp {
   chamadosPage: any = ChamadosPage;
   loginPage: any = LoginPage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public config: ConfigProvider) {
+  constructor(
+      platform: Platform, 
+      statusBar: StatusBar, 
+      splashScreen: SplashScreen, 
+      public config: ConfigProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -35,6 +39,9 @@ export class MyApp {
 
   goToPage(pagina: any)
   {
+    console.log("Chamou a função de navegação");
+    console.log(pagina);
+
     this.nav.push(pagina);
   }
 }

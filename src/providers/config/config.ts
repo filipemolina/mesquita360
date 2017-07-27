@@ -20,10 +20,10 @@ export class ConfigProvider {
 
   // Credenciais e Info do Gesol
 
-  gesolClientId: number = 2;
-  gesolClientSecret: string = "ihYKaJHmiP06vYlxVl9qDCeZoI0p6RrRdczwHpqu";
-  gesolUserName: string = 'filipemolina@live.com';
-  gesolPassword: string = '123456'
+  gesolClientId: number = 1;
+  gesolClientSecret: string = "fKbmJiFYFyGWYBc0q5eQLl6x75G2yZKr3saFtENo";
+  gesolUserName: string = 'app@mesquita.rj.gov.br';
+  gesolPassword: string = '123456';
   gesolToken: string;
 
   constructor() {
