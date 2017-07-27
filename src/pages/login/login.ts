@@ -26,11 +26,13 @@ export class LoginPage {
               public navParams: NavParams, 
               public config: ConfigProvider, 
               private fb: Facebook,
-              public auth: AuthProvider) {}
+              public auth: AuthProvider) {
+                
+              }
 
   IonViewDidLoad()
   {
-    this.auth.getGesolToken();
+    
   }
 
   logarFacebook()
@@ -76,9 +78,7 @@ export class LoginPage {
               console.log(this.config);
 
               // Redirecionar para a página principal
-
               this.navCtrl.setRoot(HomePage);
-              this.navCtrl.popToRoot();
 
             });
 
@@ -98,19 +98,6 @@ export class LoginPage {
   logout()
   {
     this.fb.logout();
-  }
-
-  getGesolToken()
-  {
-    // Obter a token de acesso do Gesol e gravar nas configurações apenas quando o resultado estiver disponível
-
-    this.auth.getGesolToken().subscribe(res => {
-
-      // Gravar a token no ConfigProvider
-
-      this.config.setGesolToken(res.access_token);
-    
-    });
   }
 
 }

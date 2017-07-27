@@ -32,41 +32,38 @@ export class ConfigProvider {
     this.fbUserPicture = "assets/img/marty.png";
   }
 
-  //////////////////////////////////////////////// Setters do Facebook
+  //////////////////////////////////////////////// Facebook
 
-  setFbUserName(nome: string){
-    this.fbUserName = nome;
-  }
+  /////////////// Getters
 
-  setFbEmail(email: string){
-    this.fbUserEmail = email;
-  }
+  getFbUserName()   { return this.fbUserName; }
+  getFbUserPicture(){ return this.fbUserPicture; }
+  getFbUserEmail()  { return this.fbUserEmail; }
+  getFbId()         { return this.fbID; }
+  getFbToken()      { return this.fbToken; }
 
-  setFbUserPicture(picture: string){
-    this.fbUserPicture = picture;
-  }
+  /////////////// Setters
 
-  setFbID(id: string)
-  {
-    this.fbID = id;
-  }
+  setFbUserName(nome: string)      { this.fbUserName = nome; }
+  setFbEmail(email: string)        { this.fbUserEmail = email; }
+  setFbUserPicture(picture: string){ this.fbUserPicture = picture; }
+  setFbID(id: string)              { this.fbID = id; }
+  setFbToken(token: string)        { this.fbToken = token; }
 
-  setFbToken(token: string){
-    this.fbToken = token;
-  }
+  //////////////////////////////////////////////// Gesol
 
-  ////////////////////////////////////////////////////// Setters do Gesol
+  /////////////// Getters
 
-  setGesolToken(token: string){
-    this.gesolToken = token;
-  }
+  getGesolClientId()    { return this.gesolClientId; }
+  getGesolClientSecret(){ return this.gesolClientSecret; }
+  getGesolUserName()    { return this.gesolUserName; }
+  getGesolPassword()    { return this.gesolPassword; }
+  getGesolToken()       { return this.gesolToken; }
 
-  setGesolUsername(name: string){
-    this.gesolUserName = name;
-  }
+  /////////////// Setters
 
-  setGesolPassword(pass: string){
-    this.gesolPassword = pass;
-  }
+  setGesolToken(token: string)  { this.gesolToken = token; }
+  setGesolUsername(name: string){ this.gesolUserName = name; }
+  setGesolPassword(pass: string){ this.gesolPassword = pass; }
 
 }

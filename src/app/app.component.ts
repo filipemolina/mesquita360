@@ -17,7 +17,7 @@ export class MyApp {
   @ViewChild('content') nav: NavController;
 
   // Páginas que serão navegadas através do Menu Principal
-  rootPage:any = LoginPage;
+  // rootPage:any = HomePage;
   chamadosPage: any = ChamadosPage;
   loginPage: any = LoginPage;
 
@@ -31,17 +31,26 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+
+      // Ir para a página de login (Caso o usuário não esteja logado)
+      if(this.config.gesolToken == null)
+      {
+        console.log("GesolToken é nula");
+        this.nav.setRoot(LoginPage);
+      }
+      else{
+        console.log("Gesol Token não é nula, ir direto para a HomePage");
+        this.nav.setRoot(HomePage);
+      }
+        
     });
   }
-
+  
   // Função que recebe uma página e navega para ela
   // A página deve ser uma das variáveis declaradas acima
 
   goToPage(pagina: any)
   {
-    console.log("Chamou a função de navegação");
-    console.log(pagina);
-
     this.nav.push(pagina);
   }
 }
