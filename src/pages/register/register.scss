@@ -1,0 +1,35 @@
+page-register {
+
+    ion-content{
+        background-image: url("../assets/img/menu.jpg");
+        background-size: cover;
+    }
+
+    ion-item{
+        margin-bottom: 5px !important;
+        opacity: 0.8;
+    }
+
+    h2{
+        text-align: center;
+        color: #fff;
+    }
+
+    div.spacer{
+        height: 20px;
+    }
+
+    .item-inner{
+        box-shadow: none !important;
+        border-bottom: none !important;
+    }
+
+    button.facebook{
+        background-color: $facebook-blue;
+    }
+
+    button.register{
+        background-color: color($colors, secondary);
+    }
+
+}

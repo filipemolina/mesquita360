@@ -13,19 +13,22 @@ export class ConfigProvider {
 
   // Credenciais e Info do Facebook
   
-  private fbUserPicture: string;
-  private fbUserName: string;
-  private fbUserEmail: string;
-  private fbID: string;
-  private fbToken: string;
+  private fbUserPicture:     string;
+  private fbUserName:        string;
+  private fbUserEmail:       string;
+  private fbID:              string;
+  private fbToken:           string;
 
   // Credenciais e Info do Gesol
 
-  private gesolClientId: number = 1;
+  private gesolClientId:     number = 1;
   private gesolClientSecret: string = "fKbmJiFYFyGWYBc0q5eQLl6x75G2yZKr3saFtENo";
-  private gesolUserName: string = 'app@mesquita.rj.gov.br';
-  private gesolPassword: string = '123456';
-  private gesolToken: string;
+  private gesolUserName:     string;
+  private gesolPassword:     string;
+  private gesolToken:        string;
+  private gesolNome:         string;
+  private gesolCPF:          string;
+  private gesolFoto:         string;
 
   constructor(private storage: Storage) {
 
@@ -34,19 +37,74 @@ export class ConfigProvider {
     // Facebook
 
     storage.get('fbUserPicture')    .then(dado => { this.fbUserPicture = dado });
-    storage.get('fbUserName')       .then(dado => { this.fbUserName = dado });
-    storage.get('fbUserEmail')      .then(dado => { this.fbUserEmail = dado });
-    storage.get('fbID')             .then(dado => { this.fbID = dado });
-    storage.get('fbToken')          .then(dado => { this.fbToken = dado });
+    storage.get('fbUserName')       .then(dado => { this.fbUserName    = dado });
+    storage.get('fbUserEmail')      .then(dado => { this.fbUserEmail   = dado });
+    storage.get('fbID')             .then(dado => { this.fbID          = dado });
+    storage.get('fbToken')          .then(dado => { this.fbToken       = dado });
 
     // Gesol
 
-    storage.get('gesolClientId')    .then(dado => { this.gesolClientId = dado });
+    storage.get('gesolClientId')    .then(dado => { this.gesolClientId     = dado });
     storage.get('gesolClientSecret').then(dado => { this.gesolClientSecret = dado });
-    storage.get('gesolUserName')    .then(dado => { this.gesolUserName = dado });
-    storage.get('gesolPassword')    .then(dado => { this.gesolPassword = dado });
-    storage.get('gesolToken')       .then(dado => { this.gesolToken = dado });
+    storage.get('gesolUserName')    .then(dado => { this.gesolUserName     = dado });
+    storage.get('gesolPassword')    .then(dado => { this.gesolPassword     = dado });
+    storage.get('gesolToken')       .then(dado => { this.gesolToken        = dado });
+    storage.get('gesolNome')        .then(dado => { this.gesolNome         = dado });
+    storage.get('gesolCPF')         .then(dado => { this.gesolCPF          = dado });
+    storage.get('gesolFoto')        .then(dado => { this.gesolFoto         = dado });
 
+  }
+  
+  /////////////////////////////////////////////////////////////// Falsos Getters
+
+  // Retorna o nome do usuário na seguinte ordem: 
+  // Gesol 
+  // -> Facebook  
+  // ->-> Sem Nome
+
+  getUserName(){
+
+    if(this.gesolNome != null){
+      return this.gesolNome;
+    } else if(this.fbUserName != null){
+      return this.fbUserName;
+    } else {
+      return "Sem Nome";
+    }
+  }
+
+  // Retorna o email do usuário na seguinte ordem: 
+  // Gesol 
+  // -> Facebook  
+  // ->-> "teste@exemplo.com"
+
+  getEmail(){
+
+    // O username do Gesol é o email do usuário
+
+    if(this.gesolUserName != null){
+      return this.gesolUserName;
+    } else if(this.fbUserEmail != null){
+      return this.fbUserEmail;
+    } else {
+      return "teste@exemplo.com";
+    }
+  }
+
+  // Retorna a foto do usuário na seguinte ordem: 
+  // Gesol 
+  // -> Facebook  
+  // ->-> "teste@exemplo.com"
+
+  getFoto(){
+
+    if(this.gesolFoto != null){
+      return this.gesolFoto;
+    } else if(this.fbUserPicture != null){
+      return this.fbUserPicture;
+    } else {
+      return "https://api.adorable.io/avatars/85/teste";
+    }
   }
 
   /////////////////////////////////////////////////////////////// Mètodos de Get
@@ -67,6 +125,8 @@ export class ConfigProvider {
   getGesolUserName()    { return this.gesolUserName; }
   getGesolPassword()    { return this.gesolPassword; }
   getGesolToken()       { return this.gesolToken; }
+  getGesolNome()        { return this.gesolNome; }
+  getGesolCPF()         { return this.gesolCPF; }
 
   /////////////////////////////////////////////////////////////// Mètodos de Set
   // Primeiro mudam o valor da chave na storage. Assim que isso foi feito, mudam o valor da variável local.
@@ -84,5 +144,7 @@ export class ConfigProvider {
   setGesolToken(dado: string)    { this.storage.set("gesolToken", dado)   .then(() => { this.gesolToken    = dado }) }
   setGesolUserName(dado: string) { this.storage.set("gesolUserName", dado).then(() => { this.gesolUserName = dado }) }
   setGesolPassword(dado: string) { this.storage.set("gesolPassword", dado).then(() => { this.gesolPassword = dado }) }
+  setGesolNome(dado:string)      { this.storage.set("gesolNome", dado)    .then(() => { this.gesolNome     = dado }) }
+  setGesolCPF(dado:string)       { this.storage.set("gesolCPF", dado)     .then(() => { this.gesolCPF      = dado }) }
 
 }

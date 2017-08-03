@@ -4,6 +4,7 @@ import { ConfigProvider } from "../../providers/config/config";
 import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook";
 import { HomePage } from "../home/home";
 import { AuthProvider } from "../../providers/auth/auth";
+import { RegisterPage } from "../register/register";
 
 /**
  * Generated class for the LoginPage page.
@@ -28,9 +29,14 @@ export class LoginPage {
               private fb: Facebook,
               public auth: AuthProvider) {}
 
-  IonViewDidLoad()
+  cadastrar(){
+    this.navCtrl.push(RegisterPage);
+  }
+
+
+  logout()
   {
-    
+    this.fb.logout();
   }
 
   logarFacebook()
@@ -96,11 +102,6 @@ export class LoginPage {
       // Caso falhe
 
       .catch(e => console.log("Login Falhou", e));
-  }
-
-  logout()
-  {
-    this.fb.logout();
   }
 
 }

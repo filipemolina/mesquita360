@@ -1,0 +1,72 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content padding>
+
+  <div class="register-form">
+
+    <ion-row>
+      <ion-col col-12>
+        <h2>Cadastro</h2>
+      </ion-col>
+    </ion-row>
+
+    <div class="spacer"></div>
+
+    <ion-list>
+
+      <!-- Nome -->
+
+      <ion-item>
+        <ion-icon name="contact" item-start></ion-icon>
+        <ion-input [(ngModel)]="nome" name="nome" type="text" placeholder="Nome"></ion-input>
+      </ion-item>
+
+      <!-- Email -->
+
+      <ion-item>
+        <ion-icon name="mail" item-start></ion-icon>
+        <ion-input [(ngModel)]="email" name="email" type="email" placeholder="E-mail"></ion-input>
+      </ion-item>
+
+      <!-- CPF -->
+
+      <ion-item>
+        <ion-icon name="card" item-start></ion-icon>
+        <ion-input [(ngModel)]="cpf" name="cpf" maxlength="15" type="text" placeholder="CPF" [textMask]="{mask: masks.cpf, placeholderChar: '\u2000'}"></ion-input>
+      </ion-item>
+
+      <!-- Senha -->
+
+      <ion-item>
+        <ion-icon name="key" item-start></ion-icon>
+        <ion-input [(ngModel)]="senha" name="senha" type="password" placeholder="Senha"></ion-input>
+      </ion-item>
+
+      <!-- Confirmar Senha -->
+
+      <ion-item>
+        <ion-icon name="lock" item-start></ion-icon>
+        <ion-input [(ngModel)]="confirmar_senha" name="senha_confirmation" type="password" placeholder="Confimar Senha"></ion-input>
+      </ion-item>
+
+    </ion-list>
+
+    <!-- Botão de Enviar -->
+
+    <ion-row>
+
+      <ion-col>
+        <button class="register" ion-button full secondary (click)="enviar()">
+          Enviar
+        </button>
+      </ion-col>
+
+    </ion-row>
+
+  </div>
+
+</ion-content>

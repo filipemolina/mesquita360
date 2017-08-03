@@ -15,6 +15,10 @@ import { ConfigProvider } from '../providers/config/config';
 import { HttpModule } from "@angular/http";
 import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook";
 import { AuthProvider } from '../providers/auth/auth';
+import { RegisterPage } from "../pages/register/register";
+import { Mask } from '../directives/mask/mask';
+import { TextMaskModule } from 'angular2-text-mask';
+import { GesolProvider } from '../providers/gesol/gesol';
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -28,14 +32,17 @@ const cloudSettings : CloudSettings = {
     HomePage,
     ChamadosPage,
     AtendimentoPage,
-    LoginPage
+    LoginPage,
+    RegisterPage,
+    Mask
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
     CloudModule.forRoot(cloudSettings),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    TextMaskModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -43,7 +50,8 @@ const cloudSettings : CloudSettings = {
     HomePage,
     ChamadosPage,
     AtendimentoPage,
-    LoginPage
+    LoginPage,
+    RegisterPage
   ],
   providers: [
     StatusBar,
@@ -52,7 +60,8 @@ const cloudSettings : CloudSettings = {
     ConfigProvider,
     HttpModule,
     Facebook,
-    AuthProvider
+    AuthProvider,
+    GesolProvider
   ]
 })
 export class AppModule {}

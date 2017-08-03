@@ -7,14 +7,14 @@
       <ion-row>
         <ion-col col-12>
           <ion-avatar item-start>
-            <img [src]="config.fbUserPicture" alt="">
+            <img [src]="config.getFoto()" alt="">
           </ion-avatar>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col col-12>
-          <div class="nome">{{ config.getFbUserName() }}</div>
-          <div class="email">{{ config.fbUserEmail }}</div>
+          <div class="nome">{{ config.getUserName() }}</div>
+          <div class="email">{{ config.getEmail() }}</div>
         </ion-col>
       </ion-row>
     </div>

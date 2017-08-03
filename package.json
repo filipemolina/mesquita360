@@ -26,6 +26,7 @@
         "@ionic-native/status-bar": "3.12.1",
         "@ionic/cloud-angular": "^0.12.0",
         "@ionic/storage": "^2.0.1",
+        "angular2-text-mask": "^8.0.2",
         "cordova-android": "^6.2.3",
         "cordova-plugin-console": "^1.0.5",
         "cordova-plugin-device": "^1.1.4",
