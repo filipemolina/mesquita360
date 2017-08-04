@@ -34,4 +34,13 @@ export class GesolProvider {
 
   }
 
+  login(email, senha){
+
+    return this.http.post(this.root_url+"/api/user/login", {
+      email : email,
+      senha : senha
+    }).map(res => res.json());
+
+  }
+
 }

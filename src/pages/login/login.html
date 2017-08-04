@@ -15,7 +15,6 @@
     </ion-row>
 
     <button class="facebook" ion-button full icon-left (click)="logarFacebook()">
-
       <ion-icon name="logo-facebook"></ion-icon>
         Entrar com Facebook
     </button>
@@ -25,13 +24,13 @@
     <!-- Email -->
 
     <ion-item>
-      <ion-input type="email" class="email" placeholder="E-mail"></ion-input>
+      <ion-input [(ngModel)]="email" type="email" class="email" placeholder="E-mail"></ion-input>
     </ion-item>
 
     <!-- Senha -->
 
     <ion-item>
-      <ion-input type="password" class="password" placeholder="Senha"></ion-input>
+      <ion-input [(ngModel)]="senha" type="password" class="password" placeholder="Senha"></ion-input>
     </ion-item>
 
     <!-- Botões de Login e Register -->

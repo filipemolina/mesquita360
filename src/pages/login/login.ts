@@ -5,6 +5,8 @@ import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook";
 import { HomePage } from "../home/home";
 import { AuthProvider } from "../../providers/auth/auth";
 import { RegisterPage } from "../register/register";
+import { GesolProvider } from "../../providers/gesol/gesol";
+import { AlertController } from 'ionic-angular';
 
 /**
  * Generated class for the LoginPage page.
@@ -19,24 +21,75 @@ import { RegisterPage } from "../register/register";
 })
 export class LoginPage {
 
-  rootPage: any = HomePage;
-  userID: string;
-  token: string;
+  // Campos da tela
+  email: string;
+  senha: string;
 
   constructor(public navCtrl: NavController, 
-              public navParams: NavParams, 
+              public alertCtrl: AlertController,
               public config: ConfigProvider, 
               private fb: Facebook,
-              public auth: AuthProvider) {}
+              public auth: AuthProvider,
+              public gesol: GesolProvider) {}
 
   cadastrar(){
     this.navCtrl.push(RegisterPage);
   }
 
+  entrar(){
 
-  logout()
-  {
-    this.fb.logout();
+    // Fazer a chamada para a função de login do GesolProvider
+
+    this.gesol.login(this.email, this.senha).subscribe(
+      
+      // Caso o login seja feito com sucesso
+      res => {
+     
+        // Criar um alerta
+        let alert = this.alertCtrl.create({
+          title: "Parabéns!",
+          subTitle: "Login efetuado!",
+          buttons: ['OK']
+        });
+
+        // Mostrar o alerta
+        alert.present();
+
+    },
+
+      // Caso haja um erro
+
+      err => {
+
+        console.log("Erro!");
+        console.log(err);
+
+        // Objeto com todos os erros
+        let erros = JSON.parse(err._body);
+        let mensagem: string = "";
+
+        // Iterar pelas propriedades do objeto com os erros
+        for(var campo in erros){
+          if(erros.hasOwnProperty(campo)){
+
+            // Montar uma variável com todas as mensagens de erro
+            mensagem += erros[campo][0] + "<br>";
+
+          }
+        }
+
+        // Criar um alerta com as mensagens de erro concatenadas
+        let alert = this.alertCtrl.create({
+          title: "Atenção!",
+          subTitle: mensagem,
+          buttons: ['OK']
+        });
+
+        // Mostrar o alerta
+        alert.present();
+
+      }
+    );
   }
 
   logarFacebook()
