@@ -127,6 +127,7 @@ export class ConfigProvider {
   getGesolToken()       { return this.gesolToken; }
   getGesolNome()        { return this.gesolNome; }
   getGesolCPF()         { return this.gesolCPF; }
+  getGesolFoto()         { return this.gesolFoto; }
 
   /////////////////////////////////////////////////////////////// Mètodos de Set
   // Primeiro mudam o valor da chave na storage. Assim que isso foi feito, mudam o valor da variável local.
@@ -146,5 +147,6 @@ export class ConfigProvider {
   setGesolPassword(dado: string) { this.storage.set("gesolPassword", dado).then(() => { this.gesolPassword = dado }) }
   setGesolNome(dado:string)      { this.storage.set("gesolNome", dado)    .then(() => { this.gesolNome     = dado }) }
   setGesolCPF(dado:string)       { this.storage.set("gesolCPF", dado)     .then(() => { this.gesolCPF      = dado }) }
+  setGesolFoto(dado: string)     { this.storage.set("gesolFoto", dado)    .then(() => { this.gesolFoto     = dado }) }
 
 }

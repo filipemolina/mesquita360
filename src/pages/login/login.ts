@@ -43,19 +43,17 @@ export class LoginPage {
     this.gesol.login(this.email, this.senha).subscribe(
       
       // Caso o login seja feito com sucesso
+
       res => {
-     
-        // Criar um alerta
-        let alert = this.alertCtrl.create({
-          title: "Parabéns!",
-          subTitle: "Login efetuado!",
-          buttons: ['OK']
-        });
 
-        // Mostrar o alerta
-        alert.present();
+        this.config.setGesolNome(res.nome);
+        this.config.setGesolFoto(res.foto);
+        this.config.setGesolUserName(res.email);
+        this.config.setGesolToken(res.token.accessToken);
 
-    },
+        this.navCtrl.setRoot(HomePage);
+
+      },
 
       // Caso haja um erro
 
@@ -66,6 +64,10 @@ export class LoginPage {
 
         // Objeto com todos os erros
         let erros = JSON.parse(err._body);
+
+        console.log("Erros!");
+        console.log(erros);
+
         let mensagem: string = "";
 
         // Iterar pelas propriedades do objeto com os erros
