@@ -29,6 +29,7 @@ export class ConfigProvider {
   private gesolNome:         string;
   private gesolCPF:          string;
   private gesolFoto:         string;
+  private gesolUserId:       number;
 
   constructor(private storage: Storage) {
 
@@ -52,6 +53,7 @@ export class ConfigProvider {
     storage.get('gesolNome')        .then(dado => { this.gesolNome         = dado });
     storage.get('gesolCPF')         .then(dado => { this.gesolCPF          = dado });
     storage.get('gesolFoto')        .then(dado => { this.gesolFoto         = dado });
+    storage.get('gesolUserId')      .then(dado => { this.gesolUserId       = dado });
 
   }
   
@@ -127,7 +129,9 @@ export class ConfigProvider {
   getGesolToken()       { return this.gesolToken; }
   getGesolNome()        { return this.gesolNome; }
   getGesolCPF()         { return this.gesolCPF; }
-  getGesolFoto()         { return this.gesolFoto; }
+  getGesolFoto()        { return this.gesolFoto; }
+  getGesolUserId()      { return this.gesolUserId; }
+
 
   /////////////////////////////////////////////////////////////// Mètodos de Set
   // Primeiro mudam o valor da chave na storage. Assim que isso foi feito, mudam o valor da variável local.
@@ -148,5 +152,6 @@ export class ConfigProvider {
   setGesolNome(dado:string)      { this.storage.set("gesolNome", dado)    .then(() => { this.gesolNome     = dado }) }
   setGesolCPF(dado:string)       { this.storage.set("gesolCPF", dado)     .then(() => { this.gesolCPF      = dado }) }
   setGesolFoto(dado: string)     { this.storage.set("gesolFoto", dado)    .then(() => { this.gesolFoto     = dado }) }
+  setGesolUserId(dado: number)   { this.storage.set("gesolUserId", dado)  .then(() => { this.gesolUserId   = dado }) }
 
 }

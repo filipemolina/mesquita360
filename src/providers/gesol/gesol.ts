@@ -20,7 +20,9 @@ export class GesolProvider {
 
   private root_url = "http://192.168.111.111/gesol";
 
-  constructor(public http: Http) {}
+  constructor(public http: Http, public config: ConfigProvider) {}
+
+  // Criar Usuário
 
   criarUsuario(nome, email, cpf, senha, confirmar_senha){
 
@@ -34,6 +36,8 @@ export class GesolProvider {
 
   }
 
+  // Logar Usuário Criado
+
   login(email, senha){
 
     return this.http.post(this.root_url+"/api/user/login", {
@@ -41,6 +45,18 @@ export class GesolProvider {
       senha : senha
     }).map(res => res.json());
 
+  }
+
+  // Obter todas as solicitações
+
+  getSolicitacoes(){
+
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.config.getGesolToken());
+
+    return this.http.get(this.root_url+"/api/solicitacoes", { headers: headers })
+                .map(res => res.json());
   }
 
 }

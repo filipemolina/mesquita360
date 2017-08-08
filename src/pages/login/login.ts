@@ -46,10 +46,15 @@ export class LoginPage {
 
       res => {
 
+        // Preencher as informações básicas do usuário
+
         this.config.setGesolNome(res.nome);
         this.config.setGesolFoto(res.foto);
         this.config.setGesolUserName(res.email);
         this.config.setGesolToken(res.token.accessToken);
+        this.config.setGesolUserId(res.id);
+
+        // Tornar a homepage o novo Root
 
         this.navCtrl.setRoot(HomePage);
 

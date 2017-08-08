@@ -13,20 +13,20 @@
 
 	<!-- Cards -->
 
-	<ion-card>
+	<ion-card *ngFor="let item of solicitacoes">
 
 		<ion-item>
 			<ion-avatar item-start>
-				<img src="img/marty.png">
+				<img src="{{ item.solicitante.foto }}">
 			</ion-avatar>
-			<h2>Marty McFly</h2>
-			<p>3 de Julho de 2017</p>
+			<h2>{{ item.solicitante.nome }}</h2>
+			<p>{{ item.data }}</p>
 		</ion-item>
 
-		<img src="img/buraco.jpg">
+		<img src="{{ item.foto }}">
 
 		<ion-card-content>
-			<p>Buraco na Avenida União na altura do número 1200. Está muito difícil atingir velocidade de escape no Delorean.</p>
+			<p>{{ item.conteudo }}</p>
 		</ion-card-content>
 
 		<ion-row>
@@ -40,41 +40,6 @@
 				<button ion-button icon-left clear small>
 					<ion-icon name="text"></ion-icon>
 					<div>1 Resposta</div>
-				</button>
-			</ion-col>
-		</ion-row>
-
-	</ion-card>
-
-	<!-- Cards -->
-
-	<ion-card>
-
-		<ion-item>
-			<ion-avatar item-start>
-				<img src="img/barbarvore.jpg">
-			</ion-avatar>
-			<h2>Barbárvore</h2>
-			<p>02 de Julho de 2017</p>
-		</ion-item>
-
-		<img src="img/arvore.jpg">
-
-		<ion-card-content>
-			<p>Árvore caída na rua da minha casa. A rua está fechada e os funcionários da prefeitura ainda não vieram realizar o funeral com as devidas honras.</p>
-		</ion-card-content>
-
-		<ion-row>
-			<ion-col>
-				<button ion-button icon-left clear small>
-					<ion-icon name="add"></ion-icon>
-					<div>Apoiar</div>
-				</button>
-			</ion-col>
-			<ion-col>
-				<button ion-button icon-left clear small>
-					<ion-icon name="text"></ion-icon>
-					<div>Sem Resposta</div>
 				</button>
 			</ion-col>
 		</ion-row>

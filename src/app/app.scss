@@ -25,6 +25,12 @@ ion-menu{
         background-size: cover;
     }
 
+    ion-avatar{
+        img{
+            width: 90px;
+        }
+    }
+
     ion-content{
         background-color: #fff !important;
     }
