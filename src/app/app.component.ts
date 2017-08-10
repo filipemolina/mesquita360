@@ -54,5 +54,13 @@ export class MyApp {
   {
     this.nav.push(pagina);
   }
+
+  sair(){
+    //Apagar todos os dados do armazenamento interno do telefone
+    this.config.logout();
+
+    //Redirecionar para a página de Login
+    this.nav.setRoot(LoginPage);
+  }
 }
 

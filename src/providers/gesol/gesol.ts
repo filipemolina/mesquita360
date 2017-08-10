@@ -22,6 +22,8 @@ export class GesolProvider {
 
   constructor(public http: Http, public config: ConfigProvider) {}
 
+  ////////////////////////////////////////////////////////////////////////// Autenticação
+
   // Criar Usuário
 
   criarUsuario(nome, email, cpf, senha, confirmar_senha){
@@ -46,6 +48,7 @@ export class GesolProvider {
     }).map(res => res.json());
 
   }
+  ////////////////////////////////////////////////////////////////////////// Obtenção de dados
 
   // Obter todas as solicitações
 
@@ -57,6 +60,24 @@ export class GesolProvider {
 
     return this.http.get(this.root_url+"/api/solicitacoes", { headers: headers })
                 .map(res => res.json());
+  }
+
+  // Cadastrar uma nova mensagem em uma solicitação
+
+  enviaMensagem(mensagem, solicitacao){
+
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.config.getGesolToken());
+
+    let body= {
+      mensagem: mensagem,
+      solicitacao_id: solicitacao
+    };
+
+    return this.http.post(this.root_url+"/api/mensagens", body, { headers: headers })
+                .map(res => res.json());
+
   }
 
 }

@@ -22,7 +22,7 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  private gesolClientSecret: string = "fKbmJiFYFyGWYBc0q5eQLl6x75G2yZKr3saFtENo";
+  private gesolClientSecret: string = "OiCj4RfXzrJq5475CX29HkPm2vP2MSwevXmaJcmy";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;
@@ -45,8 +45,6 @@ export class ConfigProvider {
 
     // Gesol
 
-    storage.get('gesolClientId')    .then(dado => { this.gesolClientId     = dado });
-    storage.get('gesolClientSecret').then(dado => { this.gesolClientSecret = dado });
     storage.get('gesolUserName')    .then(dado => { this.gesolUserName     = dado });
     storage.get('gesolPassword')    .then(dado => { this.gesolPassword     = dado });
     storage.get('gesolToken')       .then(dado => { this.gesolToken        = dado });
@@ -54,6 +52,28 @@ export class ConfigProvider {
     storage.get('gesolCPF')         .then(dado => { this.gesolCPF          = dado });
     storage.get('gesolFoto')        .then(dado => { this.gesolFoto         = dado });
     storage.get('gesolUserId')      .then(dado => { this.gesolUserId       = dado });
+
+  }
+
+  /////////////////////////////////////////////////////////////// Métodos Gerais
+
+  ////// Logout
+  // Apaga todos os dados relacionados ao usuário da storage
+
+  logout()
+  {
+    this.setFbID(null);
+    this.setFbToken(null);
+    this.setFbUserEmail(null);
+    this.setFbUserName(null);
+    this.setFbUserPicture(null);
+    this.setGesolCPF(null);
+    this.setGesolFoto(null);
+    this.setGesolNome(null);
+    this.setGesolPassword(null);
+    this.setGesolToken(null);
+    this.setGesolUserId(null);
+    this.setGesolUserName(null);
 
   }
   
@@ -134,24 +154,25 @@ export class ConfigProvider {
 
 
   /////////////////////////////////////////////////////////////// Mètodos de Set
-  // Primeiro mudam o valor da chave na storage. Assim que isso foi feito, mudam o valor da variável local.
+  // Primeiro definem o valor da variável para ser acessada globalmente pelo App.
+  // Após isso, guardam o valor da variável na storage do aplicativo.
 
   // Facebook
 
-  setFbUserName(dado: string)    { this.storage.set("fbUserName", dado)   .then(() => { this.fbUserName    = dado }) }
-  setFbUserPicture(dado: string) { this.storage.set("fbUserPicture", dado).then(() => { this.fbUserPicture = dado }) }
-  setFbUserEmail(dado: string)   { this.storage.set("fbUserEmail", dado)  .then(() => { this.fbUserEmail   = dado }) }
-  setFbID(dado: string)          { this.storage.set("fbID", dado)         .then(() => { this.fbID          = dado }) }
-  setFbToken(dado: string)       { this.storage.set("fbToken", dado)      .then(() => { this.fbToken       = dado }) }
+  setFbUserName(dado: string)    { this.fbUserName    = dado; this.storage.set("fbUserName", dado);    }
+  setFbUserPicture(dado: string) { this.fbUserPicture = dado; this.storage.set("fbUserPicture", dado); }
+  setFbUserEmail(dado: string)   { this.fbUserEmail   = dado; this.storage.set("fbUserEmail", dado);   }
+  setFbID(dado: string)          { this.fbID          = dado; this.storage.set("fbID", dado);          }
+  setFbToken(dado: string)       { this.fbToken       = dado; this.storage.set("fbToken", dado);       }
 
   // Gesol
 
-  setGesolToken(dado: string)    { this.storage.set("gesolToken", dado)   .then(() => { this.gesolToken    = dado }) }
-  setGesolUserName(dado: string) { this.storage.set("gesolUserName", dado).then(() => { this.gesolUserName = dado }) }
-  setGesolPassword(dado: string) { this.storage.set("gesolPassword", dado).then(() => { this.gesolPassword = dado }) }
-  setGesolNome(dado:string)      { this.storage.set("gesolNome", dado)    .then(() => { this.gesolNome     = dado }) }
-  setGesolCPF(dado:string)       { this.storage.set("gesolCPF", dado)     .then(() => { this.gesolCPF      = dado }) }
-  setGesolFoto(dado: string)     { this.storage.set("gesolFoto", dado)    .then(() => { this.gesolFoto     = dado }) }
-  setGesolUserId(dado: number)   { this.storage.set("gesolUserId", dado)  .then(() => { this.gesolUserId   = dado }) }
+  setGesolToken(dado: string)    { this.gesolToken    = dado; this.storage.set("gesolToken", dado);    }
+  setGesolUserName(dado: string) { this.gesolUserName = dado; this.storage.set("gesolUserName", dado); }
+  setGesolPassword(dado: string) { this.gesolPassword = dado; this.storage.set("gesolPassword", dado); }
+  setGesolNome(dado:string)      { this.gesolNome     = dado; this.storage.set("gesolNome", dado);     }
+  setGesolCPF(dado:string)       { this.gesolCPF      = dado; this.storage.set("gesolCPF", dado);      }
+  setGesolFoto(dado: string)     { this.gesolFoto     = dado; this.storage.set("gesolFoto", dado);     }
+  setGesolUserId(dado: number)   { this.gesolUserId   = dado; this.storage.set("gesolUserId", dado);   }
 
 }

@@ -103,7 +103,7 @@ export class LoginPage {
   {
     // Tentar logar no facebook usando a biblioteca nativa
 
-    this.fb.login(['public_profile','user_birthday', 'user_hometown', 'user_location', 'email'])
+    this.fb.login(['public_profile','email'])
 
       // Caso o login suceda
 

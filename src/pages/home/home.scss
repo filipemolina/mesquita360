@@ -2,4 +2,9 @@ page-home {
 
 	ion-content { background-color: #f4f4f4; }
 
+	ion-row.mensagens{
+		height: 0;
+		transition: 0.2s all ease-in;
+	}
+
 }
