@@ -12,13 +12,11 @@ export class HomePage {
 
   public solicitacoes = [];
   public meses = [];
+  public novos_comentarios = [];
 
   constructor(public navCtrl: NavController,
               public config: ConfigProvider,
               public gesol: GesolProvider) {
-
-      console.log("Config no momento do carregamento da página");
-      console.log(this.config);
 
       // Inicializar o array de meses
 
@@ -57,13 +55,35 @@ export class HomePage {
 
           this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
 
+          // Criar uma posição no vetor de novos comentários para essa solicitação
+
+          this.novos_comentarios[this.solicitacoes[item].id] = "";
+
         }
       
       }, fail => { console.log("Falhou"); console.log(fail); })
   }
 
-  // Expandir ou encolher as mensagens
+  // Definir uma classe de acordo com o status da solicitação
+  defineClass(status){
 
+    if(status == "Aberta" || status == "Aguardando"){
+
+      return "success";
+
+    } else if(status == "Encaminhada" || status == "Pendente" || status == "Em execução"){
+
+      return "warning";
+
+    } else {
+
+      return "danger";
+
+    }
+    
+  }
+
+  // Expandir ou encolher as mensagens
   expandirMensagens(id){
 
     // Obter a Row com as mensagens da solicitação que foi clicada
@@ -105,24 +125,15 @@ export class HomePage {
 
   }
 
+  // Enviar mensagem para o gesol
   enviarMensagem(evento, solicitacao){
 
-    // Obter o conteúdo do input de comentário
+    // Os novos comentários ficam guardados em um vetor
 
-    // A propriedade "path" contém a árvore do elemento que ativou o evento, no caso o elemento button-inner.
-    // Cada item desse vetor representa um elemento pai mais acima na árvore.
-
-    //Cada elemento possui uma propriedade "children" contendo todos os elemento filhos em ordem de declaração no DOM
-
-    // Nesse caso específico, eu subi 2 níveis na árvore e depois desci 3 níveis, selecionando sempre o primeiro elemento de cada nível
-    // e obtendo, no fim, o valor do último elemento selecioado
-
-    let input = evento.path[2].children[0].children[0].children[0];
-
-    if(input.value != ""){
+    if(this.novos_comentarios[solicitacao] != ""){
 
       // Fazer uma cahamda para a API e criar uma nova mensagem
-      this.gesol.enviaMensagem(input.value, solicitacao).subscribe(
+      this.gesol.enviaMensagem(this.novos_comentarios[solicitacao], solicitacao).subscribe(
         
         // Caso suceda
         res => {
@@ -146,20 +157,25 @@ export class HomePage {
 
           this.solicitacoes[i].mensagens.push({
             functionario_id : null,
-            mensagem: input.value
+            mensagem: this.novos_comentarios[solicitacao]
           });
 
           // Aumentar tamanho do container de mensagens
           evento.path[4].style.height =  evento.path[4].scrollHeight + 65 + "px";
 
           // Zerar o input
-          input.value = "";
+          this.novos_comentarios[solicitacao] = "";
         }
 
       }
 
     }
 
+  }
+
+  // Retornar o id do solicitante para ser usado no template
+  getSolicitanteId(){
+    return this.config.getGesolUserId();
   }
 
 }

@@ -22,7 +22,7 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  private gesolClientSecret: string = "OiCj4RfXzrJq5475CX29HkPm2vP2MSwevXmaJcmy";
+  private gesolClientSecret: string = "rU13qkXyItotcTFVXLnbK6Cz3B7eE3P9g40mM2CA";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;

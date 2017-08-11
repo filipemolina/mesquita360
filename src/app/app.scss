@@ -62,49 +62,16 @@ ion-menu{
 ion-card.danger
 {
     border-top: 3px solid color($colors, danger);
-
-    p
-    {
-        font-weight: bold;
-        color: color($colors, danger);
-    }
-
-    button
-    {
-        color: color($colors, danger);
-    }
 }
 
 ion-card.warning
 {
     border-top: 3px solid color($colors, secondary);
-
-    p
-    {
-        font-weight: bold;
-        color: color($colors, secondary);
-    }
-
-    button
-    {
-        color: color($colors, secondary);
-    }
 }
 
 ion-card.success
 {
     border-top: 3px solid color($colors, primary);
-
-    p
-    {
-        font-weight: bold;
-        color: color($colors, primary);
-    }
-
-    button
-    {
-        color: color($colors, primary);
-    }
 }
 
 //////////////////////////////////////////////////// Fixes

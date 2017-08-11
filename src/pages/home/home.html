@@ -13,7 +13,7 @@
 
 	<!-- Cards -->
 
-	<ion-card *ngFor="let item of solicitacoes">
+	<ion-card *ngFor="let item of solicitacoes" ngClass="success">
 
 		<ion-item>
 			<ion-avatar item-start>
@@ -24,6 +24,15 @@
 		</ion-item>
 
 		<img src="{{ item.foto }}">
+
+		<ion-item>
+			<h2 style="color: #3D276B; text-align: center;">
+				{{ item.servico.nome }} - {{ item.servico.setor.secretaria.sigla }}
+			</h2>
+			<h2 style="color: #3D276B; text-align: center;">
+				{{ item.status }}
+			</h2>
+		</ion-item>
 
 		<ion-card-content>
 			<p>{{ item.conteudo }}</p>
@@ -74,8 +83,11 @@
 				
 			</div>
 
-			<ion-item >
-				<ion-input type="text" value="" placeholder="Responder"></ion-input>					
+			<!-- Input para novas mensagens  -->
+			<!-- Mostrar apenas caso o usuário logado seja o mesmo que criou a solicitação  -->
+
+			<ion-item *ngIf="getSolicitanteId() == item.solicitante.id" >
+				<ion-input [(ngModel)]="novos_comentarios[item.id]" type="text" value="" placeholder="Responder"></ion-input>					
 				<button (click)="enviarMensagem($event, item.id)" ion-button item-end icon-left>
 					<ion-icon name="send"></ion-icon>
 					Enviar
