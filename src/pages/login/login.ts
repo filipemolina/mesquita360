@@ -130,24 +130,23 @@ export class LoginPage {
             // Enviar a token do Facebook para o Gesol, que verifićará se o usuário existe ou não e retornará um objeto com 
             // username e senha
 
-            this.auth.getGesolUser(resultado.email,
-                                    resultado.name,
-                                    resultado.picture.data.url,
-                                    resultado.email,
-                                    res.authResponse.accessToken,
-                                    res.authResponse.userID).subscribe(res => {
+            this.auth.getGesolUser(
+              resultado.email,
+              resultado.name,
+              resultado.picture.data.url,
+              resultado.email,
+              res.authResponse.accessToken,
+              res.authResponse.userID).subscribe(res => {
 
-                                      // this.config.setGesolUsername(res.username);
-                                      // this.config.setGesolPassword(res.password);
 
-                                      // Gravar os dados recebidos no ConfigProvider
-                                      this.config.setGesolToken(res.accessToken);
+              // Gravar os dados recebidos no ConfigProvider
+              this.config.setGesolToken(res.accessToken);
 
-                                      console.log("Config após atualização dos dados");
-                                      console.log(this.config);
+              console.log("Config após atualização dos dados");
+              console.log(this.config);
 
-                                      // Redirecionar para a página principal
-                                      this.navCtrl.setRoot(HomePage);
+              // Redirecionar para a página principal
+              this.navCtrl.setRoot(HomePage);
 
             });
 

@@ -33,35 +33,38 @@ export class HomePage {
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
     
-      this.gesol
-      .getSolicitacoes()
-      .subscribe(
-      res => {
-              
-        // Preencher a variável de solicitações
+      this.gesol.getSolicitacoes().subscribe(
 
-        this.solicitacoes = res;
+        res => {
+                
+          // Preencher a variável de solicitações
 
-        console.log("Solicitações");
-        console.log(this.solicitacoes);
+          this.solicitacoes = res;
 
-        for(let item in this.solicitacoes){
+          for(let item in this.solicitacoes){
 
-          // Criar um objeto de Data com a propriedade created_at do item
+            // Criar um objeto de Data com a propriedade created_at do item
 
-          let data = new Date(this.solicitacoes[item].created_at);
+            let data = new Date(this.solicitacoes[item].created_at);
 
-          // Formatar a data para um formato legível para seres humands
+            // Formatar a data para um formato legível para seres humands
 
-          this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+            this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
 
-          // Criar uma posição no vetor de novos comentários para essa solicitação
+            // Criar uma posição no vetor de novos comentários para essa solicitação
 
-          this.novos_comentarios[this.solicitacoes[item].id] = "";
+            this.novos_comentarios[this.solicitacoes[item].id] = "";
 
+          }
+        
+        }, 
+        
+        fail => { 
+          
+          console.log("Falhou"); 
+          console.log(fail); 
         }
-      
-      }, fail => { console.log("Falhou"); console.log(fail); })
+      )
   }
 
   // Definir uma classe de acordo com o status da solicitação
@@ -107,7 +110,6 @@ export class HomePage {
 
         if(typeof itens[i].attributes !== "undefined"){
 
-          // altura += itens[i].attributes[1].ownerElement.clientHeight;
           altura += itens[i].attributes[0].ownerElement.scrollHeight;
 
         }

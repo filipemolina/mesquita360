@@ -54,12 +54,29 @@ export class GesolProvider {
 
   getSolicitacoes(){
 
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer '+this.config.getGesolToken());
+    let headers = this.montaHeaders();
 
     return this.http.get(this.root_url+"/api/solicitacoes", { headers: headers })
                 .map(res => res.json());
+  }
+
+  /**
+   * Retorna apenas as solicitações criadas pelo próprio usuário
+   */
+
+  getMinhasSolicitacoes(){
+
+    let headers = this.montaHeaders();
+
+    let body = {
+
+      id : this.config.getGesolUserId()
+
+    };
+
+    return this.http.get(this.root_url+"/api/solicitacoes/minhas?id="+this.config.getGesolUserId(), { headers : headers })
+                    .map(res => res.json());
+
   }
 
   // Cadastrar uma nova mensagem em uma solicitação
@@ -77,6 +94,20 @@ export class GesolProvider {
 
     return this.http.post(this.root_url+"/api/mensagens", body, { headers: headers })
                 .map(res => res.json());
+
+  }
+
+  /**
+   * Retorna um cabeçalho que pode ser usado em qualquer requisição
+   */
+
+  private montaHeaders(){
+    
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.config.getGesolToken());
+
+    return headers;
 
   }
 

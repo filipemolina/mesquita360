@@ -15,43 +15,90 @@
 
 <ion-content padding>
 
-  <!-- Card de Atendimento -->
+  <!-- Cards -->
 
-  <ion-card tappable class="success" (tap)="detalhes(0)">
-    <ion-item>
-      <p item-start>Solicitação Nº 1001</p>
-    </ion-item>
+	<ion-card *ngFor="let item of sol" ngClass="success">
 
-    <ion-card-content>
-      <ion-note>Resposta Disponível!</ion-note>
-    </ion-card-content>
+		<ion-item>
+			<ion-avatar item-start>
+				<img src="{{ item.solicitante.foto }}">
+			</ion-avatar>
+			<h2>{{ item.solicitante.nome }}</h2>
+			<p>{{ item.data }}</p>
+		</ion-item>
 
-  </ion-card>
-  
-  <!-- Card de Atendimento -->
+		<img src="{{ item.foto }}">
 
-  <ion-card tappable class="warning" (tap)="detalhes(1)">
-    <ion-item>
-      <p>Solicitação Nº 1384</p>
-    </ion-item>
+		<ion-item>
+			<h2 style="color: #3D276B; text-align: center;">
+				{{ item.servico.nome }} - {{ item.servico.setor.secretaria.sigla }}
+			</h2>
+			<h2 style="color: #3D276B; text-align: center;">
+				{{ item.status }}
+			</h2>
+		</ion-item>
 
-    <ion-card-content>
-      <ion-note>Publicado.</ion-note>
-    </ion-card-content>
+		<ion-card-content>
+			<p>{{ item.conteudo }}</p>
+		</ion-card-content>
 
-  </ion-card>
+		<ion-row>
+			<ion-col>
+				<button ion-button icon-left clear small>
+					<ion-icon name="add"></ion-icon>
+					<div>Apoiar</div>
+				</button>
+			</ion-col>
+			<ion-col>
+				<button (click)="expandirMensagens(item.id)" ion-button icon-left clear small>
+					<ion-icon name="text"></ion-icon>
 
-  <!-- Card de Atendimento -->
+					<!-- Texto dependendo do número de mensagens -->
+					<div *ngIf="item.mensagens.length == 0">Sem Resposta</div>
+					<div *ngIf="item.mensagens.length == 1">1 Resposta</div>
+					<div *ngIf="item.mensagens.length > 1">{{ item.mensagens.length }} Respostas</div>
 
-  <ion-card tappable class="danger" (tap)="detalhes(2)">
-    <ion-item>
-      <p>Solicitação Nº 1425</p>
-    </ion-item>
+				</button>
+			</ion-col>
+		</ion-row>
 
-    <ion-card-content>
-      <ion-note>Aguardando Moderação</ion-note>
-    </ion-card-content>
+		<ion-row class="mensagens" id="minhas_mensagens_{{ item.id }}">
+			<!-- Mensagens  -->
 
-  </ion-card>
+			<div *ngFor="let mensagem of item.mensagens" style="width: 100%" class="mensagens_container">
+
+				<!-- Mensagem de um funcionário da Prefeitura  -->
+				<ion-item *ngIf="mensagem.funcionario_id != null">
+					<h2>{{ mensagem.funcionario.setor.secretaria.nome }}</h2>
+					<p>{{ mensagem.mensagem }}</p>
+					<ion-avatar item-end>
+						<img src="assets/img/brasao.png">
+					</ion-avatar>					
+				</ion-item>
+
+				<!-- Mensagem do Próprio Solicitante  -->
+				<ion-item *ngIf="mensagem.funcionario_id == null">
+					<ion-avatar item-start>
+						<img src="{{ item.solicitante.foto }}">
+					</ion-avatar>
+					<h2>{{ item.solicitante.nome }}</h2>
+					<p>{{ mensagem.mensagem }}</p>
+				</ion-item>
+				
+			</div>
+
+			<!-- Input para novas mensagens  -->
+			<!-- Mostrar apenas caso o usuário logado seja o mesmo que criou a solicitação  -->
+
+			<ion-item *ngIf="getSolicitanteId() == item.solicitante.id" >
+				<ion-input [(ngModel)]="novos_comentarios[item.id]" type="text" value="" placeholder="Responder"></ion-input>					
+				<button (click)="enviarMensagem($event, item.id)" ion-button item-end icon-left>
+					<ion-icon name="send"></ion-icon>
+					Enviar
+				</button>
+			</ion-item>
+		</ion-row>
+
+	</ion-card>
 
 </ion-content>
