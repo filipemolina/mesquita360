@@ -13,12 +13,13 @@ import { AtendimentoPage } from "../pages/atendimento/atendimento";
 import { LoginPage } from "../pages/login/login";
 import { ConfigProvider } from '../providers/config/config';
 import { HttpModule } from "@angular/http";
-import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook";
+import { Facebook } from "@ionic-native/facebook";
 import { AuthProvider } from '../providers/auth/auth';
 import { RegisterPage } from "../pages/register/register";
 import { Mask } from '../directives/mask/mask';
 import { TextMaskModule } from 'angular2-text-mask';
 import { GesolProvider } from '../providers/gesol/gesol';
+import { ServicosPage } from "../pages/servicos/servicos";
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -34,7 +35,8 @@ const cloudSettings : CloudSettings = {
     AtendimentoPage,
     LoginPage,
     RegisterPage,
-    Mask
+    Mask,
+    ServicosPage
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,8 @@ const cloudSettings : CloudSettings = {
     ChamadosPage,
     AtendimentoPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    ServicosPage
   ],
   providers: [
     StatusBar,

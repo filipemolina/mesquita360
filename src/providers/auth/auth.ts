@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpModule } from "@angular/http";
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { ConfigProvider } from "../config/config";
@@ -13,15 +12,12 @@ import { ConfigProvider } from "../config/config";
 @Injectable()
 export class AuthProvider {
 
-  private headers : Headers;
-  private body : any;
 
   // Endpoint da API
 
   private root_url = "http://192.168.111.111/gesol";
   
   constructor(public http: Http, public config : ConfigProvider) {
-    this.headers = new Headers();
   }
 
   getGesolUser(email, nome, foto, username, token, uid){

@@ -26,9 +26,9 @@
 		<img src="{{ item.foto }}">
 
 		<ion-item>
-			<h2 style="color: #3D276B; text-align: center;">
+			<div style="color: #3D276B; text-align: center;">
 				{{ item.servico.nome }} - {{ item.servico.setor.secretaria.sigla }}
-			</h2>
+			</div>
 			<h2 style="color: #3D276B; text-align: center;">
 				{{ item.status }}
 			</h2>
@@ -102,8 +102,8 @@
 	<ion-fab right bottom>
 		<button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="top">
-			<button ion-fab><ion-icon name="camera"></ion-icon></button>
-			<button ion-fab><ion-icon name="images"></ion-icon></button>
+			<button (click)="tirarFoto()" ion-fab><ion-icon name="camera"></ion-icon></button>
+			<button (click)="escolherFoto()" ion-fab><ion-icon name="images"></ion-icon></button>
 		</ion-fab-list>
 	</ion-fab>
   

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpModule } from "@angular/http";
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { ConfigProvider } from "../config/config";
@@ -12,9 +11,6 @@ import { ConfigProvider } from "../config/config";
 */
 @Injectable()
 export class GesolProvider {
-
-  private headers: Headers;
-  private body: any;
 
   // Endpoint da API
 
@@ -68,15 +64,19 @@ export class GesolProvider {
 
     let headers = this.montaHeaders();
 
-    let body = {
-
-      id : this.config.getGesolUserId()
-
-    };
-
     return this.http.get(this.root_url+"/api/solicitacoes/minhas?id="+this.config.getGesolUserId(), { headers : headers })
                     .map(res => res.json());
 
+  }
+
+  // Obter os setores para criar uma solicitação
+
+  getSetores(){
+    
+    let headers = this.montaHeaders();
+
+    return this.http.get(this.root_url+"/api/setores", { headers: headers })
+                    .map(res => res.json());
   }
 
   // Cadastrar uma nova mensagem em uma solicitação

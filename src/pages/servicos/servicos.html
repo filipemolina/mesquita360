@@ -1,0 +1,93 @@
+<!--
+  Generated template for the ServicosPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Selecione uma Categoria</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-grid>
+
+    <!-- Ícones  -->
+    <ion-row>
+      <ion-col *ngFor="let item of setores" col-4>
+        <button ion-button icon-only round [style.background-color]="item.cor" large>
+          <span [class]="'mdi '+item.icone"></span>
+        </button>
+        <ion-row>
+          <div style="text-align: center; width: 100%;">
+            {{ item.nome }}
+          </div>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <!-- Ícones  -->
+    <!-- <ion-row>
+      <ion-col col-4>
+        <button ion-button class="verde" icon-only round large>
+          <ion-icon name="leaf"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button class="azul" icon-only round large>
+          <ion-icon name="bus"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button class="vermelho" icon-only round large>
+          <ion-icon name="medkit"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row> -->
+
+    <!-- Ícones  -->
+    <!-- <ion-row>
+      <ion-col col-4>
+        <button ion-button class="branco" icon-only round large>
+          <ion-icon name="football"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button color="secondary" icon-only round large>
+          <ion-icon name="car"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button class="cinza" icon-only round large>
+          <ion-icon name="chatbubbles"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row> -->
+
+    <!-- Ícones  -->
+    <!-- <ion-row>
+      <ion-col col-4>
+        <button ion-button class="rosa" icon-only round large>
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button class="verde" icon-only round large>
+          <ion-icon name="bulb"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button class="secondary" icon-only round large>
+          <ion-icon name="flame"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row> -->
+
+  </ion-grid>
+
+</ion-content>

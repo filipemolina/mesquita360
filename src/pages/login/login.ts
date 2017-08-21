@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import { ConfigProvider } from "../../providers/config/config";
 import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook";
 import { HomePage } from "../home/home";
 import { AuthProvider } from "../../providers/auth/auth";
 import { RegisterPage } from "../register/register";
 import { GesolProvider } from "../../providers/gesol/gesol";
-import { AlertController } from 'ionic-angular';
+import { AlertController, MenuController } from 'ionic-angular';
 
 /**
  * Generated class for the LoginPage page.
@@ -30,7 +30,13 @@ export class LoginPage {
               public config: ConfigProvider, 
               private fb: Facebook,
               public auth: AuthProvider,
-              public gesol: GesolProvider) {}
+              public gesol: GesolProvider,
+              public menu: MenuController) {
+
+    // Desabilitar o menu na página de login
+    this.menu.enable(false);
+
+  }
 
   cadastrar(){
     this.navCtrl.push(RegisterPage);

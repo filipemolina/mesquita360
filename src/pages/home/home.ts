@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, MenuController } from 'ionic-angular';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
+import { Camera } from "ionic-native";
+import { ServicosPage } from "../servicos/servicos";
 
 @Component({
   selector: 'page-home',
@@ -14,9 +16,17 @@ export class HomePage {
   public meses = [];
   public novos_comentarios = [];
 
+  // BLOB da imagem tirada pela câmera
+  public base64image: string;
+
   constructor(public navCtrl: NavController,
               public config: ConfigProvider,
-              public gesol: GesolProvider) {
+              public gesol: GesolProvider,
+              public menu: MenuController) {
+
+      // Habilitar o menu lateral
+
+      this.menu.enable(true);
 
       // Inicializar o array de meses
 
@@ -66,6 +76,76 @@ export class HomePage {
         }
       )
   }
+
+  /**
+   * Tirar uma foto com a câmera e guardar na variável base64image
+   * @param
+   */
+
+   tirarFoto(){
+
+      // Chamar a câmera
+      Camera.getPicture({
+        destinationType: Camera.DestinationType.DATA_URL,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        encodingType: Camera.EncodingType.JPEG,
+        targetWidth: 1000,
+        targetHeight: 750
+      })
+      
+      // Quando a imagem for retornada
+      .then((imagem) => {
+
+          this.base64image = "data:image/jpeg;base64," + imagem;
+          
+          // Navegar para a página de serviços passando a imagem como parâmetro
+          this.navCtrl.push(ServicosPage,{
+            imagem : this.base64image
+          });
+
+      }, 
+
+      // Em caso de Errro
+      (err) => {
+        console.log(err);
+      });
+
+   }
+
+   /**
+    * Escolher foto da galeria
+    * @param
+    */
+
+    escolherFoto(){
+
+      // Chamar a câmera
+      Camera.getPicture({
+        destinationType: Camera.DestinationType.DATA_URL,
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        encodingType: Camera.EncodingType.JPEG,
+        targetWidth: 1000,
+        targetHeight: 750
+      })
+      
+      // Quando a imagem for retornada
+      .then((imagem) => {
+
+          this.base64image = "data:image/jpeg;base64," + imagem;
+          
+          // Navegar para a página de serviços passando a imagem como parâmetro
+          this.navCtrl.push(ServicosPage, {
+            imagem: this.base64image
+          });
+
+      }, 
+
+      // Em caso de Errro
+      (err) => {
+        console.log(err);
+      });
+
+    }
 
   // Definir uma classe de acordo com o status da solicitação
   defineClass(status){

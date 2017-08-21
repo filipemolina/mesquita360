@@ -15,6 +15,10 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+@import "../assets/css/materialdesignicons.min.css";
+
+.mdi:before { font-size: 40px !important; }
+
 ////////////////////////////////////////////////// Menu do Aplicativo
 
 ion-menu{
@@ -75,5 +79,5 @@ ion-card.success
 }
 
 //////////////////////////////////////////////////// Fixes
-
+.fab-close-active .button-inner { transform: translateY(5px); }
 // .fab-close-active .fab-close-icon { margin-top: 5px; }

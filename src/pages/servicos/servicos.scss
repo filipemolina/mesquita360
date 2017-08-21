@@ -1,0 +1,27 @@
+page-servicos {
+
+    ion-col{
+        
+        text-align: center;
+
+        ion-row { text-align: center !important; }
+
+        button{
+
+            width: 18vw;
+            height: 11vh !important;
+            font-size: 170% !important;
+
+        }
+
+        button.laranja  { background-color: #f44336 }
+        button.vermelho { background-color: #823029 }
+        button.azul     { background-color: #298282 }
+        button.verde    { background-color: #507826 }
+        button.preto    { background-color: #333 }
+        button.branco   { background-color: #fff; color: #000 }
+        button.cinza    { background-color: #ccc }
+        button.rosa     { background-color: #ec407a }
+    }
+
+}
