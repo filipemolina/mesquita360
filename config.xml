@@ -3,7 +3,7 @@
     <name>Mesquita 360º</name>
     <description>Aplicativo de criação de solicitações entre munícipes e funcionários da Prefeitura Municipal de Mesquita</description>
     <author email="tecnologia@mesquita.rj.gov.br" href="http://www.mesquita.rj.gov.br">Prefeitura Municipal de Mesquita</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.111.111:8100" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-intent href="http://*/*" />

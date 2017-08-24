@@ -20,6 +20,7 @@ import { Mask } from '../directives/mask/mask';
 import { TextMaskModule } from 'angular2-text-mask';
 import { GesolProvider } from '../providers/gesol/gesol';
 import { ServicosPage } from "../pages/servicos/servicos";
+import { SelecionarServicoPage } from "../pages/selecionar-servico/selecionar-servico";
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -36,7 +37,8 @@ const cloudSettings : CloudSettings = {
     LoginPage,
     RegisterPage,
     Mask,
-    ServicosPage
+    ServicosPage,
+    SelecionarServicoPage
   ],
   imports: [
     BrowserModule,
@@ -54,7 +56,8 @@ const cloudSettings : CloudSettings = {
     AtendimentoPage,
     LoginPage,
     RegisterPage,
-    ServicosPage
+    ServicosPage,
+    SelecionarServicoPage
   ],
   providers: [
     StatusBar,

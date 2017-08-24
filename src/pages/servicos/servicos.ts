@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GesolProvider } from "../../providers/gesol/gesol";
+import { ModalController } from "ionic-angular";
+import { SelecionarServicoPage } from "../selecionar-servico/selecionar-servico";
 
 /**
  * Generated class for the ServicosPage page.
@@ -39,8 +41,11 @@ export class ServicosPage {
     19: 'branco',
 };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public gesol: GesolProvider) {
-    
+  constructor(public navCtrl:   NavController, 
+              public navParams: NavParams, 
+              public gesol:     GesolProvider,
+              public modalCtrl: ModalController) {
+
     //Obter a imagem nos parâmetros
     this.imagem = this.navParams.get('imagem');
 
@@ -55,7 +60,6 @@ export class ServicosPage {
       },
 
       // Falha
-
       fail => {
 
         console.log("Erro");
@@ -63,6 +67,17 @@ export class ServicosPage {
 
       }
     );
+  }
+
+  // Abrir o modal para selecionar o serviço
+
+  abrirModal(){
+
+    // Criar o modal com a página 
+    let modal = this.modalCtrl.create(SelecionarServicoPage);
+    // Mostrar o modal
+    modal.present();
+
   }
 
 }
