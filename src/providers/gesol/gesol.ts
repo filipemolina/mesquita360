@@ -53,7 +53,7 @@ export class GesolProvider {
     let headers = this.montaHeaders();
 
     return this.http.get(this.root_url+"/api/solicitacoes", { headers: headers })
-                .map(res => res.json());
+               .map(res => res.json());
   }
 
   /**
@@ -76,7 +76,27 @@ export class GesolProvider {
     let headers = this.montaHeaders();
 
     return this.http.get(this.root_url+"/api/setores", { headers: headers })
-                    .map(res => res.json());
+               .map(res => res.json());
+  }
+
+  // Obter todos os serviços de um determinado setor
+
+  getServicos(id){
+    let headers = this.montaHeaders();
+
+    return this.http.post(this.root_url+"/api/servicosporsetor", { id: id }, { headers : headers })
+               .map(res => res.json());
+  }
+
+  // Obter um setor através do ID
+
+  getSetor(id){
+
+    let headers = this.montaHeaders();
+
+    return this.http.get(this.root_url+"/api/setores/"+id, { headers: headers })
+               .map(res => res.json());
+
   }
 
   // Cadastrar uma nova mensagem em uma solicitação
@@ -93,7 +113,34 @@ export class GesolProvider {
     };
 
     return this.http.post(this.root_url+"/api/mensagens", body, { headers: headers })
-                .map(res => res.json());
+              .map(res => res.json());
+
+  }
+
+  /**
+   * Cadastrar uma nova solicitação no Gesol
+   */
+
+  enviaSolicitacao(foto, servico, texto, endereco){
+
+    let headers = this.montaHeaders();
+
+    let body = {
+      foto: foto,
+      servico_id: servico,
+      conteudo: texto,
+      logradouro: endereco['logradouro'],
+      numero: endereco['numero'],
+      bairro: endereco['bairro'],
+      municipio: endereco['municipio'],
+      uf: endereco['uf'],
+      latitude: endereco['latitude'],
+      longitude: endereco['longitude'],
+      solicitante_id: this.config.getGesolUserId()
+    }
+
+    return this.http.post(this.root_url+"/api/solicitacoes", body, { headers: headers })
+               .map(res => res.json());
 
   }
 

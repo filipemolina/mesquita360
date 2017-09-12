@@ -50,9 +50,9 @@
 					<ion-icon name="text"></ion-icon>
 
 					<!-- Texto dependendo do número de mensagens -->
-					<div *ngIf="item.mensagens.length == 0">Sem Resposta</div>
-					<div *ngIf="item.mensagens.length == 1">1 Resposta</div>
-					<div *ngIf="item.mensagens.length > 1">{{ item.mensagens.length }} Respostas</div>
+					<div *ngIf="item.comentarios.length == 0">Sem Resposta</div>
+					<div *ngIf="item.comentarios.length == 1">1 Resposta</div>
+					<div *ngIf="item.comentarios.length > 1">{{ item.comentarios.length }} Respostas</div>
 
 				</button>
 			</ion-col>
@@ -61,24 +61,24 @@
 		<ion-row class="mensagens" id="mensagens_{{ item.id }}">
 			<!-- Mensagens  -->
 
-			<div *ngFor="let mensagem of item.mensagens" style="width: 100%" class="mensagens_container">
+			<div *ngFor="let comentario of item.comentarios" style="width: 100%" class="mensagens_container">
 
 				<!-- Mensagem de um funcionário da Prefeitura  -->
-				<ion-item *ngIf="mensagem.funcionario_id != null">
-					<h2>{{ mensagem.funcionario.setor.secretaria.nome }}</h2>
-					<p>{{ mensagem.mensagem }}</p>
+				<ion-item *ngIf="comentario.funcionario_id != null">
+					<h2>{{ comentario.funcionario.setor.secretaria.nome }}</h2>
+					<p>{{ comentario.mensagem }}</p>
 					<ion-avatar item-end>
 						<img src="assets/img/brasao.png">
 					</ion-avatar>					
 				</ion-item>
 
 				<!-- Mensagem do Próprio Solicitante  -->
-				<ion-item *ngIf="mensagem.funcionario_id == null">
+				<ion-item *ngIf="comentario.funcionario_id == null">
 					<ion-avatar item-start>
 						<img src="{{ item.solicitante.foto }}">
 					</ion-avatar>
 					<h2>{{ item.solicitante.nome }}</h2>
-					<p>{{ mensagem.mensagem }}</p>
+					<p>{{ comentario.mensagem }}</p>
 				</ion-item>
 				
 			</div>

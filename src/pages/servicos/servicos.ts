@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ModalController } from "ionic-angular";
 import { SelecionarServicoPage } from "../selecionar-servico/selecionar-servico";
+import { EscreverSolicitacaoPage } from "../escrever-solicitacao/escrever-solicitacao";
 
 /**
  * Generated class for the ServicosPage page.
@@ -55,7 +56,6 @@ export class ServicosPage {
       res => {
 
         this.setores = res;
-        console.log(this.setores);
 
       },
 
@@ -71,13 +71,17 @@ export class ServicosPage {
 
   // Abrir o modal para selecionar o serviço
 
-  abrirModal(){
+  abrirModal(setor){
 
     // Criar o modal com a página 
-    let modal = this.modalCtrl.create(SelecionarServicoPage);
+    let modal = this.modalCtrl.create(EscreverSolicitacaoPage, {
+      imagem: this.imagem,
+      setor: setor
+    });
+
     // Mostrar o modal
     modal.present();
-
+    
   }
 
 }

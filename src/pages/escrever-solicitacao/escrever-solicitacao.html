@@ -1,0 +1,55 @@
+<!--
+  Generated template for the EscreverSolicitacaoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <button ion-button clear item-start icon-olny large (click)="voltar()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+      Detalhes
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <div #map id="map"></div>
+  
+  <ion-list>
+
+    <ion-item class="centralizar" [style.background-color]="cor_setor">
+      <span [class]="'mdi ' + icone_setor"></span>
+      {{ nome_setor }}
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Selecione uma Categoria:</ion-label>
+      <ion-select [(ngModel)]="servico">
+
+        <!-- Iterar pelos servicos -->
+        <ion-option *ngFor="let item of servicos; let first = first" [value]="item.id" [selected]="first">{{ item.nome }}</ion-option>
+
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="recuo">
+        <ion-textarea [(ngModel)]="texto" placeholder="Descreva sua solicitação." autocomplete="true" spellcheck="true"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-left block large (click)="gravaSolicitacao()">
+          <ion-icon name="send"></ion-icon>
+          Enviar
+      </button>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

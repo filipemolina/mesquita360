@@ -25,13 +25,13 @@ export class AuthProvider {
     // Fazer um chamada para a API enviando a token do facebook e receber um usuário
     // (Novo ou antigo)
 
-    return this.http.post(this.root_url+"/api/user", { 
-        token: token,
-        nome:  nome,
-        email: email,
-        foto:  foto,
-        uid:   uid,
-      }).map(res => res.json());
+    return this.http.post(this.root_url+"/api/user", {
+      token: token,
+      nome:  nome,
+      email: email,
+      foto:  foto,
+      uid:   uid,
+    }).map(res => res.json());
 
   }
 

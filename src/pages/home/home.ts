@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController } from 'ionic-angular';
+import { NavController, MenuController, LoadingController } from 'ionic-angular';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { Camera } from "ionic-native";
@@ -16,17 +16,16 @@ export class HomePage {
   public meses = [];
   public novos_comentarios = [];
 
+  loading: any;
+
   // BLOB da imagem tirada pela câmera
   public base64image: string;
 
   constructor(public navCtrl: NavController,
               public config: ConfigProvider,
               public gesol: GesolProvider,
-              public menu: MenuController) {
-
-      // Habilitar o menu lateral
-
-      this.menu.enable(true);
+              public menu: MenuController,
+              public loadingCtrl: LoadingController) {
 
       // Inicializar o array de meses
 
@@ -43,38 +42,73 @@ export class HomePage {
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
     
-      this.gesol.getSolicitacoes().subscribe(
+      
+  }
 
-        res => {
-                
-          // Preencher a variável de solicitações
+  /**
+   * Essa função é chamada TODAS AS VEZES que uma página se torna visível, 
+   * ao contrároi do constructor e da ionViewDidLoad que só são chamados uma vez.
+   */
 
-          this.solicitacoes = res;
+  ionViewDidEnter(){
 
-          for(let item in this.solicitacoes){
+    // Habilitar o menu lateral
+    // this.menu.enable(true);
 
-            // Criar um objeto de Data com a propriedade created_at do item
+    console.log("Estado do Menu", this.menu);
+    
+    // O que diz aí em baixo
+    this.carregarSolicitacoes();
+    
+  }
 
-            let data = new Date(this.solicitacoes[item].created_at);
+  /**
+   * Carregar as 10 solicitações mais recentes
+   */
 
-            // Formatar a data para um formato legível para seres humands
+  carregarSolicitacoes(){
 
-            this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+    // Abrir o gif de loading
 
-            // Criar uma posição no vetor de novos comentários para essa solicitação
+    this.abrirLoading();
 
-            this.novos_comentarios[this.solicitacoes[item].id] = "";
+    this.gesol.getSolicitacoes().subscribe(
+      
+      res => {
+              
+        // Preencher a variável de solicitações
 
-          }
-        
-        }, 
-        
-        fail => { 
-          
-          console.log("Falhou"); 
-          console.log(fail); 
+        this.solicitacoes = res;
+
+        for(let item in this.solicitacoes){
+
+          // Criar um objeto de Data com a propriedade created_at do item
+
+          let data = new Date(this.solicitacoes[item].created_at);
+
+          // Formatar a data para um formato legível para seres humands
+
+          this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+
+          // Criar uma posição no vetor de novos comentários para essa solicitação
+
+          this.novos_comentarios[this.solicitacoes[item].id] = "";
+
         }
-      )
+
+        // Fechar tela de loading
+
+        this.fecharLoading();
+      
+      }, 
+      
+      fail => { 
+        
+        console.log("Falhou"); 
+        console.log(fail); 
+      }
+    );
+
   }
 
   /**
@@ -90,7 +124,8 @@ export class HomePage {
         sourceType: Camera.PictureSourceType.CAMERA,
         encodingType: Camera.EncodingType.JPEG,
         targetWidth: 1000,
-        targetHeight: 750
+        targetHeight: 750,
+        // correctOrientation: true,
       })
       
       // Quando a imagem for retornada
@@ -237,7 +272,7 @@ export class HomePage {
 
           // Criar uma mensagem fake para adicionar na solicitação enquanto a verdadeira é enviada para o servidor
 
-          this.solicitacoes[i].mensagens.push({
+          this.solicitacoes[i].comentarios.push({
             functionario_id : null,
             mensagem: this.novos_comentarios[solicitacao]
           });
@@ -258,6 +293,26 @@ export class HomePage {
   // Retornar o id do solicitante para ser usado no template
   getSolicitanteId(){
     return this.config.getGesolUserId();
+  }
+
+  /**
+   * Abrir o gif de Loading
+   */
+
+  abrirLoading(){
+    
+    this.loading = this.loadingCtrl.create({
+      content: "Carregando..."
+    });
+
+    this.loading.present();
+
+  }
+
+  fecharLoading(){
+
+    this.loading.dismiss();
+
   }
 
 }

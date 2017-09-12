@@ -54,9 +54,9 @@
 					<ion-icon name="text"></ion-icon>
 
 					<!-- Texto dependendo do número de mensagens -->
-					<div *ngIf="item.mensagens.length == 0">Sem Resposta</div>
-					<div *ngIf="item.mensagens.length == 1">1 Resposta</div>
-					<div *ngIf="item.mensagens.length > 1">{{ item.mensagens.length }} Respostas</div>
+					<div *ngIf="item.comentarios.length == 0">Sem Resposta</div>
+					<div *ngIf="item.comentarios.length == 1">1 Resposta</div>
+					<div *ngIf="item.comentarios.length > 1">{{ item.comentarios.length }} Respostas</div>
 
 				</button>
 			</ion-col>
@@ -65,7 +65,7 @@
 		<ion-row class="mensagens" id="minhas_mensagens_{{ item.id }}">
 			<!-- Mensagens  -->
 
-			<div *ngFor="let mensagem of item.mensagens" style="width: 100%" class="mensagens_container">
+			<div *ngFor="let mensagem of item.comentarios" style="width: 100%" class="mensagens_container">
 
 				<!-- Mensagem de um funcionário da Prefeitura  -->
 				<ion-item *ngIf="mensagem.funcionario_id != null">

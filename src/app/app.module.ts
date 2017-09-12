@@ -21,6 +21,10 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { GesolProvider } from '../providers/gesol/gesol';
 import { ServicosPage } from "../pages/servicos/servicos";
 import { SelecionarServicoPage } from "../pages/selecionar-servico/selecionar-servico";
+import { EscreverSolicitacaoPage } from "../pages/escrever-solicitacao/escrever-solicitacao";
+import { Geolocation } from "@ionic-native/geolocation";
+import { ConexaoProvider } from '../providers/conexao/conexao';
+import { Network } from "@ionic-native/network";
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -38,7 +42,8 @@ const cloudSettings : CloudSettings = {
     RegisterPage,
     Mask,
     ServicosPage,
-    SelecionarServicoPage
+    SelecionarServicoPage,
+    EscreverSolicitacaoPage,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +62,8 @@ const cloudSettings : CloudSettings = {
     LoginPage,
     RegisterPage,
     ServicosPage,
-    SelecionarServicoPage
+    SelecionarServicoPage,
+    EscreverSolicitacaoPage,
   ],
   providers: [
     StatusBar,
@@ -67,7 +73,10 @@ const cloudSettings : CloudSettings = {
     HttpModule,
     Facebook,
     AuthProvider,
-    GesolProvider
+    GesolProvider,
+    Geolocation,
+    ConexaoProvider,
+    Network,
   ]
 })
 export class AppModule {}

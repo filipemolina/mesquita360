@@ -34,7 +34,7 @@ export class LoginPage {
               public menu: MenuController) {
 
     // Desabilitar o menu na página de login
-    this.menu.enable(false);
+    // this.menu.enable(false);
 
   }
 
@@ -122,16 +122,16 @@ export class LoginPage {
 
         // Fazer a chamada para a Graph API para obter os dados do usuário
 
-        this.fb.api("/" + res.authResponse.userID + "?fields=id,name,email,picture,birthday,location,hometown",
-                 ['public_profile','user_birthday', 'user_hometown', 'user_location', 'email'])
+        this.fb.api("/" + res.authResponse.userID + "?fields=id,name,email,picture,",
+                 ['public_profile','email'])
 
           .then(resultado => {
 
             // Alterar as informações do usuário no aplicativo
             this.config.setFbUserEmail(resultado.email);
+            this.config.setGesolUserName(resultado.email);
             this.config.setFbUserName(resultado.name);
             this.config.setFbUserPicture(resultado.picture.data.url);
-            this.config.setGesolUserName(resultado.email);
 
             // Enviar a token do Facebook para o Gesol, que verifićará se o usuário existe ou não e retornará um objeto com 
             // username e senha

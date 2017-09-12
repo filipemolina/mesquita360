@@ -33,16 +33,8 @@ export class MyApp {
           statusBar.styleDefault();
           splashScreen.hide();
 
-          // Ir para a página de login (Caso o usuário não esteja logado)
-          if(this.config.getGesolToken() == null)
-          {
-            console.log("GesolToken é nula");
-            this.nav.setRoot(LoginPage);
-          }
-          else{
-            console.log("Gesol Token não é nula, ir direto para a HomePage");
-            this.nav.setRoot(HomePage);
-          }
+          // Definir a home page como página inicial
+          this.nav.setRoot(HomePage);
         
     });
   }
@@ -62,5 +54,14 @@ export class MyApp {
     //Redirecionar para a página de Login
     this.nav.setRoot(LoginPage);
   }
+
+  estaLogado(){
+    return this.config.getGesolToken() != null;
+  }
+
+  naoEstaLogado(){
+    return this.config.getGesolToken() == null;
+  }
+
 }
 

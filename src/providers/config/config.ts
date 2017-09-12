@@ -11,6 +11,10 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ConfigProvider {
 
+  // Chave da API do Google Maps
+
+  public MapsApiKey: string = "AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ";
+
   // Credenciais e Info do Facebook
   
   private fbUserPicture:     string;
@@ -22,7 +26,7 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  private gesolClientSecret: string = "XYXWYRh020ChSdhfwuJhd8bE81ZoppPlf0xD4VVR";
+  private gesolClientSecret: string = "mdMXPwto5Ox5yO0HMhjQzBZ1LCsPzwyPohgeY6JV";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;
@@ -91,7 +95,7 @@ export class ConfigProvider {
     } else if(this.fbUserName != null){
       return this.fbUserName;
     } else {
-      return "Sem Nome";
+      return "Faça login para ajudar Mesquita a crescer!";
     }
   }
 
@@ -109,7 +113,7 @@ export class ConfigProvider {
     } else if(this.fbUserEmail != null){
       return this.fbUserEmail;
     } else {
-      return "teste@exemplo.com";
+      return "";
     }
   }
 

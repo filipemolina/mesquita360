@@ -1,0 +1,37 @@
+page-escrever-solicitacao {
+
+    background-color: #fff !important;
+
+    ion-content, .scroll-content { padding: 0 !important; background-color: #fff !important; }
+
+    ion-navbar ion-icon { color: #fff; }
+
+    ion-item.centralizar { 
+        
+        text-align: center;
+        font-size: 20px;
+        color: #fff;
+    
+    }
+
+    ion-item.recuo { margin-left: -8px; }
+
+    .scroll { height: 100% }
+    
+    #map {
+        width: 100%;
+        height: 30vh;
+    }
+
+    textarea { height: 100px; }
+
+    // Fix para o problema da borda inferior
+
+    .item-md.item-input.item-input-has-focus .item-inner, 
+    .item-md.item-input.input-has-focus .item-inner{
+        border-bottom-color: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+}
