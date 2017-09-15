@@ -82,6 +82,7 @@
     <plugin name="cordova-plugin-camera" spec="^2.4.1" />
     <plugin name="cordova-plugin-camera-preview" spec="^0.9.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.5" />
+    <plugin name="cordova-plugin-crop" spec="^0.4.0" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
         <variable name="APP_ID" value="281455835652510" />
