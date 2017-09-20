@@ -17,8 +17,7 @@ export class AuthProvider {
 
   private root_url = "http://192.168.111.111/gesol";
   
-  constructor(public http: Http, public config : ConfigProvider) {
-  }
+  constructor(public http: Http, public config : ConfigProvider) {}
 
   getGesolUser(email, nome, foto, username, token, uid){
 

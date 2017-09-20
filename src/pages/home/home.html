@@ -23,15 +23,14 @@
 			<p>{{ item.data }}</p>
 		</ion-item>
 
-		<img src="{{ item.foto }}">
-
 		<ion-item>
-			<div style="color: #3D276B; text-align: center;">
-				{{ item.servico.nome }} - {{ item.servico.setor.secretaria.sigla }}
+
+			<img src="{{ item.foto }}">
+
+			<div class="tipo-servico" [ngStyle]="{ 'background-color': item.servico.setor.cor }">
+			    <span [ngClass]="'icone mdi ' + item.servico.setor.icone "></span> <span class="nome-servico">{{ item.servico.nome }}</span>
 			</div>
-			<h2 style="color: #3D276B; text-align: center;">
-				{{ item.status }}
-			</h2>
+
 		</ion-item>
 
 		<ion-card-content>
@@ -40,9 +39,19 @@
 
 		<ion-row>
 			<ion-col>
-				<button ion-button icon-left clear small>
-					<ion-icon name="add"></ion-icon>
-					<div>Apoiar</div>
+				<button *ngIf="estaLogado()" (click)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
+					
+					<!-- Caso a solicitação não esteja na lista de apoios do usuário, mostrar o ícone "+" -->
+					<!-- Caso contrário mostrar o ícone "-" -->
+					<ion-icon *ngIf="!meus_apoios.includes(item.id)" name="add"></ion-icon>
+					<ion-icon *ngIf="meus_apoios.includes(item.id)" name="thumbs-up"></ion-icon>
+
+					<!-- TODO: Testar se usuário já apoiou essa solicitação e atualizar a palavra Apoiar/Apoiado -->
+					<!-- Fazer esse teste quando o resultado ajax chegar e adicionar ou retirar o id do vetor -->
+					<div *ngIf="meus_apoios.includes(item.id)">Apoiado </div>
+					<div *ngIf="!meus_apoios.includes(item.id)">Apoiar </div>
+					<div class="numero" style="margin-left: 3px">({{ apoios[item.id] }})</div>
+
 				</button>
 			</ion-col>
 			<ion-col>
@@ -66,7 +75,7 @@
 				<!-- Mensagem de um funcionário da Prefeitura  -->
 				<ion-item *ngIf="comentario.funcionario_id != null">
 					<h2>{{ comentario.funcionario.setor.secretaria.nome }}</h2>
-					<p>{{ comentario.mensagem }}</p>
+					<p>{{ comentario.comentario }}</p>
 					<ion-avatar item-end>
 						<img src="assets/img/brasao.png">
 					</ion-avatar>					
@@ -78,7 +87,7 @@
 						<img src="{{ item.solicitante.foto }}">
 					</ion-avatar>
 					<h2>{{ item.solicitante.nome }}</h2>
-					<p>{{ comentario.mensagem }}</p>
+					<p>{{ comentario.comentario }}</p>
 				</ion-item>
 				
 			</div>

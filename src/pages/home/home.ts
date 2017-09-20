@@ -4,6 +4,7 @@ import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { Camera } from "ionic-native";
 import { ServicosPage } from "../servicos/servicos";
+import { Crop } from "@ionic-native/crop";
 
 @Component({
   selector: 'page-home',
@@ -15,6 +16,8 @@ export class HomePage {
   public solicitacoes = [];
   public meses = [];
   public novos_comentarios = [];
+  public apoios = [];
+  public meus_apoios = [];
 
   loading: any;
 
@@ -25,7 +28,10 @@ export class HomePage {
               public config: ConfigProvider,
               public gesol: GesolProvider,
               public menu: MenuController,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              public crop: Crop) {
+
+                console.log("Crop", this.crop);
 
       // Inicializar o array de meses
 
@@ -40,8 +46,7 @@ export class HomePage {
       this.meses[9] = "Setembro";
       this.meses[10] = "Outubro";
       this.meses[11] = "Novembro";
-      this.meses[12] = "Dezembro";
-    
+      this.meses[12] = "Dezembro";    
       
   }
 
@@ -83,16 +88,27 @@ export class HomePage {
         for(let item in this.solicitacoes){
 
           // Criar um objeto de Data com a propriedade created_at do item
-
           let data = new Date(this.solicitacoes[item].created_at);
 
-          // Formatar a data para um formato legível para seres humands
-
+          // Formatar a data para um formato legível para seres humanos
           this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
 
           // Criar uma posição no vetor de novos comentários para essa solicitação
-
           this.novos_comentarios[this.solicitacoes[item].id] = "";
+
+          // Criar uma posição no vetor de apoios com o id da solicitação e a quantidade de apoios
+          this.apoios[this.solicitacoes[item].id] = this.solicitacoes[item].apoiadores_count;
+
+          // Testar se o usuário está logado
+          if(this.estaLogado())
+          {
+            // Testar se o usuário apoiou esta solicitação
+            let meus = this.solicitacoes[item].apoiadores.filter(apoiador => (apoiador.id == 21));
+
+            // Adicionar ao vetor que guarda apenas os ids das solicitações apoiadas pelo usuário atualmente logado
+            if(meus.length)
+              this.meus_apoios.push(meus[0].pivot.solicitacao_id);
+          }
 
         }
 
@@ -120,23 +136,41 @@ export class HomePage {
 
       // Chamar a câmera
       Camera.getPicture({
-        destinationType: Camera.DestinationType.DATA_URL,
+        destinationType: Camera.DestinationType.FILE_URI,
         sourceType: Camera.PictureSourceType.CAMERA,
         encodingType: Camera.EncodingType.JPEG,
         targetWidth: 1000,
         targetHeight: 750,
-        // correctOrientation: true,
+        correctOrientation: true,
       })
       
       // Quando a imagem for retornada
       .then((imagem) => {
 
-          this.base64image = "data:image/jpeg;base64," + imagem;
-          
-          // Navegar para a página de serviços passando a imagem como parâmetro
-          this.navCtrl.push(ServicosPage,{
-            imagem : this.base64image
-          });
+          // this.base64image = "data:image/jpeg;base64," + imagem;
+
+          // Cropar a imagem
+          this.crop.crop(imagem, { quality: 100 })
+          .then(
+            nova_imagem => {
+
+              // Converter a imagem para base64
+              this.toBase64(nova_imagem).then(base64 => {
+                
+                this.base64image = base64;
+
+                // Navegar para a página de serviços passando a imagem como parâmetro
+                this.navCtrl.push(ServicosPage,{
+                  imagem : this.base64image
+                });
+
+              })
+
+            },
+
+            erro => console.log("Erro no Crop", erro)
+
+          );
 
       }, 
 
@@ -156,7 +190,7 @@ export class HomePage {
 
       // Chamar a câmera
       Camera.getPicture({
-        destinationType: Camera.DestinationType.DATA_URL,
+        destinationType: Camera.DestinationType.FILE_URI,
         sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
         encodingType: Camera.EncodingType.JPEG,
         targetWidth: 1000,
@@ -166,12 +200,23 @@ export class HomePage {
       // Quando a imagem for retornada
       .then((imagem) => {
 
-          this.base64image = "data:image/jpeg;base64," + imagem;
-          
-          // Navegar para a página de serviços passando a imagem como parâmetro
-          this.navCtrl.push(ServicosPage, {
-            imagem: this.base64image
-          });
+          // this.base64image = "data:image/jpeg;base64," + imagem;
+
+          this.crop.crop(imagem, { quality: 100 })
+          .then(
+            nova_imagem => {
+
+              this.toBase64(imagem).then(base64 => {
+
+                // Navegar para a página de serviços passando a imagem como parâmetro
+                this.navCtrl.push(ServicosPage, {
+                  imagem: base64
+                });
+
+              })
+
+            }
+          );
 
       }, 
 
@@ -274,7 +319,7 @@ export class HomePage {
 
           this.solicitacoes[i].comentarios.push({
             functionario_id : null,
-            mensagem: this.novos_comentarios[solicitacao]
+            comentario: this.novos_comentarios[solicitacao]
           });
 
           // Aumentar tamanho do container de mensagens
@@ -313,6 +358,73 @@ export class HomePage {
 
     this.loading.dismiss();
 
+  }
+
+  // Enviar o id de uma solicitação e de um solicitante e adicionar ou remover o apoio
+
+  apoiar(solicitacao, solicitante){
+
+    //Fazer a chamada AJAX
+    this.gesol.apoiar(solicitacao, solicitante).subscribe(
+
+      res => {
+
+        // A resposta desse AJAX é o número de apoios que a solicitação possui.
+        // Atribuir esse número ao vetor na posição correta para que o valor seja atualizado na tela
+        this.apoios[solicitacao] = res;
+
+        // Caso o usuário já tenha apoiado essa solicitação, excluir o seu id do vetor de apoios
+        if(this.meus_apoios.indexOf(solicitacao) > -1)
+        {
+           // Obter o índice do item para excluir
+           let index = this.meus_apoios.indexOf(solicitacao);
+
+           // Excluir o apoio
+          this.meus_apoios.splice(index, 1);
+
+        } else {
+
+          // Caso contrário, adicionar
+          this.meus_apoios.push(solicitacao);
+
+        }
+      }
+
+    );
+
+  }
+
+  /**
+   * Converte um caminho de arquivo de imagem em uma imagem base64
+   * @param url Caminho para o arquivo de imagem
+   */
+
+  toBase64(url: string){
+    return new Promise<string>(function (resolve) {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                resolve(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.send();
+    });
+  }
+
+  /**
+   * Verificar se usuário está ou não está logado no sistema atualmente
+   */
+
+  estaLogado(){
+    return this.config.getGesolToken() != null;
+  }
+
+  naoEstaLogado(){
+    return this.config.getGesolToken() == null;
   }
 
 }

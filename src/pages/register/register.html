@@ -36,7 +36,7 @@
 
       <ion-item>
         <ion-icon name="card" item-start></ion-icon>
-        <ion-input [(ngModel)]="cpf" name="cpf" maxlength="15" type="text" placeholder="CPF" [textMask]="{mask: masks.cpf, placeholderChar: '\u2000'}"></ion-input>
+        <ion-input [(ngModel)]="cpf" name="cpf" maxlength="14" type="text" placeholder="CPF" mask="***.***.***-*"></ion-input>
       </ion-item>
 
       <!-- Senha -->

@@ -120,7 +120,7 @@ export class ConfigProvider {
   // Retorna a foto do usuário na seguinte ordem: 
   // Gesol 
   // -> Facebook  
-  // ->-> "teste@exemplo.com"
+  // ->-> Avatar
 
   getFoto(){
 

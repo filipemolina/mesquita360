@@ -1,0 +1,25 @@
+page-editar-perfil {
+
+    ion-avatar{
+
+        img{
+            border-radius: 50%;
+            width: 60%;
+            margin : 0 auto;
+        }
+    
+    }
+
+    div.botao-alterar-foto {
+        text-align: center !important;
+        padding: 5px 0;
+        margin : 5px 0;
+    }
+
+    ion-content {
+        background-image: url("../assets/img/menu.jpg");
+        background-position: center;
+        background-size: auto 100%;
+    }
+
+}

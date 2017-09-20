@@ -108,11 +108,11 @@ export class GesolProvider {
     headers.append('Authorization', 'Bearer '+this.config.getGesolToken());
 
     let body= {
-      mensagem: mensagem,
+      comentario: mensagem,
       solicitacao_id: solicitacao
     };
 
-    return this.http.post(this.root_url+"/api/mensagens", body, { headers: headers })
+    return this.http.post(this.root_url+"/api/comentarios", body, { headers: headers })
               .map(res => res.json());
 
   }
@@ -141,6 +141,74 @@ export class GesolProvider {
 
     return this.http.post(this.root_url+"/api/solicitacoes", body, { headers: headers })
                .map(res => res.json());
+
+  }
+
+  editaSolicitante(solicitante){
+
+    let headers = this.montaHeaders();
+
+    let body = { 
+      solicitante: solicitante,
+      _method: "PUT"
+    };
+
+    return this.http.post(this.root_url + "/api/solicitantes/" + solicitante.id, body, { headers: headers })
+            .map(res => res.json());
+
+  }
+
+  /**
+   * Apoiar ou desapoiar
+   */
+
+   apoiar(solicitacao, solicitante){
+
+    let headers = this.montaHeaders();
+
+    let body = {
+      solicitacao_id : solicitacao,
+      solicitante_id : solicitante
+    }
+
+    return this.http.post(this.root_url + "/api/apoiar", body, { headers: headers })
+              .map(res => res.json());
+
+   }
+   
+   /**
+    *  Obter o solicitante e todos as suas informações de cadastro
+    */
+
+    getSolicitanteInfo()
+    {
+      let headers = this.montaHeaders();
+
+      return this.http.get(this.root_url + "/api/solicitantes/" + this.config.getGesolUserId(), { headers: headers })
+              .map(res => res.json());
+    }
+
+  /**
+   * Retorna uma lista com todas as opções do Enum
+   */
+
+  getEnum(tabela, coluna){
+
+    let headers = this.montaHeaders();
+
+    return this.http.get(this.root_url + "/api/enum/" + tabela + "/" + coluna, { headers: headers })
+              .map(res => res.json());
+
+  }
+
+  /**
+   * Consulta CEP via API dos correios
+   */
+
+  consultaCEP(cep){
+
+    return this.http.get("http://viacep.com.br/ws/" + cep + "/json")
+          .map(res => res.json());
 
   }
 

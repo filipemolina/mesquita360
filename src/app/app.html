@@ -26,6 +26,10 @@
         <ion-icon item-start name="clipboard"></ion-icon>
         Minhas Solicitações
       </button>
+      <button *ngIf="estaLogado()" ion-item menuToggle (click)="goToPage(perfilPage)">
+          <ion-icon item-start name="person"></ion-icon>
+          Editar Perfil
+        </button>
       <button *ngIf="naoEstaLogado()" ion-item menuToggle (click)="goToPage(loginPage)">
         <ion-icon item-start name="log-in"></ion-icon>
         Login

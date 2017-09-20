@@ -1,69 +1,64 @@
 import { Directive, Attribute } from '@angular/core';
-import { NgModel } from "@angular/forms";
+import { NgModel } from '@angular/forms';
 
 @Directive({
-  selector: '[mask]',
-  host: {
-    '(keyup)': 'onInputChange()'
-  },
-  providers: [NgModel]
+    selector: '[mask]',
+    host: {
+        '(keyup)': 'onInputChange($event)'
+    },
+    providers: [NgModel]
 })
 export class Mask {
-  maskPattern: string;
-  placeHolderCounts: number;
-  dividers: string[];
-  modelValue: string;
-  viewValue: string;
 
-  constructor(
-    public model: NgModel,
-    @Attribute("mask") maskPattern: string
-  ) {
-    this.dividers = maskPattern.replace(/\*/g, "").split("");
-    this.dividers.push(" ");
-    this.generatePattern(maskPattern);
-  }
+    pattern: string;
 
-  onInputChange() {
-    this.modelValue = this.getModelValue();
-    var stringToFormat = this.modelValue;
-    if (stringToFormat.length < 10) {
-      stringToFormat = this.padString(stringToFormat);
+    constructor(
+        public model: NgModel,
+        @Attribute('mask') pattern: string
+    ) {
+        this.pattern = pattern;
     }
 
-    this.viewValue = this.format(stringToFormat);
-    this.model.viewToModelUpdate(this.modelValue);
-    this.model.valueAccessor.writeValue(this.viewValue)
-  }
+    onInputChange(event) {
+        let value = event.target.value,
+            pattern = this.pattern;
+            
+        // Remover o caracter que foi inserido caso não seja um número
+        value = value.replace(/[a-zA-Z!@#\$%\^\&*\)\(+=_]+$/g, '');
 
-  generatePattern(patternString) {
-    this.placeHolderCounts = (patternString.match(/\*/g) || []).length;
-    for (let i = 0; i < this.placeHolderCounts; i++) {
-      patternString = patternString.replace('*', "{" + i + "}");
+        if (event.keyIdentifier === 'U+0008' || event.keyCode === 8 || event.key === 'Backspace') {
+            if (value.length) { //prevent fatal exception when backspacing empty value in progressive web app
+                //remove all trailing formatting then delete character
+                while (pattern[value.length] && pattern[value.length] !== '*') {
+                    value = value.substring(0, value.length - 1);
+                }
+                //remove all leading formatting to restore placeholder
+                if (pattern.substring(0, value.length).indexOf('*') < 0) {
+                    value = value.substring(0, value.length - 1);
+                }
+            }
+        } else {
+            let maskIndex = value.length,
+                formatted = '';
+            if (value.length === 1 && value !== pattern[0]) {
+                //apply leading formatting
+                maskIndex = 0;
+                while (maskIndex < pattern.length && pattern[maskIndex] !== '*') {
+                    formatted += pattern[maskIndex];
+                    maskIndex++;
+                }
+            }
+            formatted += value;
+            if (maskIndex < pattern.length) {
+                //apply trailing formatting
+                while (pattern[maskIndex] !== '*') {
+                    formatted += pattern[maskIndex];
+                    maskIndex++;
+                }
+            }
+            value = formatted;
+        }
+        this.model.update.emit(value);
     }
-    this.maskPattern = patternString;
-  }
 
-  format(s) {
-    var formattedString = this.maskPattern;
-    for (let i = 0; i < this.placeHolderCounts; i++) {
-      formattedString = formattedString.replace("{" + i + "}", s.charAt(i));
-    }
-    return formattedString;
-  }
-
-  padString(s) {
-    var pad = "          ";
-    return (s + pad).substring(0, pad.length);
-  }
-
-  getModelValue() {
-    var modelValue = this.model.value;
-    for (var i = 0; i < this.dividers.length; i++) {
-      while (modelValue.indexOf(this.dividers[i]) > -1) {
-        modelValue = modelValue.replace(this.dividers[i], "");
-      }
-    }
-    return modelValue;
-  }
 }

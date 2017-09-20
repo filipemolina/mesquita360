@@ -25,6 +25,8 @@ import { EscreverSolicitacaoPage } from "../pages/escrever-solicitacao/escrever-
 import { Geolocation } from "@ionic-native/geolocation";
 import { ConexaoProvider } from '../providers/conexao/conexao';
 import { Network } from "@ionic-native/network";
+import { Crop } from "@ionic-native/crop";
+import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -44,14 +46,18 @@ const cloudSettings : CloudSettings = {
     ServicosPage,
     SelecionarServicoPage,
     EscreverSolicitacaoPage,
+    EditarPerfilPage,
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{
+      monthNames: ['Janeiro', 'Fevereiro', 'Março', "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
+      monthShortNames: ['Jan', 'Fev', 'Mar', "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
+    }),
     CloudModule.forRoot(cloudSettings),
     IonicStorageModule.forRoot(),
-    TextMaskModule
+    TextMaskModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -64,6 +70,7 @@ const cloudSettings : CloudSettings = {
     ServicosPage,
     SelecionarServicoPage,
     EscreverSolicitacaoPage,
+    EditarPerfilPage
   ],
   providers: [
     StatusBar,
@@ -77,6 +84,7 @@ const cloudSettings : CloudSettings = {
     Geolocation,
     ConexaoProvider,
     Network,
+    Crop
   ]
 })
 export class AppModule {}

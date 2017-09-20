@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { ChamadosPage } from '../pages/chamados/chamados';
 import { LoginPage } from '../pages/login/login';
 import { ConfigProvider } from "../providers/config/config";
+import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
 
 @Component({
   templateUrl: 'app.html',
@@ -20,6 +21,7 @@ export class MyApp {
   // rootPage:any = HomePage;
   chamadosPage: any = ChamadosPage;
   loginPage: any = LoginPage;
+  perfilPage: any = EditarPerfilPage;
 
   constructor(
       platform: Platform, 
