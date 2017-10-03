@@ -1,8 +1,30 @@
 page-chamados {
 
     ion-row.mensagens{
-		height: 0;
 		transition: 0.2s all ease-in;
+	}
+
+	ion-card {
+		
+		ion-item{
+
+			div.tipo-servico{
+				color: #fff;
+				text-align: center;
+				width: 100%;
+				padding: 7px 10px;
+				word-wrap: break-word !important;
+				word-break: break-all !important;
+				font-size: 14px;
+				font-weight: bold;
+				border-radius: 15px;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+		}
+
 	}
 
 }

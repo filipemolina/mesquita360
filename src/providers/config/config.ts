@@ -11,6 +11,10 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ConfigProvider {
 
+  // Objeto que guarda todas as informações do solicitante
+
+  public solicitante:any = {};
+
   // Chave da API do Google Maps
 
   public MapsApiKey: string = "AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ";
@@ -26,7 +30,8 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  private gesolClientSecret: string = "mdMXPwto5Ox5yO0HMhjQzBZ1LCsPzwyPohgeY6JV";
+  // private gesolClientSecret: string = "mdMXPwto5Ox5yO0HMhjQzBZ1LCsPzwyPohgeY6JV";
+  private gesolClientSecret: string = "c8PHHk1auXNKTTYRUdpZerwc4scQyxVEuosm7gao";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;
@@ -41,11 +46,11 @@ export class ConfigProvider {
 
     // Facebook
 
-    storage.get('fbUserPicture')    .then(dado => { this.fbUserPicture = dado });
-    storage.get('fbUserName')       .then(dado => { this.fbUserName    = dado });
-    storage.get('fbUserEmail')      .then(dado => { this.fbUserEmail   = dado });
-    storage.get('fbID')             .then(dado => { this.fbID          = dado });
-    storage.get('fbToken')          .then(dado => { this.fbToken       = dado });
+    storage.get('fbUserPicture')    .then(dado => { this.fbUserPicture     = dado });
+    storage.get('fbUserName')       .then(dado => { this.fbUserName        = dado });
+    storage.get('fbUserEmail')      .then(dado => { this.fbUserEmail       = dado });
+    storage.get('fbID')             .then(dado => { this.fbID              = dado });
+    storage.get('fbToken')          .then(dado => { this.fbToken           = dado });
 
     // Gesol
 
@@ -56,6 +61,10 @@ export class ConfigProvider {
     storage.get('gesolCPF')         .then(dado => { this.gesolCPF          = dado });
     storage.get('gesolFoto')        .then(dado => { this.gesolFoto         = dado });
     storage.get('gesolUserId')      .then(dado => { this.gesolUserId       = dado });
+
+    // Solicitante
+
+    storage.get('solicitante')      .then(dado => { this.solicitante       = dado });
 
   }
 
@@ -80,22 +89,47 @@ export class ConfigProvider {
     this.setGesolUserName(null);
 
   }
+
+  /**
+   * Recebe um objeto de usuário e atualiza todas as informações salvas no aplicativo atualmente usando os setters definidos
+   * abaixo
+   * @param usuario Objeto que contem todas as informações do usuário no padrão Laravel, incluindo endereço e telefones
+   */
+
+  setSolicitante(usuario:any){
+
+    // Salvar na variável
+    this.solicitante = usuario.solicitante;
+    
+    this.setGesolCPF(usuario.solicitante.cpf);
+    this.setGesolNome(usuario.solicitante.nome);
+    this.setGesolFoto(usuario.solicitante.foto);
+    this.setGesolUserName(usuario.solicitante.email);
+    this.setGesolToken(usuario.token.accessToken);
+    this.setGesolUserId(usuario.solicitante.id);
+
+    // Salvar na Storage
+    this.storage.set('solicitante', usuario.solicitante);
+
+  }
+
+  getSolicitante(){
+    return this.solicitante;
+  }
   
   /////////////////////////////////////////////////////////////// Falsos Getters
 
   // Retorna o nome do usuário na seguinte ordem: 
   // Gesol 
   // -> Facebook  
-  // ->-> Sem Nome
+  // -> -> Sem Nome
 
   getUserName(){
 
-    if(this.gesolNome != null){
-      return this.gesolNome;
-    } else if(this.fbUserName != null){
-      return this.fbUserName;
+    if(this.solicitante != null){
+      return this.solicitante.nome;
     } else {
-      return "Faça login para ajudar Mesquita a crescer!";
+      return "";
     }
   }
 
@@ -108,10 +142,8 @@ export class ConfigProvider {
 
     // O username do Gesol é o email do usuário
 
-    if(this.gesolUserName != null){
-      return this.gesolUserName;
-    } else if(this.fbUserEmail != null){
-      return this.fbUserEmail;
+    if(this.solicitante != null){
+      return this.solicitante.email;
     } else {
       return "";
     }
@@ -124,10 +156,8 @@ export class ConfigProvider {
 
   getFoto(){
 
-    if(this.gesolFoto != null){
-      return this.gesolFoto;
-    } else if(this.fbUserPicture != null){
-      return this.fbUserPicture;
+    if(this.solicitante != null){
+      return this.solicitante.foto;
     } else {
       return "https://api.adorable.io/avatars/85/teste";
     }
@@ -138,23 +168,23 @@ export class ConfigProvider {
 
   //Facebook
 
-  getFbUserName()       { return this.fbUserName; }
+  getFbUserName()       { return this.fbUserName;    }
   getFbUserPicture()    { return this.fbUserPicture; }
-  getFbUserEmail()      { return this.fbUserEmail; }
-  getFbID()             { return this.fbID; }
-  getFbToken()          { return this.fbToken; }
+  getFbUserEmail()      { return this.fbUserEmail;   }
+  getFbID()             { return this.fbID;          }
+  getFbToken()          { return this.fbToken;       }
 
   // Gesol
 
-  getGesolClientId()    { return this.gesolClientId; }
+  getGesolClientId()    { return this.gesolClientId;     }
   getGesolClientSecret(){ return this.gesolClientSecret; }
-  getGesolUserName()    { return this.gesolUserName; }
-  getGesolPassword()    { return this.gesolPassword; }
-  getGesolToken()       { return this.gesolToken; }
-  getGesolNome()        { return this.gesolNome; }
-  getGesolCPF()         { return this.gesolCPF; }
-  getGesolFoto()        { return this.gesolFoto; }
-  getGesolUserId()      { return this.gesolUserId; }
+  getGesolUserName()    { return this.gesolUserName;     }
+  getGesolPassword()    { return this.gesolPassword;     }
+  getGesolToken()       { return this.gesolToken;        }
+  getGesolNome()        { return this.gesolNome;         }
+  getGesolCPF()         { return this.gesolCPF;          }
+  getGesolFoto()        { return this.gesolFoto;         }
+  getGesolUserId()      { return this.gesolUserId;       }
 
 
   /////////////////////////////////////////////////////////////// Mètodos de Set

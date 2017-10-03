@@ -47,14 +47,8 @@ export class RegisterPage {
         .subscribe(
           // Caso de Sucesso
           res => {
-
-          // Gravar a token do Gesol
-          this.config.setGesolToken(res.accessToken);
-
-          // Gravar as informações do usuário
-          this.config.setGesolNome(this.nome);
-          this.config.setGesolUserName(this.email);
-          this.config.setGesolCPF(this.cpf.trim());
+          
+          this.config.setSolicitante(res);
 
           // Navegar para a página inicial
           this.navCtrl.setRoot(HomePage);

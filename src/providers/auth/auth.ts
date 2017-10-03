@@ -15,7 +15,8 @@ export class AuthProvider {
 
   // Endpoint da API
 
-  private root_url = "http://192.168.111.111/gesol";
+  // private root_url = "http://192.168.111.111/gesol";
+  private root_url = "http://192.168.0.18/gesol";
   
   constructor(public http: Http, public config : ConfigProvider) {}
 

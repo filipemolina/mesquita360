@@ -54,11 +54,8 @@ export class LoginPage {
 
         // Preencher as informações básicas do usuário
 
-        this.config.setGesolNome(res.nome);
-        this.config.setGesolFoto(res.foto);
-        this.config.setGesolUserName(res.email);
-        this.config.setGesolToken(res.token.accessToken);
-        this.config.setGesolUserId(res.id);
+        this.config.setSolicitante(res);
+        console.log("Solicitante", this.config.getSolicitante());
 
         // Tornar a homepage o novo Root
 
@@ -122,7 +119,7 @@ export class LoginPage {
 
         // Fazer a chamada para a Graph API para obter os dados do usuário
 
-        this.fb.api("/" + res.authResponse.userID + "?fields=id,name,email,picture,",
+        this.fb.api("/" + res.authResponse.userID + "?fields=id,name,email,picture",
                  ['public_profile','email'])
 
           .then(resultado => {
@@ -146,7 +143,8 @@ export class LoginPage {
 
 
               // Gravar os dados recebidos no ConfigProvider
-              this.config.setGesolToken(res.accessToken);
+              this.config.setGesolToken(res.token.accessToken);
+              this.config.setSolicitante(res);
 
               console.log("Config após atualização dos dados");
               console.log(this.config);

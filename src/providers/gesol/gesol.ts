@@ -14,7 +14,8 @@ export class GesolProvider {
 
   // Endpoint da API
 
-  private root_url = "http://192.168.111.111/gesol";
+  // private root_url = "http://192.168.111.111/gesol";
+  private root_url = "http://192.168.0.18/gesol";
 
   constructor(public http: Http, public config: ConfigProvider) {}
 
@@ -50,9 +51,9 @@ export class GesolProvider {
 
   getSolicitacoes(){
 
-    let headers = this.montaHeaders();
+    // let headers = this.montaHeaders();
 
-    return this.http.get(this.root_url+"/api/solicitacoes", { headers: headers })
+    return this.http.get(this.root_url+"/api/solicitacoes")
                .map(res => res.json());
   }
 
@@ -184,7 +185,11 @@ export class GesolProvider {
     {
       let headers = this.montaHeaders();
 
-      return this.http.get(this.root_url + "/api/solicitantes/" + this.config.getGesolUserId(), { headers: headers })
+      let id = this.config.getGesolUserId();
+
+      console.log("ID DO SOLICITANTE", id);
+
+      return this.http.get(this.root_url + "/api/solicitantes/" + id, { headers: headers })
               .map(res => res.json());
     }
 

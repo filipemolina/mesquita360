@@ -12,6 +12,7 @@ import {
 import { GesolProvider } from '../../providers/gesol/gesol';
 import { Camera } from "ionic-native";
 import { Crop } from "@ionic-native/crop";
+import { ConfigProvider } from '../../providers/config/config';
 
 /**
  * Generated class for the EditarPerfilPage page.
@@ -44,7 +45,8 @@ export class EditarPerfilPage {
     public actionSheetController: ActionSheetController,
     public crop: Crop,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public config: ConfigProvider
   ){
 
     this.abrirLoading();
@@ -108,7 +110,7 @@ export class EditarPerfilPage {
             // Converter a imagem para base64
             this.toBase64(nova_imagem).then(base64 => {
               
-              this.usuario.foto = nova_imagem;
+              this.usuario.foto = base64;
 
             })
 

@@ -31,8 +31,6 @@ export class HomePage {
               public loadingCtrl: LoadingController,
               public crop: Crop) {
 
-                console.log("Crop", this.crop);
-
       // Inicializar o array de meses
 
       this.meses[1] ="Janeiro";
@@ -249,12 +247,18 @@ export class HomePage {
   // Expandir ou encolher as mensagens
   expandirMensagens(id){
 
+    console.log("Chamou");
+
     // Obter a Row com as mensagens da solicitação que foi clicada
     let row = document.getElementById("mensagens_"+id);
+
+    console.log("Elemento", row);
 
     // Caso a Altura da div seja 0 ou não esteja definidar, abrir
 
     if(row.style.height == "0px" || !row.style.height){
+
+      console.log("Altura era igual a 0");
 
        // Altura da div de mensagens
       let altura = 0;
@@ -276,9 +280,13 @@ export class HomePage {
 
       }
 
+      console.log("Nova altura", altura);
+
       row.style.height = altura + "px";
 
     } else {
+
+      console.log("Altura era maior que 0, mudando para 0");
 
       // Caso contrário, setar a altura para 0px
       row.style.height = "0px";
