@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ModalController } from "ionic-angular";
-import { SelecionarServicoPage } from "../selecionar-servico/selecionar-servico";
 import { EscreverSolicitacaoPage } from "../escrever-solicitacao/escrever-solicitacao";
 
 /**

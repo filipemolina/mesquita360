@@ -56,6 +56,12 @@ export class EditarPerfilPage {
     
   }
 
+  // Executar o chamado para alterar os dados do usuário quando este sair da página de alteração
+
+  ionViewDidLeave(){
+    this.salvarInfoUsuario();
+  }
+
   abrirActionSheet(){
 
     // Criar a ActionSheet
@@ -269,7 +275,7 @@ export class EditarPerfilPage {
 
   salvarInfoUsuario(){
 
-    this.abrirLoading();
+    console.log("Começou a salvar o usuário...");
 
     // Adicionar as informações de endereço e telefones no objeto do usuário
 
@@ -280,24 +286,26 @@ export class EditarPerfilPage {
 
       res => {
 
-        this.fecharLoading();
-        console.log(res);
+        console.log("Salvou o usuário!");
 
         // Criar um alerta de sucesso
-        let alert = this.alertCtrl.create({
-          title: "Parabéns!",
-          subTitle: "Dados Alterados",
-          buttons: ['OK']
-        });
+        // let alert = this.alertCtrl.create({
+        //   title: "Parabéns!",
+        //   subTitle: "Dados Alterados",
+        //   buttons: ['OK']
+        // });
+
+        this.config.setSolicitante(res);
 
         // Mostrar o alerta
-        alert.present();
+        // alert.present();
+
 
       },
 
       erro => {
 
-        this.fecharLoading();
+        console.log("Ocorreu um erro!");
 
         // Objeto com todos os erros
         let erros = JSON.parse(erro._body);
@@ -316,14 +324,14 @@ export class EditarPerfilPage {
         }
         
         // Criar um alerta com as mensagens de erro concatenadas
-        let alert = this.alertCtrl.create({
-          title: "Atenção!",
-          subTitle: mensagem,
-          buttons: ['OK']
-        });
+        // let alert = this.alertCtrl.create({
+        //   title: "Atenção!",
+        //   subTitle: mensagem,
+        //   buttons: ['OK']
+        // });
 
         // Mostrar o alerta
-        alert.present();
+        // alert.present();
 
       }
 

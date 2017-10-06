@@ -4,7 +4,15 @@ page-escrever-solicitacao {
 
     ion-content, .scroll-content { padding: 0 !important; background-color: #fff !important; }
 
-    ion-navbar ion-icon { color: #fff; }
+    ion-navbar{
+
+        ion-icon { color: #fff; }
+
+        button {
+            font-size: 1.4rem;
+        }
+
+    }
 
     ion-item.centralizar { 
         
@@ -21,6 +29,9 @@ page-escrever-solicitacao {
     #map {
         width: 100%;
         height: 30vh;
+        background-image: url("../assets/img/cloud_load.gif");
+        background-position: center;
+        background-size: cover;
     }
 
     textarea { height: 100px; }

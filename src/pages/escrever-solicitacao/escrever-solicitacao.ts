@@ -1,9 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, PopoverController, AlertController, LoadingController, App, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, App, ViewController } from 'ionic-angular';
 import { Geolocation } from "@ionic-native/geolocation";
 import { Http } from "@angular/http";
 import { GesolProvider } from "../../providers/gesol/gesol";
-import { HomePage } from "../home/home";
 
 // Fazer com que o TypeScript não sobrescreva a variável do google
 declare var google;
@@ -65,8 +64,6 @@ export class EscreverSolicitacaoPage {
 
   obtemLocalizacao(){
 
-    this.abrirLoading();
-
     // Obter a localização
     this.geolocation.getCurrentPosition()
     .then(resp => {
@@ -89,8 +86,6 @@ export class EscreverSolicitacaoPage {
           this.endereco['uf']            = address.address_components[5].short_name;
           this.endereco['latitude']      = this.lati;
           this.endereco['longitude']     = this.longi;
-
-          console.log("Endereco do objeto ", this.endereco);
 
           // Montar o Mapa
           this.loadMap();
@@ -124,8 +119,6 @@ export class EscreverSolicitacaoPage {
       animation: google.maps.Animation.DROP,
       position: this.map.getCenter()
     });
-
-    this.fecharLoading();
 
   }
 

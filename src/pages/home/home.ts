@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, LoadingController } from 'ionic-angular';
+import { NavController, MenuController, LoadingController, ToastController, FabContainer } from 'ionic-angular';
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { Camera } from "ionic-native";
@@ -20,6 +21,7 @@ export class HomePage {
   public meus_apoios = [];
 
   loading: any;
+  toast: any;
 
   // BLOB da imagem tirada pela câmera
   public base64image: string;
@@ -29,7 +31,9 @@ export class HomePage {
               public gesol: GesolProvider,
               public menu: MenuController,
               public loadingCtrl: LoadingController,
-              public crop: Crop) {
+              public crop: Crop,
+              public splashScreen: SplashScreen,
+              public toastCtrl: ToastController) {
 
       // Inicializar o array de meses
 
@@ -44,22 +48,22 @@ export class HomePage {
       this.meses[9] = "Setembro";
       this.meses[10] = "Outubro";
       this.meses[11] = "Novembro";
-      this.meses[12] = "Dezembro";    
+      this.meses[12] = "Dezembro";
+      
+      //Inicializar o Toast
+      this.loading = this.loadingCtrl.create({
+        content: "Carregando..."
+      });
       
   }
 
   /**
    * Essa função é chamada TODAS AS VEZES que uma página se torna visível, 
-   * ao contrároi do constructor e da ionViewDidLoad que só são chamados uma vez.
+   * ao contrário do constructor e da ionViewDidLoad que só são chamados uma vez.
    */
 
   ionViewDidEnter(){
 
-    // Habilitar o menu lateral
-    // this.menu.enable(true);
-
-    console.log("Estado do Menu", this.menu);
-    
     // O que diz aí em baixo
     this.carregarSolicitacoes();
     
@@ -71,9 +75,7 @@ export class HomePage {
 
   carregarSolicitacoes(){
 
-    // Abrir o gif de loading
-
-    this.abrirLoading();
+    this.abrirToast();
 
     this.gesol.getSolicitacoes().subscribe(
       
@@ -112,7 +114,7 @@ export class HomePage {
 
         // Fechar tela de loading
 
-        this.fecharLoading();
+        // this.fecharLoading();
       
       }, 
       
@@ -130,7 +132,9 @@ export class HomePage {
    * @param
    */
 
-   tirarFoto(){
+   tirarFoto(fab: FabContainer){
+     
+      fab.close();
 
       // Chamar a câmera
       Camera.getPicture({
@@ -184,7 +188,9 @@ export class HomePage {
     * @param
     */
 
-    escolherFoto(){
+    escolherFoto(fab: FabContainer){
+
+      fab.close();
 
       // Chamar a câmera
       Camera.getPicture({
@@ -353,10 +359,9 @@ export class HomePage {
    */
 
   abrirLoading(){
-    
-    this.loading = this.loadingCtrl.create({
-      content: "Carregando..."
-    });
+
+    //Fechar o toast, caso ele esteja aberto
+    this.fecharToast();
 
     this.loading.present();
 
@@ -367,6 +372,28 @@ export class HomePage {
     this.loading.dismiss();
 
   }
+
+  /**
+   * Abrir e fechar o Toast de "Procurando por novas solicitações..." 
+   */
+
+   abrirToast(){
+
+    this.toast = this.toastCtrl.create({
+      message: "Carregando novas solicitações...",
+      duration: 3000,
+      position: 'bottom'
+    });
+
+    this.toast.present();
+
+   }
+
+   fecharToast(){
+
+    this.toast.dismiss();
+
+   }
 
   // Enviar o id de uma solicitação e de um solicitante e adicionar ou remover o apoio
 

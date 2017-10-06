@@ -27,11 +27,11 @@ page-login {
         background-color: color($colors, secondary);
     }
 
-    div.login-form
-    {
-        position: absolute;
-        top: 50%;
-        margin-top: -200px;
-        width: 92%;
+    ion-col.imagem{
+        text-align: center;
+
+        img {
+            width: 70%;
+        }
     }
 }

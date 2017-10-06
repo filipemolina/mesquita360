@@ -31,7 +31,7 @@ export class ConfigProvider {
 
   private gesolClientId:     number = 1;
   // private gesolClientSecret: string = "mdMXPwto5Ox5yO0HMhjQzBZ1LCsPzwyPohgeY6JV";
-  private gesolClientSecret: string = "c8PHHk1auXNKTTYRUdpZerwc4scQyxVEuosm7gao";
+  private gesolClientSecret: string = "x4nknnjyPU8ojvg4C8F5rBc59S4IEpAgWqNQjY2n";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;

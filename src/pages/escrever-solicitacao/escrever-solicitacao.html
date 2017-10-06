@@ -7,12 +7,23 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>
-      <button ion-button clear item-start icon-olny large (click)="voltar()">
+
+    <ion-buttons left>
+      <button ion-button clear icon-olny large (click)="voltar()">
         <ion-icon name="arrow-back"></ion-icon>
       </button>
+    </ion-buttons>
+
+    <ion-title>
       Detalhes
     </ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-right (click)="gravaSolicitacao()">
+        Enviar
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -41,13 +52,6 @@
 
     <ion-item class="recuo">
         <ion-textarea [(ngModel)]="texto" placeholder="Descreva sua solicitação." autocomplete="true" autocorrect="on"></ion-textarea>
-    </ion-item>
-
-    <ion-item>
-      <button ion-button icon-left block large (click)="gravaSolicitacao()">
-          <ion-icon name="send"></ion-icon>
-          Enviar
-      </button>
     </ion-item>
 
   </ion-list>
