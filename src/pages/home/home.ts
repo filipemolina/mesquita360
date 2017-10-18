@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, LoadingController, ToastController, FabContainer } from 'ionic-angular';
+import { NavController, MenuController, LoadingController, ToastController, FabContainer, AlertController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { Camera } from "ionic-native";
-import { ServicosPage } from "../servicos/servicos";
+// import { ServicosPage } from "../servicos/servicos";
 import { Crop } from "@ionic-native/crop";
 
 @Component({
@@ -19,15 +19,18 @@ export class HomePage {
   public novos_comentarios = [];
   public apoios = [];
   public meus_apoios = [];
+  public loading: boolean = true;
 
-  loading: any;
+  offset = 0;
   toast: any;
+
 
   // BLOB da imagem tirada pela câmera
   public base64image: string;
 
   constructor(public navCtrl: NavController,
               public config: ConfigProvider,
+              public alertCtrl: AlertController,
               public gesol: GesolProvider,
               public menu: MenuController,
               public loadingCtrl: LoadingController,
@@ -50,11 +53,6 @@ export class HomePage {
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
       
-      //Inicializar o Toast
-      this.loading = this.loadingCtrl.create({
-        content: "Carregando..."
-      });
-      
   }
 
   /**
@@ -74,8 +72,6 @@ export class HomePage {
    */
 
   carregarSolicitacoes(){
-
-    this.abrirToast();
 
     this.gesol.getSolicitacoes().subscribe(
       
@@ -114,7 +110,68 @@ export class HomePage {
 
         // Fechar tela de loading
 
-        // this.fecharLoading();
+        this.fecharLoading();
+      
+      }, 
+      
+      fail => { 
+        
+        let alert = this.alertCtrl.create({
+          title: 'Sem Conexão',
+          subTitle: 'Nâo é possível acessar o servidor do Mesquita 360º. Verifique sua conexão com a internet e tente novamente.',
+          buttons: ['Ok']
+        });
+
+        alert.present();
+      }
+    );
+
+  }
+
+  adicionarSolicitacoes(infiniteScroll){
+
+     // Calcular o offset
+
+     this.offset += 10;
+
+     this.gesol.addSolicitacoes(this.offset).subscribe(
+      
+      res => {
+              
+        // Aidioncar os novos itens à variável de solicitações
+
+        this.solicitacoes = this.solicitacoes.concat(res);
+
+        for(let item in this.solicitacoes){
+
+          // Criar um objeto de Data com a propriedade created_at do item
+          let data = new Date(this.solicitacoes[item].created_at);
+
+          // Formatar a data para um formato legível para seres humanos
+          this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+
+          // Criar uma posição no vetor de novos comentários para essa solicitação
+          this.novos_comentarios[this.solicitacoes[item].id] = "";
+
+          // Criar uma posição no vetor de apoios com o id da solicitação e a quantidade de apoios
+          this.apoios[this.solicitacoes[item].id] = this.solicitacoes[item].apoiadores_count;
+
+          // Testar se o usuário está logado
+          if(this.estaLogado())
+          {
+            // Testar se o usuário apoiou esta solicitação
+            let meus = this.solicitacoes[item].apoiadores.filter(apoiador => (apoiador.id == 21));
+
+            // Adicionar ao vetor que guarda apenas os ids das solicitações apoiadas pelo usuário atualmente logado
+            if(meus.length)
+              this.meus_apoios.push(meus[0].pivot.solicitacao_id);
+          }
+
+        }
+
+        // Fechar o gif de loading
+
+        infiniteScroll.complete();
       
       }, 
       
@@ -162,7 +219,7 @@ export class HomePage {
                 this.base64image = base64;
 
                 // Navegar para a página de serviços passando a imagem como parâmetro
-                this.navCtrl.push(ServicosPage,{
+                this.navCtrl.push('ServicosPage',{
                   imagem : this.base64image
                 });
 
@@ -213,7 +270,7 @@ export class HomePage {
               this.toBase64(imagem).then(base64 => {
 
                 // Navegar para a página de serviços passando a imagem como parâmetro
-                this.navCtrl.push(ServicosPage, {
+                this.navCtrl.push('ServicosPage', {
                   imagem: base64
                 });
 
@@ -355,21 +412,13 @@ export class HomePage {
   }
 
   /**
-   * Abrir o gif de Loading
+   * Fechar o gif de Loading
    */
 
-  abrirLoading(){
-
-    //Fechar o toast, caso ele esteja aberto
-    this.fecharToast();
-
-    this.loading.present();
-
-  }
 
   fecharLoading(){
 
-    this.loading.dismiss();
+    this.loading = false;
 
   }
 
@@ -448,6 +497,17 @@ export class HomePage {
         xhr.open('GET', url);
         xhr.send();
     });
+  }
+
+  doInfinite(infiniteScroll){
+    
+    this.adicionarSolicitacoes(infiniteScroll);
+
+  }
+
+  irParaLogin()
+  {
+    this.navCtrl.push('LoginPage');
   }
 
   /**

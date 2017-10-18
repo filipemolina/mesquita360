@@ -8,25 +8,25 @@ import { IonicStorageModule } from "@ionic/storage";
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ChamadosPage } from "../pages/chamados/chamados";
-import { AtendimentoPage } from "../pages/atendimento/atendimento";
-import { LoginPage } from "../pages/login/login";
+// import { ChamadosPage } from "../pages/chamados/chamados";
+// import { AtendimentoPage } from "../pages/atendimento/atendimento";
+// import { LoginPage } from "../pages/login/login";
 import { ConfigProvider } from '../providers/config/config';
 import { HttpModule } from "@angular/http";
 import { Facebook } from "@ionic-native/facebook";
 import { AuthProvider } from '../providers/auth/auth';
-import { RegisterPage } from "../pages/register/register";
+// import { RegisterPage } from "../pages/register/register";
 import { Mask } from '../directives/mask/mask';
 import { TextMaskModule } from 'angular2-text-mask';
 import { GesolProvider } from '../providers/gesol/gesol';
-import { ServicosPage } from "../pages/servicos/servicos";
-import { SelecionarServicoPage } from "../pages/selecionar-servico/selecionar-servico";
-import { EscreverSolicitacaoPage } from "../pages/escrever-solicitacao/escrever-solicitacao";
+// import { ServicosPage } from "../pages/servicos/servicos";
+// import { SelecionarServicoPage } from "../pages/selecionar-servico/selecionar-servico";
+// import { EscreverSolicitacaoPage } from "../pages/escrever-solicitacao/escrever-solicitacao";
 import { Geolocation } from "@ionic-native/geolocation";
 import { ConexaoProvider } from '../providers/conexao/conexao';
 import { Network } from "@ionic-native/network";
 import { Crop } from "@ionic-native/crop";
-import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
+// import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -38,15 +38,15 @@ const cloudSettings : CloudSettings = {
   declarations: [
     MyApp,
     HomePage,
-    ChamadosPage,
-    AtendimentoPage,
-    LoginPage,
-    RegisterPage,
+    // AtendimentoPage,
+    // ChamadosPage,
+    // LoginPage,
+    // RegisterPage,
     Mask,
-    ServicosPage,
-    SelecionarServicoPage,
-    EscreverSolicitacaoPage,
-    EditarPerfilPage,
+    // ServicosPage,
+    // SelecionarServicoPage,
+    // EscreverSolicitacaoPage,
+    // EditarPerfilPage,
   ],
   imports: [
     BrowserModule,
@@ -63,14 +63,14 @@ const cloudSettings : CloudSettings = {
   entryComponents: [
     MyApp,
     HomePage,
-    ChamadosPage,
-    AtendimentoPage,
-    LoginPage,
-    RegisterPage,
-    ServicosPage,
-    SelecionarServicoPage,
-    EscreverSolicitacaoPage,
-    EditarPerfilPage
+    // ChamadosPage,
+    // AtendimentoPage,
+    // LoginPage,
+    // RegisterPage,
+    // ServicosPage,
+    // SelecionarServicoPage,
+    // EscreverSolicitacaoPage,
+    // EditarPerfilPage,
   ],
   providers: [
     StatusBar,

@@ -90,11 +90,25 @@ export class EscreverSolicitacaoPage {
           // Montar o Mapa
           this.loadMap();
 
+        }, erro => {
+
+          console.log("Erro do Mapa:", erro);
+
         })
 
     })
     .catch(erro => {
-      console.log("Erro do Maps: ", erro);
+      
+      // Criar o alerta com os erros
+      let alert = this.alertCtrl.create({
+        title: "Atenção",
+        subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
+        buttons: ['ok']
+      });
+
+      // Mostrar o aleta
+      alert.present();
+
     });
   }
 
@@ -167,8 +181,9 @@ export class EscreverSolicitacaoPage {
 
         // Navegar de volta para a página inicial
 
-        this.viewController.dismiss();
-        this.appCtrl.getRootNav().popToRoot();
+        // this.viewController.dismiss();
+        // this.appCtrl.getRootNav().popToRoot();
+        this.navCtrl.popToRoot();
 
       },
 

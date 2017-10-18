@@ -1,4 +1,4 @@
-<ion-menu [content]="content">
+<ion-menu *ngIf="estaLogado()" [content]="content">
   <ion-content>
 
     <!-- Topo -->
@@ -22,15 +22,15 @@
     <!-- Menu -->
 
     <ion-list no-lines>
-      <button *ngIf="estaLogado()" ion-item menuToggle (click)="goToPage(chamadosPage)">
+      <button *ngIf="estaLogado()" ion-item menuToggle (click)="goToPage('ChamadosPage')">
         <ion-icon item-start name="clipboard"></ion-icon>
         Minhas Solicitações
       </button>
-      <button *ngIf="estaLogado()" ion-item menuToggle (click)="goToPage(perfilPage)">
+      <button *ngIf="estaLogado()" ion-item menuToggle (click)="goToPage('EditarPerfilPage')">
           <ion-icon item-start name="person"></ion-icon>
           Editar Perfil
         </button>
-      <button *ngIf="naoEstaLogado()" ion-item menuToggle (click)="goToPage(loginPage)">
+      <button *ngIf="naoEstaLogado()" ion-item menuToggle (click)="goToPage('LoginPage')">
         <ion-icon item-start name="log-in"></ion-icon>
         Login
       </button>

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { EditarPerfilPage } from './editar-perfil';
-import { Crop } from "@ionic-native/crop";
 
 @NgModule({
   declarations: [
@@ -9,7 +8,6 @@ import { Crop } from "@ionic-native/crop";
   ],
   imports: [
     IonicPageModule.forChild(EditarPerfilPage),
-    Crop
   ],
   exports: [
     EditarPerfilPage

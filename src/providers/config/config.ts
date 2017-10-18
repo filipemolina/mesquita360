@@ -11,6 +11,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ConfigProvider {
 
+  // Rota Raiz da Aplicação
+  private root_url = "https://360.mesquita.rj.gov.br/gesol";  
+
   // Objeto que guarda todas as informações do solicitante
 
   public solicitante:any = {};
@@ -31,7 +34,7 @@ export class ConfigProvider {
 
   private gesolClientId:     number = 1;
   // private gesolClientSecret: string = "mdMXPwto5Ox5yO0HMhjQzBZ1LCsPzwyPohgeY6JV";
-  private gesolClientSecret: string = "x4nknnjyPU8ojvg4C8F5rBc59S4IEpAgWqNQjY2n";
+  private gesolClientSecret: string = "yFuZ78ogEjwVXXGXkfp1N8yncIwqxk2OzDfESwpC";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;
@@ -111,6 +114,10 @@ export class ConfigProvider {
     // Salvar na Storage
     this.storage.set('solicitante', usuario.solicitante);
 
+  }
+
+  getRootUrl(){
+    return this.root_url;
   }
 
   getSolicitante(){

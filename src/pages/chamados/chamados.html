@@ -43,7 +43,7 @@
 
 		<ion-row>
 			<ion-col>
-				<button (click)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
+				<button (tap)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
 					
 					<!-- Caso a solicitação não esteja na lista de apoios do usuário, mostrar o ícone "+" -->
 					<!-- Caso contrário mostrar o ícone "-" -->
@@ -59,7 +59,7 @@
 				</button>
 			</ion-col>
 			<ion-col>
-				<button (click)="expandirMensagens(item.id)" ion-button icon-left clear small>
+				<button (tap)="expandirMensagens(item.id)" ion-button icon-left clear small>
 					<ion-icon name="text"></ion-icon>
 
 					<!-- Texto dependendo do número de mensagens -->
@@ -101,7 +101,7 @@
 
 			<ion-item *ngIf="getSolicitanteId() == item.solicitante.id" >
 				<ion-input [(ngModel)]="novos_comentarios[item.id]" type="text" value="" placeholder="Responder"></ion-input>					
-				<button (click)="enviarMensagem($event, item.id)" ion-button item-end icon-left>
+				<button (tap)="enviarMensagem($event, item.id)" ion-button item-end icon-left>
 					<ion-icon name="send"></ion-icon>
 					Enviar
 				</button>

@@ -16,9 +16,14 @@ export class AuthProvider {
   // Endpoint da API
 
   // private root_url = "http://192.168.111.111/gesol";
-  private root_url = "http://192.168.0.18/gesol";
+  // private root_url = "http://192.168.0.18/gesol";
+  private root_url: string;
   
-  constructor(public http: Http, public config : ConfigProvider) {}
+  constructor(public http: Http, public config : ConfigProvider) {
+
+    this.root_url = this.config.getRootUrl();
+
+  }
 
   getGesolUser(email, nome, foto, username, token, uid){
 

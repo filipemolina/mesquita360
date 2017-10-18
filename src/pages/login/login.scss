@@ -1,4 +1,13 @@
 page-login {
+
+    .toolbar-background.toolbar-background-md{
+        background-color: transparent !important;
+    }
+
+    button.botao-voltar{
+        color: #fff !important;
+        z-index: 20;
+    }
     
     ion-content{
         background-image: url("../assets/img/menu.jpg");

@@ -1,5 +1,14 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths":{
+      "@ionic-native/*": [
+        "../node_modules/@ionic-native/*"
+      ],
+      "@angular/*": [
+        "../node_modules/@angular/*"
+      ]
+    },
     "allowSyntheticDefaultImports": true,
     "declaration": false,
     "emitDecoratorMetadata": true,

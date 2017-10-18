@@ -4,6 +4,12 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+
+<button ion-button icon-only clear class="botao-voltar" (click)="voltarHome()">
+  <ion-icon name="arrow-back"></ion-icon>
+</button>
+
+
 <ion-content padding>
 
   <div class="login-form">
@@ -14,7 +20,7 @@
       </ion-col>
     </ion-row>
 
-    <button class="facebook" ion-button full icon-left (click)="logarFacebook()">
+    <button class="facebook" ion-button full icon-left (tap)="logarFacebook()">
       <ion-icon name="logo-facebook"></ion-icon>
         Entrar com Facebook
     </button>
@@ -38,13 +44,13 @@
     <ion-row>
 
       <ion-col>
-        <button ion-button full primary (click)="entrar()">
+        <button ion-button full primary (tap)="entrar()">
           Entrar
         </button>
       </ion-col>
 
       <ion-col>
-        <button class="register" (click)="cadastrar()" ion-button full secondary>
+        <button class="register" (tap)="cadastrar()" ion-button full secondary>
           Cadastre-se
         </button>
       </ion-col>

@@ -13,11 +13,18 @@ import { ConfigProvider } from "../config/config";
 export class GesolProvider {
 
   // Endpoint da API
-
+  // Minha máquina
   // private root_url = "http://192.168.111.111/gesol";
-  private root_url = "http://192.168.0.18/gesol";
 
-  constructor(public http: Http, public config: ConfigProvider) {}
+  // SRVHOMO URL Interna
+  private root_url : string;
+
+  constructor(public http: Http, public config: ConfigProvider) {
+
+    //URL Externa SRVHOMO
+    this.root_url = this.config.getRootUrl();
+
+  }
 
   ////////////////////////////////////////////////////////////////////////// Autenticação
 
@@ -48,13 +55,24 @@ export class GesolProvider {
   ////////////////////////////////////////////////////////////////////////// Obtenção de dados
 
   // Obter todas as solicitações
+  // Offset é um parâmetro opcional, como indicado por "?" no final do nome
 
   getSolicitacoes(){
 
     // let headers = this.montaHeaders();
 
     return this.http.get(this.root_url+"/api/solicitacoes")
+               .timeout(10000)
                .map(res => res.json());
+  }
+
+  // Adicionar solicitações no Infinite Scroll
+
+  addSolicitacoes(offset){
+
+    return this.http.get(this.root_url+"/api/solicitacoes?offset="+offset)
+    .map(res => res.json());
+
   }
 
   /**

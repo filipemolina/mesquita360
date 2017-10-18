@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
-import { AtendimentoPage } from "../atendimento/atendimento";
+// import { AtendimentoPage } from "../atendimento/atendimento";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ConfigProvider } from "../../providers/config/config";
 
@@ -156,7 +156,7 @@ export class ChamadosPage {
   {
     // Ir para a pagina de detalhes do Atendimento
 
-    this.navCtrl.push(AtendimentoPage, this.sol[id]);
+    this.navCtrl.push('AtendimentoPage', this.sol[id]);
   }
 
   /**

@@ -1,6 +1,21 @@
 page-home {
 
-	ion-content { background-color: #f4f4f4; }
+	ion-content { 
+		
+		background-color: #f4f4f4; 
+
+		div#lupa{
+			background-image: url("../assets/img/ajax-loader.gif");
+			width: 90%;
+			height: 100px;
+			background-repeat: no-repeat;
+			background-position: center;
+			position: absolute;
+			top: 50%;
+			margin-top: -50px;
+		}
+	
+	}
 
 	ion-row.mensagens{
 		height: 0;

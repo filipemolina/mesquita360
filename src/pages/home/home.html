@@ -6,10 +6,20 @@
 		<ion-title>
 			Mesquita 360º
 		</ion-title>
+		<ion-buttons *ngIf="naoEstaLogado()" right>
+			<button ion-button icon-left (click)="irParaLogin()">
+				<ion-icon name="contact"></ion-icon>
+				Entrar
+			</button>
+		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
+
+	<!-- Imagem da Lupa -->
+
+	<div id="lupa" *ngIf="loading"></div>
 
 	<!-- Cards -->
 
@@ -39,7 +49,7 @@
 
 		<ion-row>
 			<ion-col>
-				<button *ngIf="estaLogado()" (click)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
+				<button *ngIf="estaLogado()" (tap)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
 					
 					<!-- Caso a solicitação não esteja na lista de apoios do usuário, mostrar o ícone "+" -->
 					<!-- Caso contrário mostrar o ícone "-" -->
@@ -55,7 +65,7 @@
 				</button>
 			</ion-col>
 			<ion-col>
-				<button (click)="expandirMensagens(item.id)" ion-button icon-left clear small>
+				<button (tap)="expandirMensagens(item.id)" ion-button icon-left clear small>
 					<ion-icon name="text"></ion-icon>
 
 					<!-- Texto dependendo do número de mensagens -->
@@ -97,7 +107,7 @@
 
 			<ion-item *ngIf="getSolicitanteId() == item.solicitante.id" >
 				<ion-input [(ngModel)]="novos_comentarios[item.id]" type="text" value="" placeholder="Responder"></ion-input>					
-				<button (click)="enviarMensagem($event, item.id)" ion-button item-end icon-left>
+				<button (tap)="enviarMensagem($event, item.id)" ion-button item-end icon-left>
 					<ion-icon name="send"></ion-icon>
 					Enviar
 				</button>
@@ -106,13 +116,17 @@
 
 	</ion-card>
 
+	<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+		<ion-infinite-scroll-content loadingText="Carregando mais solicitações..."></ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
 	<!-- FAB -->
 
-	<ion-fab right bottom #fab>
+	<ion-fab *ngIf="estaLogado()" right bottom #fab>
 		<button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="top">
-			<button (click)="tirarFoto(fab)" ion-fab><ion-icon name="camera"></ion-icon></button>
-			<button (click)="escolherFoto(fab)" ion-fab><ion-icon name="images"></ion-icon></button>
+			<button (tap)="tirarFoto(fab)" ion-fab><ion-icon name="camera"></ion-icon></button>
+			<button (tap)="escolherFoto(fab)" ion-fab><ion-icon name="images"></ion-icon></button>
 		</ion-fab-list>
 	</ion-fab>
   

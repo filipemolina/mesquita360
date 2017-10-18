@@ -14,3 +14,6 @@ import { ServicosPage } from './servicos';
   ]
 })
 export class ServicosPageModule {}
+
+// TODO: Configurar o Lazy Loading em todas os componentes (*.ts), retirar a importação e usar apenas
+// o nome da página como uma string, 'LoginPage' por exemplo.

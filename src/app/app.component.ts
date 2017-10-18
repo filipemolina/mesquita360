@@ -4,10 +4,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ChamadosPage } from '../pages/chamados/chamados';
-import { LoginPage } from '../pages/login/login';
+// import { ChamadosPage } from '../pages/chamados/chamados';
+// import { LoginPage } from '../pages/login/login';
 import { ConfigProvider } from "../providers/config/config";
-import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
+// import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
 
 @Component({
   templateUrl: 'app.html',
@@ -17,34 +17,28 @@ export class MyApp {
   // Para acessar o navController no app.component é necessário usar o @ViewChild()
   @ViewChild('content') nav: NavController;
 
-  // Páginas que serão navegadas através do Menu Principal
-  // rootPage:any = HomePage;
-  chamadosPage: any = ChamadosPage;
-  loginPage: any = LoginPage;
-  perfilPage: any = EditarPerfilPage;
-
   constructor(
       platform: Platform, 
       statusBar: StatusBar, 
       splashScreen: SplashScreen, 
       public config: ConfigProvider) {
 
-        platform.ready().then(() => {
-          // Okay, so the platform is ready and our plugins are available.
-          // Here you can do any higher level native things you might need.
-          statusBar.styleDefault();
-          splashScreen.hide();
+      platform.ready().then(() => {
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        statusBar.styleDefault();
+        splashScreen.hide();
 
-          // Definir a home page como página inicial
-          this.nav.setRoot(HomePage);
-        
-    });
+        // Definir a home page como página inicial
+        this.nav.setRoot(HomePage);
+      
+      });
   }
   
   // Função que recebe uma página e navega para ela
   // A página deve ser uma das variáveis declaradas acima
 
-  goToPage(pagina: any)
+  goToPage(pagina: string)
   {
     this.nav.push(pagina);
   }
@@ -54,7 +48,7 @@ export class MyApp {
     this.config.logout();
 
     //Redirecionar para a página de Login
-    this.nav.setRoot(LoginPage);
+    this.nav.setRoot('LoginPage');
   }
 
   estaLogado(){

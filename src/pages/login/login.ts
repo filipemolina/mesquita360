@@ -4,7 +4,7 @@ import { ConfigProvider } from "../../providers/config/config";
 import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook";
 import { HomePage } from "../home/home";
 import { AuthProvider } from "../../providers/auth/auth";
-import { RegisterPage } from "../register/register";
+// import { RegisterPage } from "../register/register";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { AlertController, MenuController } from 'ionic-angular';
 
@@ -39,7 +39,7 @@ export class LoginPage {
   }
 
   cadastrar(){
-    this.navCtrl.push(RegisterPage);
+    this.navCtrl.push('RegisterPage');
   }
 
   entrar(){
@@ -165,6 +165,10 @@ export class LoginPage {
       // Caso falhe
 
       .catch(e => console.log("Login Falhou", e));
+  }
+
+  voltarHome(){
+    this.navCtrl.popToRoot();
   }
 
 }
