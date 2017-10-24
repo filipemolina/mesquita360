@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 import { Geolocation } from "@ionic-native/geolocation";
 import { Http } from "@angular/http";
 import { GesolProvider } from "../../providers/gesol/gesol";
+import { Diagnostic } from "@ionic-native/diagnostic";
 
 // Fazer com que o TypeScript não sobrescreva a variável do google
 declare var google;
@@ -49,12 +50,55 @@ export class EscreverSolicitacaoPage {
               public alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
               public viewController: ViewController,
-              public appCtrl: App) {
-    
-    this.obtemLocalizacao();
+              public appCtrl: App,
+              public diagnostic: Diagnostic) {
 
     this.imagem = this.navParams.get('imagem');
     this.setor = this.navParams.get('setor');
+
+  }
+
+  ionViewDidLoad(){
+
+    // Testa se o GPS está ativado e tem permissão para ser usado
+
+    this.diagnostic.isLocationAvailable()
+      .then(success => {
+        
+        if(success){
+
+          // GPS está disponível e ativado, obter a localização normalmente
+          this.obtemLocalizacao();
+
+        } else {
+
+          // Criar o alerta com os erros
+          let alert = this.alertCtrl.create({
+            title: "Atenção",
+            subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
+            buttons: [{
+              text: "Ok",
+              handler: () => {
+
+                this.diagnostic.switchToLocationSettings();
+
+              }
+            }]
+          });
+
+          // Mostrar o aleta
+          alert.present();
+
+        }
+
+        
+
+      })
+      .catch(erro => {
+
+        console.log("Erro de GPS!!", erro);
+
+      });
 
     // Obter todas as informações do setor
 
@@ -92,22 +136,18 @@ export class EscreverSolicitacaoPage {
 
         }, erro => {
 
-          console.log("Erro do Mapa:", erro);
+          console.log("Erro da API do Google:", erro);
 
         })
+
+    }, erro => {
+
+      console.log("Erro do MAPA:", erro);
 
     })
     .catch(erro => {
       
-      // Criar o alerta com os erros
-      let alert = this.alertCtrl.create({
-        title: "Atenção",
-        subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
-        buttons: ['ok']
-      });
-
-      // Mostrar o aleta
-      alert.present();
+      console.log("Erro na linha 143: ", erro);
 
     });
   }
