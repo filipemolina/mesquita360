@@ -4,8 +4,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { Camera } from "ionic-native";
-// import { ServicosPage } from "../servicos/servicos";
 import { Crop } from "@ionic-native/crop";
+import { Storage } from "@ionic/storage";
 
 @Component({
   selector: 'page-home',
@@ -36,7 +36,8 @@ export class HomePage {
               public loadingCtrl: LoadingController,
               public crop: Crop,
               public splashScreen: SplashScreen,
-              public toastCtrl: ToastController) {
+              public toastCtrl: ToastController,
+              private storage: Storage) {
 
       // Inicializar o array de meses
 
@@ -64,6 +65,18 @@ export class HomePage {
 
     // O que diz aí em baixo
     this.carregarSolicitacoes();
+
+    // Obter o valor da variável que diz se o usuário está logado no sistema
+    this.storage.get('logado').then(val => {
+
+        // Habilitar ou desabilitar o menu de acordo com o valor desta variável
+        if(val){
+          this.menu.enable(true);
+        } else {
+          this.menu.enable(false);
+        }
+
+    })
     
   }
 
@@ -310,18 +323,12 @@ export class HomePage {
   // Expandir ou encolher as mensagens
   expandirMensagens(id){
 
-    console.log("Chamou");
-
     // Obter a Row com as mensagens da solicitação que foi clicada
     let row = document.getElementById("mensagens_"+id);
-
-    console.log("Elemento", row);
 
     // Caso a Altura da div seja 0 ou não esteja definidar, abrir
 
     if(row.style.height == "0px" || !row.style.height){
-
-      console.log("Altura era igual a 0");
 
        // Altura da div de mensagens
       let altura = 0;
@@ -343,13 +350,9 @@ export class HomePage {
 
       }
 
-      console.log("Nova altura", altura);
-
       row.style.height = altura + "px";
 
     } else {
-
-      console.log("Altura era maior que 0, mudando para 0");
 
       // Caso contrário, setar a altura para 0px
       row.style.height = "0px";
@@ -370,7 +373,6 @@ export class HomePage {
         
         // Caso suceda
         res => {
-          console.log("Mensagem Cadastrada");
         },
 
         //Caso Falhe
@@ -453,12 +455,14 @@ export class HomePage {
 
       res => {
 
+        let resposta = res;
+
         // A resposta desse AJAX é o número de apoios que a solicitação possui.
         // Atribuir esse número ao vetor na posição correta para que o valor seja atualizado na tela
-        this.apoios[solicitacao] = res;
+        this.apoios[solicitacao] = resposta.qtd;
 
         // Caso o usuário já tenha apoiado essa solicitação, excluir o seu id do vetor de apoios
-        if(this.meus_apoios.indexOf(solicitacao) > -1)
+        if(resposta.remover)
         {
            // Obter o índice do item para excluir
            let index = this.meus_apoios.indexOf(solicitacao);
@@ -515,11 +519,11 @@ export class HomePage {
    */
 
   estaLogado(){
-    return this.config.getGesolToken() != null;
+    return this.config.getLogado();
   }
 
   naoEstaLogado(){
-    return this.config.getGesolToken() == null;
+    return !this.config.getLogado() || this.config.getLogado() == null;
   }
 
 }

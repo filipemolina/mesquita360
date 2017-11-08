@@ -1,13 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController } from 'ionic-angular';
+import { Platform, NavController, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-// import { ChamadosPage } from '../pages/chamados/chamados';
-// import { LoginPage } from '../pages/login/login';
 import { ConfigProvider } from "../providers/config/config";
-// import { EditarPerfilPage } from '../pages/editar-perfil/editar-perfil';
 
 @Component({
   templateUrl: 'app.html',
@@ -21,16 +18,19 @@ export class MyApp {
       platform: Platform, 
       statusBar: StatusBar, 
       splashScreen: SplashScreen, 
-      public config: ConfigProvider) {
+      public config: ConfigProvider,
+      public menuController : MenuController) {
 
       platform.ready().then(() => {
         // Okay, so the platform is ready and our plugins are available.
         // Here you can do any higher level native things you might need.
-        statusBar.styleDefault();
+        statusBar.overlaysWebView(false);
+        statusBar.backgroundColorByHexString('#3d276b');
         splashScreen.hide();
 
         // Definir a home page como página inicial
         this.nav.setRoot(HomePage);
+
       
       });
   }
@@ -40,23 +40,27 @@ export class MyApp {
 
   goToPage(pagina: string)
   {
+    this.menuController.close();
     this.nav.push(pagina);
   }
 
   sair(){
-    //Apagar todos os dados do armazenamento interno do telefone
-    this.config.logout();
+      // Fechar o menu
+      this.menuController.close();
 
-    //Redirecionar para a página de Login
-    this.nav.setRoot('LoginPage');
+      //Apagar todos os dados do armazenamento interno do telefone
+      this.config.logout(this.nav);
+
+      // Desabilitar o menu
+      this.menuController.enable(false);
   }
 
   estaLogado(){
-    return this.config.getGesolToken() != null;
+    return this.config.getLogado()
   }
 
   naoEstaLogado(){
-    return this.config.getGesolToken() == null;
+    return !this.config.getLogado();
   }
 
 }

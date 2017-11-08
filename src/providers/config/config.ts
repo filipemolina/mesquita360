@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from "@ionic/storage";
 import 'rxjs/add/operator/map';
+import { NavController } from 'ionic-angular';
 
 /*
   Generated class for the ConfigProvider provider.
@@ -33,7 +34,6 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  // private gesolClientSecret: string = "mdMXPwto5Ox5yO0HMhjQzBZ1LCsPzwyPohgeY6JV";
   private gesolClientSecret: string = "yFuZ78ogEjwVXXGXkfp1N8yncIwqxk2OzDfESwpC";
   private gesolUserName:     string;
   private gesolPassword:     string;
@@ -42,6 +42,8 @@ export class ConfigProvider {
   private gesolCPF:          string;
   private gesolFoto:         string;
   private gesolUserId:       number;
+
+  private logado:            boolean;
 
   constructor(private storage: Storage) {
 
@@ -69,6 +71,10 @@ export class ConfigProvider {
 
     storage.get('solicitante')      .then(dado => { this.solicitante       = dado });
 
+    // Logado
+
+    storage.get('logado')           .then(dado => { this.logado = dado });
+
   }
 
   /////////////////////////////////////////////////////////////// Métodos Gerais
@@ -76,7 +82,7 @@ export class ConfigProvider {
   ////// Logout
   // Apaga todos os dados relacionados ao usuário da storage
 
-  logout()
+  logout(nav: NavController)
   {
     this.setFbID(null);
     this.setFbToken(null);
@@ -87,9 +93,16 @@ export class ConfigProvider {
     this.setGesolFoto(null);
     this.setGesolNome(null);
     this.setGesolPassword(null);
-    this.setGesolToken(null);
     this.setGesolUserId(null);
     this.setGesolUserName(null);
+
+    this.storage.set('gesolToken', null).then(()=>{
+
+      this.storage.set('logado', false).then(()=>{
+        this.logado = false;
+      })
+
+    });
 
   }
 
@@ -114,6 +127,10 @@ export class ConfigProvider {
     // Salvar na Storage
     this.storage.set('solicitante', usuario.solicitante);
 
+  }
+
+  getLogado(){
+    return this.logado;
   }
 
   getRootUrl(){
@@ -166,7 +183,7 @@ export class ConfigProvider {
     if(this.solicitante != null){
       return this.solicitante.foto;
     } else {
-      return "https://api.adorable.io/avatars/85/teste";
+      return "../assets/img/blank.jpg";
     }
   }
 
@@ -215,5 +232,9 @@ export class ConfigProvider {
   setGesolCPF(dado:string)       { this.gesolCPF      = dado; this.storage.set("gesolCPF", dado);      }
   setGesolFoto(dado: string)     { this.gesolFoto     = dado; this.storage.set("gesolFoto", dado);     }
   setGesolUserId(dado: number)   { this.gesolUserId   = dado; this.storage.set("gesolUserId", dado);   }
+
+  // Logado
+
+  setLogado(dado: boolean)   { this.logado   = dado; this.storage.set("logado", dado);   }
 
 }

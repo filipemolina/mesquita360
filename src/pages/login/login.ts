@@ -31,12 +31,7 @@ export class LoginPage {
               private fb: Facebook,
               public auth: AuthProvider,
               public gesol: GesolProvider,
-              public menu: MenuController) {
-
-    // Desabilitar o menu na página de login
-    // this.menu.enable(false);
-
-  }
+              public menu: MenuController) {}
 
   cadastrar(){
     this.navCtrl.push('RegisterPage');
@@ -55,6 +50,7 @@ export class LoginPage {
         // Preencher as informações básicas do usuário
 
         this.config.setSolicitante(res);
+        this.config.setLogado(true);
         console.log("Solicitante", this.config.getSolicitante());
 
         // Tornar a homepage o novo Root
@@ -144,6 +140,7 @@ export class LoginPage {
 
               // Gravar os dados recebidos no ConfigProvider
               this.config.setGesolToken(res.token.accessToken);
+              this.config.setLogado(true);
               this.config.setSolicitante(res);
 
               console.log("Config após atualização dos dados");

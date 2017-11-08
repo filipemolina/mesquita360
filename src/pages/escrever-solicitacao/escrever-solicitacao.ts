@@ -56,14 +56,26 @@ export class EscreverSolicitacaoPage {
     this.imagem = this.navParams.get('imagem');
     this.setor = this.navParams.get('setor');
 
+    // Registrar uma função que será executada toda vez que o status da localização mudar
+    this.diagnostic.registerLocationStateChangeHandler((arg) => {
+      
+      if(arg != this.diagnostic.locationMode.LOCATION_OFF){
+        console.log("Chamou obtem localização");
+        this.obtemLocalizacao();
+      }
+
+    });
+
   }
 
-  ionViewDidLoad(){
+  ionViewDidEnter(){
 
     // Testa se o GPS está ativado e tem permissão para ser usado
 
-    this.diagnostic.isLocationAvailable()
+    this.diagnostic.isLocationEnabled()
       .then(success => {
+
+        console.log("Resultado do diagnóstico", success);
         
         if(success){
 
@@ -83,6 +95,10 @@ export class EscreverSolicitacaoPage {
                 this.diagnostic.switchToLocationSettings();
 
               }
+            },
+            {
+              text: 'Cancelar',
+              role: 'cancel'
             }]
           });
 
@@ -120,7 +136,7 @@ export class EscreverSolicitacaoPage {
         .map(res => res.json())
         .subscribe(data => {
           let address = data.results[0];
-          this.location = address.formatted_address;
+          // this.location = address.formatted_address;
 
           // Separar os dados do endereço
           this.endereco['numero']        = address.address_components[0].long_name;
