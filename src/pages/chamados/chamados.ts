@@ -190,10 +190,10 @@ export class ChamadosPage {
 
         // A resposta desse AJAX é o número de apoios que a solicitação possui.
         // Atribuir esse número ao vetor na posição correta para que o valor seja atualizado na tela
-        this.apoios[solicitacao] = res;
+        this.apoios[solicitacao] = res.qtd;
 
         // Caso o usuário já tenha apoiado essa solicitação, excluir o seu id do vetor de apoios
-        if(this.meus_apoios.indexOf(solicitacao) > -1)
+        if(res.remover)
         {
            // Obter o índice do item para excluir
            let index = this.meus_apoios.indexOf(solicitacao);

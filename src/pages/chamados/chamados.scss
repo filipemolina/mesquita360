@@ -23,6 +23,20 @@ page-chamados {
 				left: 0;
 			}
 
+			span.nome{
+				display: block;
+				width: 84%;
+				float: left;
+			}
+
+			span.data{
+				display: block;
+				float: left;
+				font-size: 0.8em;
+				color: #555;
+				margin-top: -11px;
+			}
+
 		}
 
 	}

@@ -32,6 +32,7 @@
         "@ionic/cloud-angular": "^0.12.0",
         "@ionic/storage": "^2.0.1",
         "angular2-text-mask": "^8.0.4",
+        "brmasker-ionic-3": "^1.0.1",
         "cordova-android": "^6.2.3",
         "cordova-plugin-camera": "^2.4.1",
         "cordova-plugin-camera-preview": "^0.9.0",
