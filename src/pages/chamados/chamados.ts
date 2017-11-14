@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 // import { AtendimentoPage } from "../atendimento/atendimento";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ConfigProvider } from "../../providers/config/config";
+import { Alert } from 'ionic-angular/components/alert/alert';
 
 /**
  * Generated class for the ChamadosPage page.
@@ -30,7 +31,8 @@ export class ChamadosPage {
               public navParams: NavParams, 
               public gesol : GesolProvider, 
               public config: ConfigProvider,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              public alertController: AlertController) {
 
     // Inicializar o array de meses
 
@@ -250,4 +252,48 @@ export class ChamadosPage {
           console.log("Falha na solicitação", fail);
       });
     }
+
+  deletaSolicitacao(id){
+
+    let alert = this.alertController.create({
+      title: "Atenção!",
+      message: "Deseja realmente excluir essa solicitação?",
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel"
+        },
+        {
+          text: "Ok",
+          handler: () => {
+
+             // Faz a chamada para o gesol para deletar a solicitação
+
+            this.gesol.deletaSolicitacao(id).subscribe(
+              res => {
+
+                // Caso o processo seja bem sucedido...
+
+                if(res.status){
+
+                  this.abrirLoading();
+
+                  this.carregarSolicitacoes();
+
+                }
+
+              },
+              fail => {
+                console.log("Falha na exclusão de solicitação", fail);
+              }
+            );
+
+          }
+        }
+      ]
+    });
+
+    alert.present();
+
+  }
 }

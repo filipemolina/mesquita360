@@ -127,7 +127,7 @@ export class HomePage {
       
       }, 
       
-      fail => { 
+      fail => {
         
         let alert = this.alertCtrl.create({
           title: 'Sem Conexão',

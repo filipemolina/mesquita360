@@ -163,6 +163,27 @@ export class GesolProvider {
 
   }
 
+  /**
+   * Deletar uma solicitação no GESOL desde que o status dela ainda seja "Aberta"
+   * @param id
+   */
+
+  deletaSolicitacao(id){
+
+    let headers = this.montaHeaders();
+
+    let body = {
+
+      id : id,
+      _method : "DELETE"
+
+    }
+
+    return this.http.post(this.root_url+"/api/solicitacoes/"+id, body, { headers : headers })
+               .map(res => res.json());
+
+  }
+
   editaSolicitante(solicitante){
 
     let headers = this.montaHeaders();
