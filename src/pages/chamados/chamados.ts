@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
-// import { AtendimentoPage } from "../atendimento/atendimento";
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ConfigProvider } from "../../providers/config/config";
 import { Alert } from 'ionic-angular/components/alert/alert';
@@ -27,9 +26,9 @@ export class ChamadosPage {
 
   //////////////////////// Esta página mostra apenas as solicitações do próprio usuário logado, independente do status
 
-  constructor(public navCtrl: NavController, 
-              public navParams: NavParams, 
-              public gesol : GesolProvider, 
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public gesol : GesolProvider,
               public config: ConfigProvider,
               public loadingCtrl: LoadingController,
               public alertController: AlertController) {
@@ -104,6 +103,12 @@ export class ChamadosPage {
   // Enviar mensagem para o gesol
   enviarMensagem(evento, solicitacao){
 
+    let nova_altura_mensagens = 0;
+    let nova_altura_outros = 0;
+    let nova_altura = 0;
+
+    let container = <HTMLElement>document.getElementById('mensagens_'+solicitacao).parentNode.childNodes[9];
+
     // Os novos comentários ficam guardados em um vetor
 
     if(this.novos_comentarios[solicitacao] != ""){
@@ -130,17 +135,14 @@ export class ChamadosPage {
         if(this.sol[i].id == solicitacao){
 
           // Criar uma mensagem fake para adicionar na solicitação enquanto a verdadeira é enviada para o servidor
-
-          this.sol[i].mensagens.push({
+          this.sol[i].comentarios.push({
             functionario_id : null,
-            mensagem: this.novos_comentarios[solicitacao]
-          });
-
-          // Aumentar tamanho do container de mensagens
-          evento.path[4].style.height =  evento.path[4].scrollHeight + 65 + "px";
+            comentario: this.novos_comentarios[solicitacao]
+           });
 
           // Zerar o input
           this.novos_comentarios[solicitacao] = "";
+
         }
 
       }
@@ -216,42 +218,45 @@ export class ChamadosPage {
   }
 
 
-    private carregarSolicitacoes() {
-        // Fazer a requisição ao Gesol pelas solicitações do usuário
+  private carregarSolicitacoes() {
+      // Fazer a requisição ao Gesol pelas solicitações do usuário
 
-        this.gesol.getMinhasSolicitacoes().subscribe(
-          // Caso de sucesso
-          res => {
-            this.sol = res;
+      this.gesol.getMinhasSolicitacoes().subscribe(
+        // Caso de sucesso
+        res => {
+          this.sol = res;
 
-            for(let item in this.sol) {
-              // Criar um objeto de Data com a propriedade created_at do item
-              let data = new Date(this.sol[item].created_at);
+          for(let item in this.sol) {
+            // Criar um objeto de Data com a propriedade created_at do item
+            let data = new Date(this.sol[item].created_at);
 
-              // Formatar a data para um formato legível para seres humands
-              this.sol[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+            // Formatar a data para um formato legível para seres humands
+            this.sol[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
 
-              // Criar uma posição no vetor de novos comentários para essa solicitação
-              this.novos_comentarios[this.sol[item].id] = "";
+            // Criar uma posição no vetor de novos comentários para essa solicitação
+            this.novos_comentarios[this.sol[item].id] = "";
 
-              // Criar uma posição no vetor de apoios com o id da solicitação e a quantidade de apoios
-              this.apoios[this.sol[item].id] = this.sol[item].apoiadores_count;
+            // Criar uma posição no vetor de apoios com o id da solicitação e a quantidade de apoios
+            this.apoios[this.sol[item].id] = this.sol[item].apoiadores_count;
 
-              // Testar se o usuário apoiou esta solicitação
-              let meus = this.sol[item].apoiadores.filter(apoiador => (apoiador.id == 21));
+            // Testar se o usuário apoiou esta solicitação
+            let meus = this.sol[item].apoiadores.filter(apoiador => (apoiador.id == 21));
 
-              // Adicionar ao vetor que guarda apenas os ids das solicitações apoiadas pelo usuário atualmente logado
-              if(meus.length)
-                this.meus_apoios.push(meus[0].pivot.solicitacao_id);  
-          }
-          
-          this.fecharLoading();
-      },
-      // Caso de falha
-      fail => {
-          console.log("Falha na solicitação", fail);
-      });
-    }
+            // Adicionar ao vetor que guarda apenas os ids das solicitações apoiadas pelo usuário atualmente logado
+            if(meus.length)
+              this.meus_apoios.push(meus[0].pivot.solicitacao_id);
+
+            // Criar um vetor para as mensagens dessa solicitação
+            this.sol[item].mensagens = [];
+        }
+        
+        this.fecharLoading();
+    },
+    // Caso de falha
+    fail => {
+        console.log("Falha na solicitação", fail);
+    });
+  }
 
   deletaSolicitacao(id){
 

@@ -237,9 +237,24 @@ export class EscreverSolicitacaoPage {
 
         // Navegar de volta para a página inicial
 
-        // this.viewController.dismiss();
-        // this.appCtrl.getRootNav().popToRoot();
-        this.navCtrl.popToRoot();
+        // Criar o alerta com os erros
+        let alert = this.alertCtrl.create({
+          title: "Parabéns!",
+          subTitle: "Sua solicitação foi enviada e em breve será analisada pela Prefeitura. Acompanhe o andamento do seu atendimento na página 'Minhas Solicitações' no menu principal.",
+          buttons: [
+            {
+              text: "Ok",
+              handler: () => {
+
+                this.navCtrl.popToRoot();
+
+              }
+            }
+          ]
+        });
+
+        // Mostrar o aleta
+        alert.present();
 
       },
 
