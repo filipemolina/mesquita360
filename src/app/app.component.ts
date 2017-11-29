@@ -6,6 +6,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ConfigProvider } from "../providers/config/config";
 
+// Fazer com que o TypeScript não sobrescreva a variável do google
+declare var google;
+
 @Component({
   templateUrl: 'app.html',
 })

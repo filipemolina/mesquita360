@@ -18,7 +18,7 @@ export class SelecionarServicoPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SelecionarServicoPage');
+    
   }
 
 }

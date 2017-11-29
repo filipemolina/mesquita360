@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 import { Geolocation } from "@ionic-native/geolocation";
 import { Http } from "@angular/http";
 import { GesolProvider } from "../../providers/gesol/gesol";
+import { ConfigProvider } from "../../providers/config/config";
 import { Diagnostic } from "@ionic-native/diagnostic";
 
 // Fazer com que o TypeScript não sobrescreva a variável do google
@@ -51,70 +52,24 @@ export class EscreverSolicitacaoPage {
               public loadingCtrl: LoadingController,
               public viewController: ViewController,
               public appCtrl: App,
-              public diagnostic: Diagnostic) {
+              public diagnostic: Diagnostic,
+              public config : ConfigProvider) {
 
     this.imagem = this.navParams.get('imagem');
     this.setor = this.navParams.get('setor');
 
     // Registrar uma função que será executada toda vez que o status da localização mudar
-    this.diagnostic.registerLocationStateChangeHandler((arg) => {
+    // this.diagnostic.registerLocationStateChangeHandler((arg) => {
       
-      if(arg != this.diagnostic.locationMode.LOCATION_OFF){
-        console.log("Chamou obtem localização");
-        this.obtemLocalizacao();
-      }
+    //   if(arg != this.diagnostic.locationMode.LOCATION_OFF){
+    //     this.obtemLocalizacao();
+    //   }
 
-    });
+    // });
 
   }
 
   ionViewDidEnter(){
-
-    // Testa se o GPS está ativado e tem permissão para ser usado
-
-    this.diagnostic.isLocationEnabled()
-      .then(success => {
-
-        console.log("Resultado do diagnóstico", success);
-        
-        if(success){
-
-          // GPS está disponível e ativado, obter a localização normalmente
-          this.obtemLocalizacao();
-
-        } else {
-
-          // Criar o alerta com os erros
-          let alert = this.alertCtrl.create({
-            title: "Atenção",
-            subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
-            buttons: [{
-              text: "Ok",
-              handler: () => {
-
-                this.diagnostic.switchToLocationSettings();
-
-              }
-            },
-            {
-              text: 'Cancelar',
-              role: 'cancel'
-            }]
-          });
-
-          // Mostrar o aleta
-          alert.present();
-
-        }
-
-        
-
-      })
-      .catch(erro => {
-
-        console.log("Erro de GPS!!", erro);
-
-      });
 
     // Obter todas as informações do setor
 
@@ -122,73 +77,39 @@ export class EscreverSolicitacaoPage {
 
   }
 
-  obtemLocalizacao(){
-
-    // Obter a localização
-    this.geolocation.getCurrentPosition()
-    .then(resp => {
-
-      this.lati = resp.coords.latitude;
-      this.longi = resp.coords.longitude;
-
-      // Chamada à API do Google
-      this.http.get("http://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true")
-        .map(res => res.json())
-        .subscribe(data => {
-          let address = data.results[0];
-          // this.location = address.formatted_address;
-
-          // Separar os dados do endereço
-          this.endereco['numero']        = address.address_components[0].long_name;
-          this.endereco['logradouro']    = address.address_components[1].long_name;
-          this.endereco['bairro']        = address.address_components[2].long_name;
-          this.endereco['municipio']     = address.address_components[4].long_name;
-          this.endereco['uf']            = address.address_components[5].short_name;
-          this.endereco['latitude']      = this.lati;
-          this.endereco['longitude']     = this.longi;
-
-          // Montar o Mapa
-          this.loadMap();
-
-        }, erro => {
-
-          console.log("Erro da API do Google:", erro);
-
-        })
-
-    }, erro => {
-
-      console.log("Erro do MAPA:", erro);
-
-    })
-    .catch(erro => {
-      
-      console.log("Erro na linha 143: ", erro);
-
-    });
-  }
-
   loadMap(){
 
-    // Criar um objeto com as coordenadas do chamado
-    let latLng = new google.maps.LatLng(this.lati, this.longi);
+    //Testar se a localização já foi obtida pelo aplicativo
 
-    let mapOptions = {
-      center: latLng,
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
+    if(this.config.temEndereco == false){
+      // Chamar novamente essa mesma função até que a localização tenha sido obtida
+      window.setTimeout(this.loadMap, 100);
+    } else {
 
-    // Criar o mapa
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      // Criar um objeto com as coordenadas do chamado
+      let latLng = new google.maps.LatLng(this.config.lati, this.config.longi);
 
-    // Adicionar um marcador central
+      // Salvar o endereço em uma propriedade desta classe
+      this.endereco = this.config.endereco;
+    
+      let mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+  
+      // Criar o mapa
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+  
+      // Adicionar um marcador central
+  
+      let marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: this.map.getCenter()
+      });
 
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: this.map.getCenter()
-    });
+    }
 
   }
 

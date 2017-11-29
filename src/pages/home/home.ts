@@ -203,6 +203,9 @@ export class HomePage {
    */
 
    tirarFoto(fab: FabContainer){
+
+      // Obter o endereço enquanto o resto da lógica é feito
+      this.config.getLatLong();
      
       fab.close();
 
@@ -259,6 +262,9 @@ export class HomePage {
     */
 
     escolherFoto(fab: FabContainer){
+
+      // Obter o endereço enquanto o resto da lógica é feito
+      this.config.getLatLong();
 
       fab.close();
 

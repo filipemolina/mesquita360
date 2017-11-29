@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Storage } from "@ionic/storage";
 import 'rxjs/add/operator/map';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
+import { Geolocation } from "@ionic-native/geolocation";
+import { Diagnostic } from "@ionic-native/diagnostic";
+import { Http } from "@angular/http";
 
 /*
   Generated class for the ConfigProvider provider.
@@ -22,6 +25,10 @@ export class ConfigProvider {
   // Chave da API do Google Maps
 
   public MapsApiKey: string = "AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ";
+  public lati: any;
+  public longi: any;
+  public endereco : any[] = [];
+  public temEndereco: boolean = false;
 
   // Credenciais e Info do Facebook
   
@@ -34,7 +41,7 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  private gesolClientSecret: string = "yFuZ78ogEjwVXXGXkfp1N8yncIwqxk2OzDfESwpC";
+  private gesolClientSecret: string = "S45SAbHuHkI9n1TwAOvU1zVbrOifXT3lD7YVGVoN";
   private gesolUserName:     string;
   private gesolPassword:     string;
   private gesolToken:        string;
@@ -45,7 +52,11 @@ export class ConfigProvider {
 
   private logado:            boolean;
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, 
+              private geolocation: Geolocation, 
+              private http: Http,
+              public diagnostic: Diagnostic,
+              public alertCtrl: AlertController) {
 
     // Ler os valores guardados no dispositivo
 
@@ -74,6 +85,17 @@ export class ConfigProvider {
     // Logado
 
     storage.get('logado')           .then(dado => { this.logado = dado });
+
+    // Registrar uma função que será executada toda vez que o status da localização mudar
+    this.diagnostic.registerLocationStateChangeHandler((arg) => {
+      
+      if(arg != this.diagnostic.locationMode.LOCATION_OFF){
+        this.getLatLong();
+      } else {
+        this.temEndereco = false;
+      }
+
+    });
 
   }
 
@@ -105,6 +127,100 @@ export class ConfigProvider {
     });
 
   }
+
+  /**
+   * Obtém a latitude e longitude utilizando a API do google maps
+   */
+
+   getLatLong(){
+
+    console.log("Chamou a GetLatLong");
+
+    this.diagnostic.isLocationEnabled()
+      .then(success => {
+
+        console.log("Chamou isLocationEnabled");
+
+        // GPS está ativado e disponível, obter a localização normalmente
+        if(success){
+
+          console.log("GPS Está ativo e disponível");
+
+          // Obter a localização
+          this.geolocation.getCurrentPosition()
+          .then(resp => {
+
+            console.log("Obteve a localização atual");
+
+            this.lati = resp.coords.latitude;
+            this.longi = resp.coords.longitude;
+            console.log("Inciando chamada do Google...");
+            // Chamada à API do Google
+            this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true&key=AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ")
+              .map(res => res.json())
+              .subscribe(data => {
+                console.log("Resultado da chamada ao google", data);
+                let address = data.results[0];
+                // this.location = address.formatted_address;
+
+                // Separar os dados do endereço
+                this.endereco['numero']        = address.address_components[0].long_name;
+                this.endereco['logradouro']    = address.address_components[1].long_name;
+                this.endereco['bairro']        = address.address_components[2].long_name;
+                this.endereco['municipio']     = address.address_components[4].long_name;
+                this.endereco['uf']            = address.address_components[5].short_name;
+                this.endereco['latitude']      = this.lati;
+                this.endereco['longitude']     = this.longi;
+
+                this.temEndereco = true;
+
+                console.log("Obteve o endereço:", this.endereco, this.temEndereco);
+
+              }, erro => {
+
+                console.log("Erro da API do Google:", erro);
+
+              })
+
+          }, erro => {
+
+            console.log("Erro do MAPA:", erro);
+
+          })
+          .catch(erro => {
+            
+            console.log("Erro na linha 143: ", erro);
+
+          });
+
+        } else {
+
+          // Criar o alerta com os erros
+          let alert = this.alertCtrl.create({
+            title: "Atenção",
+            subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
+            buttons: [{
+              text: "Ok",
+              handler: () => {
+
+                this.diagnostic.switchToLocationSettings();
+
+              }
+            },
+            {
+              text: 'Cancelar',
+              role: 'cancel'
+            }]
+          });
+
+          // Mostrar o aleta
+          alert.present();
+
+        }
+
+      });
+
+   }
 
   /**
    * Recebe um objeto de usuário e atualiza todas as informações salvas no aplicativo atualmente usando os setters definidos
