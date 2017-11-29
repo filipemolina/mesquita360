@@ -75,17 +75,24 @@ export class EscreverSolicitacaoPage {
 
     this.getSetor(this.setor);
 
+    this.loadMap();
+
   }
 
   loadMap(){
 
+    console.log("Chamou o LoadMap");
+
     //Testar se a localização já foi obtida pelo aplicativo
 
     if(this.config.temEndereco == false){
+      console.log("O endereço ainda não foi obtido pelo config");
       // Chamar novamente essa mesma função até que a localização tenha sido obtida
       window.setTimeout(this.loadMap, 100);
     } else {
 
+      console.log("O Endereço já foi obtido, prosseguindo");
+      
       // Criar um objeto com as coordenadas do chamado
       let latLng = new google.maps.LatLng(this.config.lati, this.config.longi);
 
