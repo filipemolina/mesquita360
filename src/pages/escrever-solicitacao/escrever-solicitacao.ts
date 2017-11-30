@@ -110,6 +110,9 @@ export class EscreverSolicitacaoPage {
         position: this.map.getCenter()
       });
 
+      // Informar que o endereço já foi utilizado
+      this.config.temEndereco = false;
+
     }
 
   }
