@@ -58,15 +58,10 @@ export class EscreverSolicitacaoPage {
     this.imagem = this.navParams.get('imagem');
     this.setor = this.navParams.get('setor');
 
-    // Registrar uma função que será executada toda vez que o status da localização mudar
-    // this.diagnostic.registerLocationStateChangeHandler((arg) => {
-      
-    //   if(arg != this.diagnostic.locationMode.LOCATION_OFF){
-    //     this.obtemLocalizacao();
-    //   }
+  }
 
-    // });
-
+  ionViewDidLoad(){
+    this.loadMap();
   }
 
   ionViewDidEnter(){
@@ -75,13 +70,12 @@ export class EscreverSolicitacaoPage {
 
     this.getSetor(this.setor);
 
-    this.loadMap();
-
   }
 
   loadMap(){
 
     console.log("Chamou o LoadMap");
+    console.log("Config nesse momento", this.config);
 
     //Testar se a localização já foi obtida pelo aplicativo
 

@@ -221,7 +221,7 @@ export class ChamadosPage {
   private carregarSolicitacoes() {
       // Fazer a requisição ao Gesol pelas solicitações do usuário
 
-      this.gesol.getMinhasSolicitacoes().subscribe(
+      this.gesol.getMinhasSolicitacoes(true).subscribe(
         // Caso de sucesso
         res => {
           this.sol = res;

@@ -79,11 +79,16 @@ export class GesolProvider {
    * Retorna apenas as solicitações criadas pelo próprio usuário
    */
 
-  getMinhasSolicitacoes(){
+  getMinhasSolicitacoes(obterTodos?:boolean){
 
     let headers = this.montaHeaders();
+    let obter = "";
 
-    return this.http.get(this.root_url+"/api/solicitacoes/minhas?id="+this.config.getGesolUserId(), { headers : headers })
+    if(obterTodos){
+      obter = "&todos=true";
+    }
+
+    return this.http.get(this.root_url+"/api/solicitacoes/minhas?id="+this.config.getGesolUserId()+obter, { headers : headers })
                     .map(res => res.json());
 
   }

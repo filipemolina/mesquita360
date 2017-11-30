@@ -19,15 +19,23 @@
 
 	<ion-card *ngFor="let item of sol" ngClass="success">
 		
-		<ion-item>
+		<ion-item *ngIf="item.status == 'Aberta'">
 			<ion-avatar item-start>
 				<img src="{{ item.solicitante.foto }}">
 			</ion-avatar>
 			<span class="nome">{{ item.solicitante.nome }}</span>
-			<button *ngIf="item.status == 'Aberta'" color="danger" ion-button icon-only small (tap)="deletaSolicitacao(item.id)">
+			<button color="danger" ion-button icon-only small (tap)="deletaSolicitacao(item.id)">
 				<ion-icon name="trash"></ion-icon>
 			</button><br/>
 			<span class="data">{{ item.data }}</span>
+		</ion-item>
+
+		<ion-item *ngIf="item.status != 'Aberta'">
+			<ion-avatar item-start>
+				<img src="{{ item.solicitante.foto }}">
+			</ion-avatar>
+			<h2>{{ item.solicitante.nome }}</h2>
+			<p>{{ item.data }}</p>
 		</ion-item>
 
 		<ion-item>
