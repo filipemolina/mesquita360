@@ -110,9 +110,6 @@ export class EscreverSolicitacaoPage {
         position: this.map.getCenter()
       });
 
-      // Informar que o endereço já foi utilizado
-      this.config.temEndereco = false;
-
     }
 
   }
@@ -153,66 +150,84 @@ export class EscreverSolicitacaoPage {
 
     this.abrirLoading();
 
-    this.gesol.enviaSolicitacao(this.imagem, this.servico, this.texto, this.endereco).subscribe(
-      
-      // Caso de sucesso
-      res => {
+    // Testar se a foto foi tirada em Mesquita
 
-        this.fecharLoading();
+    if(this.endereco['municipio'] == "Mesquita"){
 
-        // Navegar de volta para a página inicial
-
-        // Criar o alerta com os erros
-        let alert = this.alertCtrl.create({
-          title: "Parabéns!",
-          subTitle: "Sua solicitação foi enviada e em breve será analisada pela Prefeitura. Acompanhe o andamento do seu atendimento na página 'Minhas Solicitações' no menu principal.",
-          buttons: [
-            {
-              text: "Ok",
-              handler: () => {
-
-                this.navCtrl.popToRoot();
-
+      this.gesol.enviaSolicitacao(this.imagem, this.servico, this.texto, this.endereco).subscribe(
+        
+        // Caso de sucesso
+        res => {
+  
+          this.fecharLoading();
+  
+          // Navegar de volta para a página inicial
+  
+          // Criar o alerta com os erros
+          let alert = this.alertCtrl.create({
+            title: "Parabéns!",
+            subTitle: "Sua solicitação foi enviada e em breve será analisada pela Prefeitura. Acompanhe o andamento do seu atendimento na página 'Minhas Solicitações' no menu principal.",
+            buttons: [
+              {
+                text: "Ok",
+                handler: () => {
+  
+                  this.navCtrl.popToRoot();
+  
+                }
               }
+            ]
+          });
+  
+          // Mostrar o aleta
+          alert.present();
+  
+          this.config.temEndereco = false;
+  
+        },
+  
+        // Caso de falha
+        erro => {
+  
+          this.fecharLoading();
+  
+          let erros = JSON.parse(erro._body);
+  
+          // Variável com as mensagens de erro concatenadas
+          let mensagens = "";
+  
+          // Popular as mensagens de erro
+          for(let campo in erros){
+            if(erros.hasOwnProperty(campo)){
+              mensagens += erros[campo][0] + "<br>";
             }
-          ]
-        });
-
-        // Mostrar o aleta
-        alert.present();
-
-      },
-
-      // Caso de falha
-      erro => {
-
-        this.fecharLoading();
-
-        let erros = JSON.parse(erro._body);
-
-        // Variável com as mensagens de erro concatenadas
-        let mensagens = "";
-
-        // Popular as mensagens de erro
-        for(let campo in erros){
-          if(erros.hasOwnProperty(campo)){
-            mensagens += erros[campo][0] + "<br>";
           }
+  
+          // Criar o alerta com os erros
+          let alert = this.alertCtrl.create({
+            title: "Atenção",
+            subTitle: mensagens,
+            buttons: ['ok']
+          });
+  
+          // Mostrar o aleta
+          alert.present();
+  
         }
+  
+      );
 
-        // Criar o alerta com os erros
-        let alert = this.alertCtrl.create({
-          title: "Atenção",
-          subTitle: mensagens,
-          buttons: ['ok']
-        });
+    } else {
 
-        // Mostrar o aleta
-        alert.present();
+      let alert = this.alertCtrl.create({
+        title: "Atenção",
+        subTitle: "Apenas solicitações registradas no município de Mesquita podem ser registradas pelo Mesquita 360.",
+        buttons: ['ok']
+      });
 
-      }
+      alert.present();
 
-    );
+    }
 
   }
 

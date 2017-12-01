@@ -206,6 +206,8 @@ export class HomePage {
 
       // Obter o endereço enquanto o resto da lógica é feito
       this.config.getLatLong();
+
+      console.log("Chamou a Câmera");
      
       fab.close();
 
@@ -217,20 +219,19 @@ export class HomePage {
         targetWidth: 1000,
         targetHeight: 750,
         correctOrientation: true,
-      })
-      
+      })  
       // Quando a imagem for retornada
       .then((imagem) => {
-
-          // this.base64image = "data:image/jpeg;base64," + imagem;
+          console.log("Retornou a imagem. Chamando o Crop...");
 
           // Cropar a imagem
           this.crop.crop(imagem, { quality: 100 })
-          .then(
-            nova_imagem => {
+          .then(nova_imagem => {
+              console.log("Retornou a imagem cropada, convertendo para base64...");
 
               // Converter a imagem para base64
               this.toBase64(nova_imagem).then(base64 => {
+                console.log("Converteu para base64. Chamando a página de serviços");
                 
                 this.base64image = base64;
 
