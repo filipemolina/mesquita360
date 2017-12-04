@@ -20,11 +20,12 @@
         "@angular/http": "4.1.3",
         "@angular/platform-browser": "4.1.3",
         "@angular/platform-browser-dynamic": "4.1.3",
+        "@ionic-native/camera": "^4.4.2",
         "@ionic-native/camera-preview": "^4.2.1",
-        "@ionic-native/core": "3.12.1",
+        "@ionic-native/core": "^3.12.1",
         "@ionic-native/crop": "^4.2.1",
-        "@ionic-native/diagnostic": "^4.3.2",
-        "@ionic-native/facebook": "^3.13.1",
+        "@ionic-native/diagnostic": "^4.4.2",
+        "@ionic-native/facebook": "^3.14.0",
         "@ionic-native/geolocation": "^4.1.0",
         "@ionic-native/network": "^4.1.0",
         "@ionic-native/splash-screen": "3.12.1",
@@ -78,12 +79,7 @@
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
             "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-facebook4": {
-                "APP_ID": "281455835652510",
-                "APP_NAME": "Mesquita 360º"
-            },
             "cordova-sqlite-storage": {},
-            "cordova-plugin-camera": {},
             "cordova-plugin-image-picker": {},
             "cordova-plugin-geolocation": {},
             "cordova-plugin-network-information": {},
@@ -97,7 +93,12 @@
                 "XWALK_MULTIPLEAPK": "true"
             },
             "cordova.plugins.diagnostic": {},
-            "cordova-plugin-overview": {}
+            "cordova-plugin-overview": {},
+            "cordova-plugin-camera": {},
+            "cordova-plugin-facebook4": {
+                "APP_ID": "281455835652510",
+                "APP_NAME": "Mesquita 360º"
+            }
         },
         "platforms": [
             "android"

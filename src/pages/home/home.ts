@@ -3,9 +3,13 @@ import { NavController, MenuController, LoadingController, ToastController, FabC
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
-import { Camera } from "ionic-native";
+import { Camera } from "@ionic-native/camera";
 import { Crop } from "@ionic-native/crop";
 import { Storage } from "@ionic/storage";
+
+// Impedir que o Typescrypt sobrescreva a variável do Pusher
+// (Incluída no arquivo index.html)
+declare var Pusher;
 
 @Component({
   selector: 'page-home',
@@ -13,6 +17,9 @@ import { Storage } from "@ionic/storage";
 })
 
 export class HomePage {
+
+  // Variáveis usadas no pusher
+  private pusher;
 
   public solicitacoes = [];
   public meses = [];
@@ -23,7 +30,6 @@ export class HomePage {
 
   offset = 0;
   toast: any;
-
 
   // BLOB da imagem tirada pela câmera
   public base64image: string;
@@ -37,7 +43,8 @@ export class HomePage {
               public crop: Crop,
               public splashScreen: SplashScreen,
               public toastCtrl: ToastController,
-              private storage: Storage) {
+              private storage: Storage,
+              private camera: Camera) {
 
       // Inicializar o array de meses
 
@@ -53,6 +60,21 @@ export class HomePage {
       this.meses[10] = "Outubro";
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
+
+    // Criar uma nova instância do Pusher
+    this.pusher = new Pusher('d5bbfbed2c038130dedf', {
+      cluster: 'us2',
+      encrypted: true
+    });
+
+    // Ligar ao canal Solicitações
+    let solicitacoes_channel = this.pusher.subscribe('solicitacoes');
+
+    // Ouvir o evento 'nova'
+    solicitacoes_channel.bind('nova', (data) => {
+      console.log("Chegou uma nova solicitação");
+      this.carregarSolicitacoes();
+    });
       
   }
 
@@ -85,6 +107,8 @@ export class HomePage {
    */
 
   carregarSolicitacoes(){
+
+    console.log("Chamou carregarSolicitacoes na Home");
 
     this.gesol.getSolicitacoes().subscribe(
       
@@ -212,26 +236,23 @@ export class HomePage {
       fab.close();
 
       // Chamar a câmera
-      Camera.getPicture({
-        destinationType: Camera.DestinationType.FILE_URI,
-        sourceType: Camera.PictureSourceType.CAMERA,
-        encodingType: Camera.EncodingType.JPEG,
+      this.camera.getPicture({
+        destinationType: this.camera.DestinationType.FILE_URI,
+        sourceType: this.camera.PictureSourceType.CAMERA,
+        encodingType: this.camera.EncodingType.JPEG,
         targetWidth: 1000,
         targetHeight: 750,
         correctOrientation: true,
       })  
       // Quando a imagem for retornada
       .then((imagem) => {
-          console.log("Retornou a imagem. Chamando o Crop...");
 
           // Cropar a imagem
           this.crop.crop(imagem, { quality: 100 })
           .then(nova_imagem => {
-              console.log("Retornou a imagem cropada, convertendo para base64...");
 
               // Converter a imagem para base64
               this.toBase64(nova_imagem).then(base64 => {
-                console.log("Converteu para base64. Chamando a página de serviços");
                 
                 this.base64image = base64;
 
@@ -247,6 +268,8 @@ export class HomePage {
             erro => console.log("Erro no Crop", erro)
 
           );
+
+          console.log(imagem);
 
       }, 
 
@@ -270,10 +293,10 @@ export class HomePage {
       fab.close();
 
       // Chamar a câmera
-      Camera.getPicture({
-        destinationType: Camera.DestinationType.FILE_URI,
-        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-        encodingType: Camera.EncodingType.JPEG,
+      this.camera.getPicture({
+        destinationType: this.camera.DestinationType.FILE_URI,
+        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+        encodingType: this.camera.EncodingType.JPEG,
         targetWidth: 1000,
         targetHeight: 750
       })

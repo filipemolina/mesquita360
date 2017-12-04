@@ -49,6 +49,7 @@ export class RegisterPage {
           res => {
           
           this.config.setSolicitante(res);
+          this.config.setLogado(true);
 
           // Navegar para a página inicial
           this.navCtrl.setRoot(HomePage);

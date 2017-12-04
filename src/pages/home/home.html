@@ -49,7 +49,7 @@
 
 		<ion-row>
 			<ion-col>
-				<button *ngIf="estaLogado()" (tap)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
+				<button *ngIf="estaLogado()" (tap)="apoiar(item.id, config.getSolicitante().id)" ion-button icon-left clear small>
 					
 					<!-- Caso a solicitação não esteja na lista de apoios do usuário, mostrar o ícone "+" -->
 					<!-- Caso contrário mostrar o ícone "-" -->

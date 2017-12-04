@@ -62,7 +62,6 @@ export class GesolProvider {
     // let headers = this.montaHeaders();
 
     return this.http.get(this.root_url+"/api/solicitacoes")
-               .timeout(10000)
                .map(res => res.json());
   }
 

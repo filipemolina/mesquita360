@@ -2,12 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
 import { HomePage } from '../pages/home/home';
 import { ConfigProvider } from "../providers/config/config";
 
 // Fazer com que o TypeScript não sobrescreva a variável do google
 declare var google;
+declare var Pusher;
 
 @Component({
   templateUrl: 'app.html',
@@ -32,9 +32,7 @@ export class MyApp {
         splashScreen.hide();
 
         // Definir a home page como página inicial
-        this.nav.setRoot(HomePage);
-
-      
+        this.nav.setRoot(HomePage);      
       });
   }
   

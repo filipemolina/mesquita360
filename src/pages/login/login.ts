@@ -51,10 +51,8 @@ export class LoginPage {
 
         this.config.setSolicitante(res);
         this.config.setLogado(true);
-        console.log("Solicitante", this.config.getSolicitante());
 
         // Tornar a homepage o novo Root
-
         this.navCtrl.setRoot(HomePage);
 
       },

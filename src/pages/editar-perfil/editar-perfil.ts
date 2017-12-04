@@ -49,7 +49,7 @@ export class EditarPerfilPage {
     public config: ConfigProvider
   ){
 
-    this.abrirLoading();
+    // this.abrirLoading();
 
     // Obter todas as informações do usuário
     this.getUserInfo();
@@ -201,7 +201,7 @@ export class EditarPerfilPage {
 
         this.escolaridades = res;
 
-        this.fecharLoading();
+        // this.fecharLoading();
 
       },
 
@@ -220,57 +220,56 @@ export class EditarPerfilPage {
    */
 
   getUserInfo() {
-    this.gesol.getSolicitanteInfo().subscribe(res => {
-       
-      // Todas as informações do usuário
-      this.usuario = res;
 
-      // Caso já haja algum endereço cadastrado, popular o array de endereço
-      if(this.usuario.endereco)
-        this.endereco = this.usuario.endereco;
+    console.log("Info do usuário quando entrou na página", this.config.getSolicitante());
+
+    // Todas as informações do usuário
+    this.usuario = this.config.getSolicitante();
+
+    // Caso já haja algum endereço cadastrado, popular o array de endereço
+    if(this.usuario.endereco)
+      this.endereco = this.usuario.endereco;
+    
+    else
+      this.endereco = {
+        logradouro: "",
+        numero: "",
+        bairro: "",
+        municipio: "",
+        uf: "",
+        cep: "",
+      };
+
+    // Caso já haja telefones cadastrados, popular o array de telefones
+
+    if(this.usuario.telefones.length){
+      //Gravar o primeiro telefone
+      this.telefone_fixo = this.usuario.telefones[0];
+
+      // Testar se o segundo telefone existe
+      if(this.usuario.telefones.length > 1)
+        this.telefone_celular = this.usuario.telefones[1];
+    }
+    else{
+
+      this.telefone_fixo = {
+          tipo_telefone: "Fixo",
+          numero: ""
+      }
       
-      else
-        this.endereco = {
-          logradouro: "",
-          numero: "",
-          bairro: "",
-          municipio: "",
-          uf: "",
-          cep: "",
-        };
-
-      // Caso já haja telefones cadastrados, popular o array de telefones
-
-      if(this.usuario.telefones.length){
-        //Gravar o primeiro telefone
-        this.telefone_fixo = this.usuario.telefones[0];
-
-        // Testar se o segundo telefone existe
-        if(this.usuario.telefones.length > 1)
-          this.telefone_celular = this.usuario.telefones[1];
+      this.telefone_celular = {
+          tipo_telefone: "Celular",
+          numero: ""
       }
-      else{
+      
+      console.log("telefone 1", this.telefone_fixo);
+      console.log("telefone 2", this.telefone_celular);
 
-        this.telefone_fixo = {
-            tipo_telefone: "Fixo",
-            numero: ""
-        }
-        
-        this.telefone_celular = {
-            tipo_telefone: "Celular",
-            numero: ""
-        }
-        
-        console.log("telefone 1", this.telefone_fixo);
-        console.log("telefone 2", this.telefone_celular);
+    }
 
-      }
+    // Obter todas as opções do Enum de escolaridade
+    this.getEscolaridade();
 
-      // Obter todas as opções do Enum de escolaridade
-      this.getEscolaridade();
-
-
-    }, err => console.log(err));
   }
 
   salvarInfoUsuario(){
@@ -280,11 +279,17 @@ export class EditarPerfilPage {
     this.usuario.endereco = this.endereco;
     this.usuario.telefones = [this.telefone_fixo, this.telefone_celular];
 
+    console.log("Info do usuário antes de enviar", this.usuario);
+
     this.gesol.editaSolicitante(this.usuario).subscribe(
 
       res => {
 
+        console.log("Resposta do Gesol", res);
+
         this.config.setSolicitante(res);
+
+        console.log("Info do usuário depois de alterar", this.config.getSolicitante());
 
       },
 

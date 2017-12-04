@@ -118,6 +118,13 @@ export class ConfigProvider {
     this.setGesolUserId(null);
     this.setGesolUserName(null);
 
+    // Zerar o solicitante guardado na memória do celular
+    this.storage.set('solicitante', null).then(() => {
+      
+      this.solicitante = null;
+
+    });
+
     this.storage.set('gesolToken', null).then(()=>{
 
       this.storage.set('logado', false).then(()=>{
@@ -225,23 +232,23 @@ export class ConfigProvider {
   /**
    * Recebe um objeto de usuário e atualiza todas as informações salvas no aplicativo atualmente usando os setters definidos
    * abaixo
-   * @param usuario Objeto que contem todas as informações do usuário no padrão Laravel, incluindo endereço e telefones
+   * @param dados Resposta do Laravel que contém o objeto do solicitante com endereço, telefones e user e também contem uma token de acesso
    */
 
-  setSolicitante(usuario:any){
+  setSolicitante(dados:any){
 
     // Salvar na variável
-    this.solicitante = usuario.solicitante;
+    this.solicitante = dados.solicitante;
     
-    this.setGesolCPF(usuario.solicitante.cpf);
-    this.setGesolNome(usuario.solicitante.nome);
-    this.setGesolFoto(usuario.solicitante.foto);
-    this.setGesolUserName(usuario.solicitante.email);
-    this.setGesolToken(usuario.token.accessToken);
-    this.setGesolUserId(usuario.solicitante.id);
+    this.setGesolCPF(dados.solicitante.cpf);
+    this.setGesolNome(dados.solicitante.nome);
+    this.setGesolFoto(dados.solicitante.foto);
+    this.setGesolUserName(dados.solicitante.email);
+    this.setGesolToken(dados.token.accessToken);
+    this.setGesolUserId(dados.solicitante.id);
 
     // Salvar na Storage
-    this.storage.set('solicitante', usuario.solicitante);
+    this.storage.set('solicitante', dados.solicitante);
 
   }
 

@@ -19,6 +19,8 @@ import { ConexaoProvider }                          from '../providers/conexao/c
 import { Network }                                  from "@ionic-native/network";
 import { Crop }                                     from "@ionic-native/crop";
 import { Diagnostic }                               from '@ionic-native/diagnostic';
+import { Camera }                                   from '@ionic-native/camera';
+import { PusherProvider } from '../providers/pusher/pusher';
 
 const cloudSettings : CloudSettings = {
   'core' : {
@@ -63,6 +65,8 @@ const cloudSettings : CloudSettings = {
     Crop,
     Diagnostic,
     StatusBar,
+    Camera,
+    PusherProvider
   ]
 })
 export class AppModule {}
