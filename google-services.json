@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "22259915167",
+    "firebase_url": "https://mesquita-360.firebaseio.com",
+    "project_id": "mesquita-360",
+    "storage_bucket": "mesquita-360.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22259915167:android:5bb91f8f34b6e9a9",
+        "android_client_info": {
+          "package_name": "br.gov.rj.mesquita.mesquita360"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "22259915167-v1pp2lqqm8dg7d54beh2m6i2qtuobngl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIr4gm5QHe-YvK-l8rGhO0f4tIr52aDJM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
