@@ -52,6 +52,13 @@ export class LoginPage {
         this.config.setSolicitante(res);
         this.config.setLogado(true);
 
+        // Atualizar o ID do FCM
+        this.gesol.alteraFcmId(this.config.FCM_ID).subscribe((res) => {
+
+          console.log("Resultado do AlteraFCMID", res);
+
+        });
+
         // Tornar a homepage o novo Root
         this.navCtrl.setRoot(HomePage);
 
@@ -133,7 +140,8 @@ export class LoginPage {
               resultado.picture.data.url,
               resultado.email,
               res.authResponse.accessToken,
-              res.authResponse.userID).subscribe(res => {
+              res.authResponse.userID,
+              this.config.FCM_ID).subscribe(res => {
 
 
               // Gravar os dados recebidos no ConfigProvider

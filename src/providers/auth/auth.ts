@@ -25,7 +25,7 @@ export class AuthProvider {
 
   }
 
-  getGesolUser(email, nome, foto, username, token, uid){
+  getGesolUser(email, nome, foto, username, token, uid, fcm_id){
 
     // Fazer um chamada para a API enviando a token do facebook e receber um usuário
     // (Novo ou antigo)
@@ -36,6 +36,7 @@ export class AuthProvider {
       email: email,
       foto:  foto,
       uid:   uid,
+      fcm_id: fcm_id
     }).map(res => res.json());
 
   }

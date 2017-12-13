@@ -42,6 +42,7 @@ export class EscreverSolicitacaoPage {
   cor_setor: any;
   icone_setor: any;
   nome_setor: string;
+  eu:any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams, 
@@ -74,18 +75,18 @@ export class EscreverSolicitacaoPage {
 
   loadMap(){
 
-    console.log("Chamou o LoadMap");
-    console.log("Config nesse momento", this.config);
+    console.log("ES -> Chamou o LoadMap", new Date());
+    console.log("ES -> Config nesse momento", this.config, new Date());
 
     //Testar se a localização já foi obtida pelo aplicativo
 
-    if(this.config.temEndereco == false){
-      console.log("O endereço ainda não foi obtido pelo config");
-      // Chamar novamente essa mesma função até que a localização tenha sido obtida
-      window.setTimeout(this.loadMap, 100);
+    if(!this.config.temEndereco){
+      
+      this.obterEnderecoECarregarMapa();
+
     } else {
 
-      console.log("O Endereço já foi obtido, prosseguindo");
+      console.log("ES -> O Endereço já foi obtido, prosseguindo", new Date());
       
       // Criar um objeto com as coordenadas do chamado
       let latLng = new google.maps.LatLng(this.config.lati, this.config.longi);
@@ -112,6 +113,76 @@ export class EscreverSolicitacaoPage {
 
     }
 
+  }
+
+  obterEnderecoECarregarMapa(){
+
+    console.log("Não tinha endereço, precisou chamar a função com nome ridiculamente longo");
+    
+    // Obter a localização
+    this.geolocation.getCurrentPosition()
+    .then(resp => {
+
+      console.log("CONFIG -> Obteve a localização atual", new Date());
+
+      this.lati = resp.coords.latitude;
+      this.longi = resp.coords.longitude;
+      console.log("CONFIG -> Inciando chamada do Google...", new Date());
+      // Chamada à API do Google
+      this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true&key=AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ")
+        .map(res => res.json())
+        .subscribe(data => {
+          console.log("CONFIG -> Resultado da chamada ao google", data, new Date());
+          let address = data.results[0];
+          // this.location = address.formatted_address;
+
+          // Separar os dados do endereço
+          this.endereco['numero']        = address.address_components[0].long_name;
+          this.endereco['logradouro']    = address.address_components[1].long_name;
+          this.endereco['bairro']        = address.address_components[2].long_name;
+          this.endereco['municipio']     = address.address_components[4].long_name;
+          this.endereco['uf']            = address.address_components[5].short_name;
+          this.endereco['latitude']      = this.lati;
+          this.endereco['longitude']     = this.longi;
+
+          ////////////////////////////////// Criar o mapa
+
+            // Criar um objeto com as coordenadas do chamado
+            let latLng = new google.maps.LatLng(this.lati, this.longi);
+          
+            let mapOptions = {
+              center: latLng,
+              zoom: 15,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+        
+            // Criar o mapa
+            this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+        
+            // Adicionar um marcador central
+        
+            let marker = new google.maps.Marker({
+              map: this.map,
+              animation: google.maps.Animation.DROP,
+              position: this.map.getCenter()
+            });
+
+        }, erro => {
+
+          console.log("CONFIG -> Erro da API do Google:", erro, new Date());
+
+        })
+
+    }, erro => {
+
+      console.log("CONFIG -> Erro do MAPA:", erro, new Date());
+
+    })
+    .catch(erro => {
+      
+      console.log("CONFIG -> Erro na linha 143: ", erro, new Date());
+
+    });
   }
 
   // Obtém as informações necessárias para mostrar o setor
@@ -150,82 +221,107 @@ export class EscreverSolicitacaoPage {
 
     this.abrirLoading();
 
-    // Testar se a foto foi tirada em Mesquita
+    // Testar se o endereço já foi obtido
+    if(Object.keys(this.endereco).length || Object.keys(this.config.endereco).length){
 
-    if(this.endereco['municipio'] == "Mesquita"){
+      // Testar se a foto foi tirada em Mesquita
 
-      this.gesol.enviaSolicitacao(this.imagem, this.servico, this.texto, this.endereco).subscribe(
-        
-        // Caso de sucesso
-        res => {
-  
-          this.fecharLoading();
-  
-          // Navegar de volta para a página inicial
-  
-          // Criar o alerta com os erros
-          let alert = this.alertCtrl.create({
-            title: "Parabéns!",
-            subTitle: "Sua solicitação foi enviada e em breve será analisada pela Prefeitura. Acompanhe o andamento do seu atendimento na página 'Minhas Solicitações' no menu principal.",
-            buttons: [
-              {
-                text: "Ok",
-                handler: () => {
-  
-                  this.navCtrl.popToRoot();
-  
+      if(this.endereco['municipio'] == "Mesquita"){
+      
+        this.gesol.enviaSolicitacao(this.imagem, this.servico, this.texto, this.endereco).subscribe(
+          
+          // Caso de sucesso
+          res => {
+    
+            this.fecharLoading();
+    
+            // Navegar de volta para a página inicial
+    
+            // Criar o alerta com os erros
+            let alert = this.alertCtrl.create({
+              title: "Parabéns!",
+              subTitle: "Sua solicitação foi enviada e em breve será analisada pela Prefeitura. Acompanhe o andamento do seu atendimento na página 'Minhas Solicitações' no menu principal.",
+              buttons: [
+                {
+                  text: "Ok",
+                  handler: () => {
+    
+                    this.navCtrl.popToRoot();
+    
+                  }
                 }
+              ]
+            });
+    
+            // Mostrar o aleta
+            alert.present();
+    
+            this.config.temEndereco = false;
+    
+          },
+    
+          // Caso de falha
+          erro => {
+    
+            this.fecharLoading();
+    
+            let erros = JSON.parse(erro._body);
+    
+            // Variável com as mensagens de erro concatenadas
+            let mensagens = "";
+    
+            // Popular as mensagens de erro
+            for(let campo in erros){
+              if(erros.hasOwnProperty(campo)){
+                mensagens += erros[campo][0] + "<br>";
               }
-            ]
-          });
-  
-          // Mostrar o aleta
-          alert.present();
-  
-          this.config.temEndereco = false;
-  
-        },
-  
-        // Caso de falha
-        erro => {
-  
-          this.fecharLoading();
-  
-          let erros = JSON.parse(erro._body);
-  
-          // Variável com as mensagens de erro concatenadas
-          let mensagens = "";
-  
-          // Popular as mensagens de erro
-          for(let campo in erros){
-            if(erros.hasOwnProperty(campo)){
-              mensagens += erros[campo][0] + "<br>";
             }
+    
+            // Criar o alerta com os erros
+            let alert = this.alertCtrl.create({
+              title: "Atenção",
+              subTitle: mensagens,
+              buttons: ['ok']
+            });
+    
+            // Mostrar o aleta
+            alert.present();
+
+            this.fecharLoading();
+    
           }
+    
+        );
   
-          // Criar o alerta com os erros
-          let alert = this.alertCtrl.create({
-            title: "Atenção",
-            subTitle: mensagens,
-            buttons: ['ok']
-          });
+      } else {
   
-          // Mostrar o aleta
-          alert.present();
+        let alert = this.alertCtrl.create({
+          title: "Atenção",
+          subTitle: "Apenas solicitações registradas no município de Mesquita podem ser registradas pelo Mesquita 360.",
+          buttons: ['ok']
+        });
   
-        }
+        alert.present();
+
+        this.fecharLoading();
   
-      );
+      }
 
     } else {
 
+      // Caso o enderço ainda não tenha sido obtido
+
       let alert = this.alertCtrl.create({
         title: "Atenção",
-        subTitle: "Apenas solicitações registradas no município de Mesquita podem ser registradas pelo Mesquita 360.",
+        subTitle: "Aguarde um momento enquanto estamos localizando você.",
         buttons: ['ok']
       });
 
       alert.present();
+
+      console.log("Endereço da página", this.endereco, Object.keys(this.endereco).length, "Endereço do config", this.config.endereco, Object.keys(this.endereco).length);
+
+      this.fecharLoading();
 
     }
 

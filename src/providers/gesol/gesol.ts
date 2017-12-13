@@ -30,14 +30,15 @@ export class GesolProvider {
 
   // Criar Usuário
 
-  criarUsuario(nome, email, cpf, senha, confirmar_senha){
+  criarUsuario(nome, email, cpf, senha, confirmar_senha, fcm_id){
 
     return this.http.post(this.root_url+"/api/user/create", {
       nome: nome,
       email: email,
       cpf: cpf,
       senha: senha,
-      senha_confirmation: confirmar_senha
+      senha_confirmation: confirmar_senha,
+      fcm_id: fcm_id
     }).map(res => res.json());
 
   }
@@ -167,6 +168,12 @@ export class GesolProvider {
 
   }
 
+  verificaVersao(){
+  
+    return this.http.get(this.root_url+"/api/versao");
+
+  }
+
   /**
    * Deletar uma solicitação no GESOL desde que o status dela ainda seja "Aberta"
    * @param id
@@ -257,6 +264,23 @@ export class GesolProvider {
 
     return this.http.get("http://viacep.com.br/ws/" + cep + "/json")
           .map(res => res.json());
+
+  }
+
+  // Altera o ID do FCM deste usuário no banco de dados
+
+  alteraFcmId(fcm_id){
+
+    console.log("Chamou Altera FCM Id ", fcm_id);
+
+    let headers = this.montaHeaders();
+
+    let body = {
+      fcm_id: fcm_id,
+      solicitante_id: this.config.getSolicitante().id
+    }
+
+    return this.http.post(this.root_url + "/api/alteraFcmId", body, {headers: headers});
 
   }
 

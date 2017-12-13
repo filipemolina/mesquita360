@@ -1,14 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController } from 'ionic-angular';
+import { Platform, NavController, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ConfigProvider } from "../providers/config/config";
 import { FCM } from '@ionic-native/fcm';
+import { GesolProvider } from '../providers/gesol/gesol';
 
 // Fazer com que o TypeScript não sobrescreva a variável do google
 declare var google;
-declare var Pusher;
 
 @Component({
   templateUrl: 'app.html',
@@ -19,12 +19,14 @@ export class MyApp {
   @ViewChild('content') nav: NavController;
 
   constructor(
-      platform: Platform, 
+      private platform: Platform, 
       statusBar: StatusBar, 
       splashScreen: SplashScreen, 
       public config: ConfigProvider,
       public menuController : MenuController,
-      private fcm : FCM) {
+      private fcm : FCM,
+      public gesol : GesolProvider,
+      public alertCtrl: AlertController) {
 
       platform.ready().then(() => {
         // Okay, so the platform is ready and our plugins are available.
@@ -35,6 +37,27 @@ export class MyApp {
 
         // Definir a home page como página inicial
         this.nav.setRoot(HomePage);
+
+        this.verificarVersao();
+
+        // Setar a token do FCM no ConfigProvider
+        // Ela só será enviada para o servidor quando o usuário logar
+        fcm.getToken().then(token => {
+
+          this.config.FCM_ID = token;
+
+        });
+
+        // Quando a token do FCM expirar, outra é gerada automaticamente
+        // Essa função é executada quando isso acontece
+        fcm.onTokenRefresh().subscribe(token => {
+
+          // Testar se o usuário está logado antes de tentar mudar a token dele no banco de dados
+          if(this.config.getLogado())
+            this.gesol.alteraFcmId(this.config.FCM_ID);
+          
+
+        });
         
         // Notificações FCM
         fcm.onNotification().subscribe( data => {
@@ -60,7 +83,7 @@ export class MyApp {
       this.menuController.close();
 
       //Apagar todos os dados do armazenamento interno do telefone
-      this.config.logout(this.nav);
+      this.config.logout();
 
       // Desabilitar o menu
       this.menuController.enable(false);
@@ -72,6 +95,31 @@ export class MyApp {
 
   naoEstaLogado(){
     return !this.config.getLogado();
+  }
+
+  verificarVersao(){
+
+    this.gesol.verificaVersao().subscribe(res => {
+      let resposta : any = res;
+
+      if(resposta._body != this.config.versao){
+
+        let alert = this.alertCtrl.create({
+          title: "Atenção",
+          subTitle: "Você está utilizando uma versão antiga do aplicativo. Entre em contato com o setor de TI para obter a versão mais recente",
+          buttons: [{
+            text: "Ok",
+            handler: () => {
+              this.platform.exitApp();
+            }
+          }]
+        });
+
+        alert.present();
+
+      }
+    })
+
   }
 
 }

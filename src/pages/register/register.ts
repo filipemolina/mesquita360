@@ -43,7 +43,7 @@ export class RegisterPage {
   enviar(){
 
     this.gesol
-        .criarUsuario(this.nome, this.email, this.cpf.trim(), this.senha, this.confirmar_senha)
+        .criarUsuario(this.nome, this.email, this.cpf.trim(), this.senha, this.confirmar_senha, this.config.FCM_ID)
         .subscribe(
           // Caso de Sucesso
           res => {

@@ -3,13 +3,12 @@ import { NavController, MenuController, LoadingController, ToastController, FabC
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
+import { Diagnostic } from "@ionic-native/diagnostic";
 import { Camera } from "@ionic-native/camera";
 import { Crop } from "@ionic-native/crop";
 import { Storage } from "@ionic/storage";
+import { FCM } from '@ionic-native/fcm';
 
-// Impedir que o Typescrypt sobrescreva a variável do Pusher
-// (Incluída no arquivo index.html)
-declare var Pusher;
 
 @Component({
   selector: 'page-home',
@@ -44,7 +43,9 @@ export class HomePage {
               public splashScreen: SplashScreen,
               public toastCtrl: ToastController,
               private storage: Storage,
-              private camera: Camera) {
+              private camera: Camera,
+              private diagnostic: Diagnostic,
+              private fcm: FCM) {
 
       // Inicializar o array de meses
 
@@ -61,20 +62,14 @@ export class HomePage {
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
 
-    // Criar uma nova instância do Pusher
-    this.pusher = new Pusher('d5bbfbed2c038130dedf', {
-      cluster: 'us2',
-      encrypted: true
-    });
+      fcm.onNotification().subscribe(data => {
 
-    // Ligar ao canal Solicitações
-    let solicitacoes_channel = this.pusher.subscribe('solicitacoes');
+        if(data.tipo = "recarregar" && data.model == "solicitacoes"){
+          console.log("Recarregar as solicitações...");
+          this.carregarSolicitacoes();
+        }
 
-    // Ouvir o evento 'nova'
-    solicitacoes_channel.bind('nova', (data) => {
-      console.log("Chegou uma nova solicitação");
-      this.carregarSolicitacoes();
-    });
+      });
       
   }
 
@@ -148,6 +143,8 @@ export class HomePage {
         // Fechar tela de loading
 
         this.fecharLoading();
+
+        console.log("Terminou de carregar solicitações");
       
       }, 
       
@@ -228,8 +225,38 @@ export class HomePage {
 
    tirarFoto(fab: FabContainer){
 
+      console.log("CONFIG -> ", this.diagnostic.locationMode);
+      this.diagnostic.getLocationAuthorizationStatus().then(res => console.log("Authorization", res));
+
       // Obter o endereço enquanto o resto da lógica é feito
-      this.config.getLatLong();
+      this.config.getLatLong().catch(() => {
+
+        // Criar o alerta com os erros
+        let alert = this.alertCtrl.create({
+          title: "Atenção",
+          subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
+          buttons: [{
+            text: "Ok",
+            handler: () => {
+
+              this.diagnostic.switchToLocationSettings();
+
+            }
+          },
+          {
+            text: 'Cancelar',
+            handler: () => {
+              
+              this.navCtrl.popToRoot();
+
+            }
+          }]
+        });
+
+        // Mostrar o aleta
+        alert.present();
+
+      });
 
       console.log("Chamou a Câmera");
      
@@ -288,7 +315,34 @@ export class HomePage {
     escolherFoto(fab: FabContainer){
 
       // Obter o endereço enquanto o resto da lógica é feito
-      this.config.getLatLong();
+      this.config.getLatLong().catch(() => {
+
+        // Criar o alerta com os erros
+        let alert = this.alertCtrl.create({
+          title: "Atenção",
+          subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
+          buttons: [{
+            text: "Ok",
+            handler: () => {
+
+              this.diagnostic.switchToLocationSettings();
+
+            }
+          },
+          {
+            text: 'Cancelar',
+            handler: () => {
+              
+              this.navCtrl.popToRoot();
+
+            }
+          }]
+        });
+
+        // Mostrar o aleta
+        alert.present();
+
+      });
 
       fab.close();
 
@@ -421,7 +475,7 @@ export class HomePage {
           // Criar uma mensagem fake para adicionar na solicitação enquanto a verdadeira é enviada para o servidor
 
           this.solicitacoes[i].comentarios.push({
-            functionario_id : null,
+            funcionario_id : null,
             comentario: this.novos_comentarios[solicitacao]
           });
 

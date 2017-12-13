@@ -15,12 +15,20 @@ import { Http } from "@angular/http";
 @Injectable()
 export class ConfigProvider {
 
+  // Versão do aplicativo
+  public versao = "0.0.3";
+
   // Rota Raiz da Aplicação
   private root_url = "https://360.mesquita.rj.gov.br/gesol";  
 
   // Objeto que guarda todas as informações do solicitante
-
   public solicitante:any = {};
+
+  // Objeto que guarda todas as solicitações recebidas do Gesol
+  public solicitacoes:any;
+
+  // Token do FCM (Firebase Cloud Message)
+  public FCM_ID: string;
 
   // Chave da API do Google Maps
 
@@ -29,6 +37,7 @@ export class ConfigProvider {
   public longi: any;
   public endereco : any[] = [];
   public temEndereco: boolean = false;
+  private GPSAtivado = false;
 
   // Credenciais e Info do Facebook
   
@@ -88,10 +97,14 @@ export class ConfigProvider {
 
     // Registrar uma função que será executada toda vez que o status da localização mudar
     this.diagnostic.registerLocationStateChangeHandler((arg) => {
+
+      console.log("CONFIG -> Localização mudou", new Date());
       
       if(arg != this.diagnostic.locationMode.LOCATION_OFF){
+        console.log("CONFIG -> Localização foi ligada, chamando getlatlong", new Date());
         this.getLatLong();
       } else {
+        console.log("CONFIG -> Localização foi desligada, mudando temEndereco para False", new Date());
         this.temEndereco = false;
       }
 
@@ -104,7 +117,7 @@ export class ConfigProvider {
   ////// Logout
   // Apaga todos os dados relacionados ao usuário da storage
 
-  logout(nav: NavController)
+  logout()
   {
     this.setFbID(null);
     this.setFbToken(null);
@@ -139,93 +152,81 @@ export class ConfigProvider {
    * Obtém a latitude e longitude utilizando a API do google maps
    */
 
-   getLatLong(){
+   getLatLong(nav? : NavController){
 
-    console.log("Chamou a GetLatLong");
+    // Retornar uma promessa
+    return new Promise((resolve, reject) => {
 
-    this.diagnostic.isLocationEnabled()
-      .then(success => {
+      console.log("CONFIG -> Chamou a GetLatLong", new Date());
+  
+      this.diagnostic.isLocationEnabled()
+        .then(success => {
+  
+          console.log("CONFIG -> Chamou isLocationEnabled", new Date());
+  
+          // GPS está ativado e disponível, obter a localização normalmente
+          if(success){
+  
+            console.log("CONFIG -> GPS Está ativo e disponível", new Date());
+  
+            // Obter a localização
+            this.geolocation.getCurrentPosition()
+            .then(resp => {
+  
+              console.log("CONFIG -> Obteve a localização atual", new Date());
+  
+              this.lati = resp.coords.latitude;
+              this.longi = resp.coords.longitude;
+              console.log("CONFIG -> Inciando chamada do Google...", new Date());
+              // Chamada à API do Google
+              this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true&key=AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ")
+                .map(res => res.json())
+                .subscribe(data => {
+                  console.log("CONFIG -> Resultado da chamada ao google", data, new Date());
+                  let address = data.results[0];
+                  // this.location = address.formatted_address;
+  
+                  // Separar os dados do endereço
+                  this.endereco['numero']        = address.address_components[0].long_name;
+                  this.endereco['logradouro']    = address.address_components[1].long_name;
+                  this.endereco['bairro']        = address.address_components[2].long_name;
+                  this.endereco['municipio']     = address.address_components[4].long_name;
+                  this.endereco['uf']            = address.address_components[5].short_name;
+                  this.endereco['latitude']      = this.lati;
+                  this.endereco['longitude']     = this.longi;
+  
+                  this.temEndereco = true;
+  
+                  console.log("CONFIG -> Obteve o endereço:", this.endereco, this.temEndereco, new Date());
 
-        console.log("Chamou isLocationEnabled");
+                  resolve(this.endereco);
+  
+                }, erro => {
+  
+                  console.log("CONFIG -> Erro da API do Google:", erro, new Date());
+  
+                })
+  
+            }, erro => {
+  
+              console.log("CONFIG -> Erro do MAPA:", erro, new Date());
+  
+            })
+            .catch(erro => {
+              
+              console.log("CONFIG -> Erro na linha 143: ", erro, new Date());
+  
+            });
+  
+          } else {
+  
+            reject();
+  
+          }
+  
+        });
 
-        // GPS está ativado e disponível, obter a localização normalmente
-        if(success){
-
-          console.log("GPS Está ativo e disponível");
-
-          // Obter a localização
-          this.geolocation.getCurrentPosition()
-          .then(resp => {
-
-            console.log("Obteve a localização atual");
-
-            this.lati = resp.coords.latitude;
-            this.longi = resp.coords.longitude;
-            console.log("Inciando chamada do Google...");
-            // Chamada à API do Google
-            this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true&key=AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ")
-              .map(res => res.json())
-              .subscribe(data => {
-                console.log("Resultado da chamada ao google", data);
-                let address = data.results[0];
-                // this.location = address.formatted_address;
-
-                // Separar os dados do endereço
-                this.endereco['numero']        = address.address_components[0].long_name;
-                this.endereco['logradouro']    = address.address_components[1].long_name;
-                this.endereco['bairro']        = address.address_components[2].long_name;
-                this.endereco['municipio']     = address.address_components[4].long_name;
-                this.endereco['uf']            = address.address_components[5].short_name;
-                this.endereco['latitude']      = this.lati;
-                this.endereco['longitude']     = this.longi;
-
-                this.temEndereco = true;
-
-                console.log("Obteve o endereço:", this.endereco, this.temEndereco);
-
-              }, erro => {
-
-                console.log("Erro da API do Google:", erro);
-
-              })
-
-          }, erro => {
-
-            console.log("Erro do MAPA:", erro);
-
-          })
-          .catch(erro => {
-            
-            console.log("Erro na linha 143: ", erro);
-
-          });
-
-        } else {
-
-          // Criar o alerta com os erros
-          let alert = this.alertCtrl.create({
-            title: "Atenção",
-            subTitle: 'O Aplicativo Mesquita 360º precisa obter a sua localização atual para enviar a sua solicitação. Por favor, habilite o GPS de seu aparelho e tente novamente.',
-            buttons: [{
-              text: "Ok",
-              handler: () => {
-
-                this.diagnostic.switchToLocationSettings();
-
-              }
-            },
-            {
-              text: 'Cancelar',
-              role: 'cancel'
-            }]
-          });
-
-          // Mostrar o aleta
-          alert.present();
-
-        }
-
-      });
+    });
 
    }
 
