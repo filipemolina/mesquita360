@@ -62,12 +62,24 @@ export class HomePage {
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
 
+      //TODO : Mover a lista de solicitações para o arquivo config, onde ela pode ser armazenada.
+      //Receber o ID do comentário pela notificação, buscá-lo no BD e adicioná-lo no item correto do vetor
+      //Fazer toda a adapatação necessária na página "Minhas Solicitações"
+      //Verificar o envio de comentários de mais de uma linha
+      //Só após isso voltar ao GESOL
+
       fcm.onNotification().subscribe(data => {
 
         if(data.tipo = "recarregar" && data.model == "solicitacoes"){
           console.log("Recarregar as solicitações...");
           this.carregarSolicitacoes();
         }
+
+        if(data.acao == "atualizar" && data.model == "comentario"){
+          console.log(this.solicitacoes.find(i => i.id === parseInt(data.solicitacao)));
+        }
+
+        console.log(data);
 
       });
       
