@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { Events, IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ConfigProvider } from "../../providers/config/config";
 import { Alert } from 'ionic-angular/components/alert/alert';
@@ -31,7 +31,8 @@ export class ChamadosPage {
               public gesol : GesolProvider,
               public config: ConfigProvider,
               public loadingCtrl: LoadingController,
-              public alertController: AlertController) {
+              public alertController: AlertController,
+              public events: Events) {
 
     // Inicializar o array de meses
 
@@ -48,9 +49,12 @@ export class ChamadosPage {
     this.meses[11] = "Novembro";
     this.meses[12] = "Dezembro";
 
-    this.abrirLoading();
+  }
 
-    this.carregarSolicitacoes();
+  ionViewDidEnter(){
+
+    // Trigar o evento que faz com que o app.component.ts busque as solicitações no Gesol
+    this.events.publish("recarregar:minhas");
 
   }
 
@@ -103,12 +107,6 @@ export class ChamadosPage {
   // Enviar mensagem para o gesol
   enviarMensagem(evento, solicitacao){
 
-    let nova_altura_mensagens = 0;
-    let nova_altura_outros = 0;
-    let nova_altura = 0;
-
-    let container = <HTMLElement>document.getElementById('mensagens_'+solicitacao).parentNode.childNodes[9];
-
     // Os novos comentários ficam guardados em um vetor
 
     if(this.novos_comentarios[solicitacao] != ""){
@@ -142,6 +140,13 @@ export class ChamadosPage {
 
           // Zerar o input
           this.novos_comentarios[solicitacao] = "";
+
+          // Obter o tamanho da última mensagem enviada
+          let altura_da_ultima = document.querySelectorAll("#mensagens_"+solicitacao+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
+          let altura_atual = parseInt(document.getElementById("mensagens_"+solicitacao).style.height);
+
+          // Aumentar tamanho do container de mensagens
+          document.getElementById("mensagens_"+solicitacao).style.height = altura_atual + altura_da_ultima + "px";
 
         }
 
@@ -224,6 +229,7 @@ export class ChamadosPage {
       this.gesol.getMinhasSolicitacoes(true).subscribe(
         // Caso de sucesso
         res => {
+          
           this.sol = res;
 
           for(let item in this.sol) {
@@ -249,6 +255,8 @@ export class ChamadosPage {
             // Criar um vetor para as mensagens dessa solicitação
             this.sol[item].mensagens = [];
         }
+
+        this.config.setSolicitacoes(this.sol);
         
         this.fecharLoading();
     },
@@ -283,7 +291,8 @@ export class ChamadosPage {
 
                   this.abrirLoading();
 
-                  this.carregarSolicitacoes();
+                  //Chamar o evento no app.component.ts para recarregar as minhas solicitações
+                  this.events.publish('recarregar:minhas');
 
                 }
 

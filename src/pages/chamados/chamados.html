@@ -17,7 +17,7 @@
 
   	<!-- Cards -->
 
-	<ion-card *ngFor="let item of sol" ngClass="success">
+	<ion-card *ngFor="let item of config.getMinhasSolicitacoes()" ngClass="success">
 		
 		<ion-item *ngIf="item.status == 'Aberta'">
 			<ion-avatar item-start>

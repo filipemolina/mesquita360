@@ -22,10 +22,11 @@ export class ConfigProvider {
   private root_url = "https://360.mesquita.rj.gov.br/gesol";  
 
   // Objeto que guarda todas as informações do solicitante
-  public solicitante:any = {};
+  public solicitante:any = [];
 
   // Objeto que guarda todas as solicitações recebidas do Gesol
-  public solicitacoes:any;
+  private solicitacoes:any;
+  private minhasSolicitacoes:any;
 
   // Token do FCM (Firebase Cloud Message)
   public FCM_ID: string;
@@ -360,5 +361,25 @@ export class ConfigProvider {
   // Logado
 
   setLogado(dado: boolean)   { this.logado   = dado; this.storage.set("logado", dado);   }
+
+  /**
+   * Gets e Sets das Solicitações
+   */
+
+  public getSolicitacoes(){
+    return this.solicitacoes;
+  }
+
+  public setSolicitacoes(sol){
+    this.solicitacoes = sol;
+  }
+
+  public getMinhasSolicitacoes(){
+    return this.minhasSolicitacoes;
+  }
+
+  public setMinhasSolicitacoes(sol){
+    this.minhasSolicitacoes = sol;
+  }
 
 }

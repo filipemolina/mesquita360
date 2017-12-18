@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, LoadingController, ToastController, FabContainer, AlertController } from 'ionic-angular';
+import { Events, NavController, MenuController, LoadingController, ToastController, FabContainer, AlertController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from "../../providers/config/config";
 import { GesolProvider } from "../../providers/gesol/gesol";
@@ -45,7 +45,8 @@ export class HomePage {
               private storage: Storage,
               private camera: Camera,
               private diagnostic: Diagnostic,
-              private fcm: FCM) {
+              private fcm: FCM,
+              public events: Events) {
 
       // Inicializar o array de meses
 
@@ -72,7 +73,9 @@ export class HomePage {
 
         if(data.tipo = "recarregar" && data.model == "solicitacoes"){
           console.log("Recarregar as solicitações...");
-          this.carregarSolicitacoes();
+          
+          // Chamar o evento que será ouvido na app.component.ts
+          events.publish('recarregar:solicitacoes');
         }
 
         if(data.acao == "atualizar" && data.model == "comentario"){
@@ -93,7 +96,7 @@ export class HomePage {
   ionViewDidEnter(){
 
     // O que diz aí em baixo
-    this.carregarSolicitacoes();
+    this.events.publish('recarregar:solicitacoes');
 
     // Obter o valor da variável que diz se o usuário está logado no sistema
     this.storage.get('logado').then(val => {
@@ -121,7 +124,7 @@ export class HomePage {
       
       res => {
               
-        // Preencher a variável de solicitações
+        // Preencher a variável temporaria de solicitações
 
         this.solicitacoes = res;
 
@@ -151,6 +154,9 @@ export class HomePage {
           }
 
         }
+
+        // Gravar as solicitações já preparadas no config
+        this.config.setSolicitacoes(this.solicitacoes);
 
         // Fechar tela de loading
 
@@ -215,8 +221,10 @@ export class HomePage {
 
         }
 
-        // Fechar o gif de loading
+        // Gravar as solicitações já preparadas no config, de onde elas serão lidas pela view
+        this.config.setSolicitacoes(this.solicitacoes);
 
+        // Fechar o gif de loading
         infiniteScroll.complete();
       
       }, 
@@ -491,8 +499,12 @@ export class HomePage {
             comentario: this.novos_comentarios[solicitacao]
           });
 
+          // Obter o tamanho da última mensagem enviada
+          let altura_da_ultima = document.querySelectorAll("#mensagens_"+solicitacao+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
+          let altura_atual = parseInt(document.getElementById("mensagens_"+solicitacao).style.height);
+
           // Aumentar tamanho do container de mensagens
-          evento.path[4].style.height =  evento.path[4].scrollHeight + 65 + "px";
+          document.getElementById("mensagens_"+solicitacao).style.height = altura_atual + altura_da_ultima + "px";
 
           // Zerar o input
           this.novos_comentarios[solicitacao] = "";
