@@ -98,14 +98,10 @@ export class ConfigProvider {
 
     // Registrar uma função que será executada toda vez que o status da localização mudar
     this.diagnostic.registerLocationStateChangeHandler((arg) => {
-
-      console.log("CONFIG -> Localização mudou", new Date());
       
       if(arg != this.diagnostic.locationMode.LOCATION_OFF){
-        console.log("CONFIG -> Localização foi ligada, chamando getlatlong", new Date());
         this.getLatLong();
       } else {
-        console.log("CONFIG -> Localização foi desligada, mudando temEndereco para False", new Date());
         this.temEndereco = false;
       }
 
@@ -157,33 +153,25 @@ export class ConfigProvider {
 
     // Retornar uma promessa
     return new Promise((resolve, reject) => {
-
-      console.log("CONFIG -> Chamou a GetLatLong", new Date());
   
       this.diagnostic.isLocationEnabled()
         .then(success => {
   
-          console.log("CONFIG -> Chamou isLocationEnabled", new Date());
-  
           // GPS está ativado e disponível, obter a localização normalmente
           if(success){
-  
-            console.log("CONFIG -> GPS Está ativo e disponível", new Date());
   
             // Obter a localização
             this.geolocation.getCurrentPosition()
             .then(resp => {
   
-              console.log("CONFIG -> Obteve a localização atual", new Date());
-  
               this.lati = resp.coords.latitude;
               this.longi = resp.coords.longitude;
-              console.log("CONFIG -> Inciando chamada do Google...", new Date());
+
               // Chamada à API do Google
               this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true&key=AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ")
                 .map(res => res.json())
                 .subscribe(data => {
-                  console.log("CONFIG -> Resultado da chamada ao google", data, new Date());
+
                   let address = data.results[0];
                   // this.location = address.formatted_address;
   
@@ -197,8 +185,6 @@ export class ConfigProvider {
                   this.endereco['longitude']     = this.longi;
   
                   this.temEndereco = true;
-  
-                  console.log("CONFIG -> Obteve o endereço:", this.endereco, this.temEndereco, new Date());
 
                   resolve(this.endereco);
   
@@ -380,6 +366,71 @@ export class ConfigProvider {
 
   public setMinhasSolicitacoes(sol){
     this.minhasSolicitacoes = sol;
+  }
+
+  public getQtdSolicitacoes(){
+    return this.solicitacoes.length;
+  }
+
+  // Cadastra uma nova mensagem no vetor de mensagens da solicitação especificada
+  public novoComentario(solicitacao_id, comentario, pagina){
+
+     // Encontar o índice da solicitação no array de solicitaçoes
+    let indice = this.solicitacoes.findIndex(elem => {
+      return elem.id == solicitacao_id;
+    });
+
+    // Caso a solicitação exista no Array
+    if(indice >= 0){
+
+      //Adicionar a nova mensagem no índice encontrado do vetor de solicitações
+      this.solicitacoes[indice].comentarios.push({
+        funcionario_id : null,
+        comentario: comentario
+      });
+
+    }
+
+    // Fazer o mesmo no array de minhas solicitações, apenas se ele já tiver sido carregado
+    if(this.minhasSolicitacoes){
+
+      // Encontar o índice da solicitação no array de MINHAS solicitaçoes
+      indice = this.minhasSolicitacoes.findIndex(elem => {
+        return elem.id == solicitacao_id;
+      });
+
+      // Caso a solicitação exista no Array
+      if(indice >= 0){
+
+        //Adicionar a nova mensagem no índice encontrado do vetor de solicitações
+        this.minhasSolicitacoes[indice].comentarios.push({
+          funcionario_id : null,
+          comentario: comentario
+        });
+
+      }
+
+    }
+
+    // Chamar a função com os argumentos corretos de acordo com a página que invocou o método
+    if(pagina == "ChamadosPage"){
+      this.aumentarTamanho("minhas_mensagens_"+solicitacao_id);
+    } else {
+      this.aumentarTamanho("mensagens_"+solicitacao_id);
+    }
+
+  }
+
+  private aumentarTamanho(id){
+
+
+    // Obter o tamanho da última mensagem enviada e a altura atual do container de mensagens
+    let altura_da_ultima = document.querySelectorAll("#"+id+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
+    let altura_atual = parseInt(document.getElementById(id).style.height);
+
+    // Aumentar tamanho do container de mensagens
+    document.getElementById(id).style.height = altura_atual + altura_da_ultima + "px";
+
   }
 
 }

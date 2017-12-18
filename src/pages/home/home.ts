@@ -63,26 +63,22 @@ export class HomePage {
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
 
-      //TODO : Mover a lista de solicitações para o arquivo config, onde ela pode ser armazenada.
-      //Receber o ID do comentário pela notificação, buscá-lo no BD e adicioná-lo no item correto do vetor
-      //Fazer toda a adapatação necessária na página "Minhas Solicitações"
-      //Verificar o envio de comentários de mais de uma linha
-      //Só após isso voltar ao GESOL
+      //TODO :
+      // Receber o ID do comentário pela notificação, buscá-lo no BD e adicioná-lo no item correto do vetor
+      // Verificar o envio de comentários de mais de uma linha
+      // Só após isso voltar ao GESOL
 
       fcm.onNotification().subscribe(data => {
 
         if(data.tipo = "recarregar" && data.model == "solicitacoes"){
-          console.log("Recarregar as solicitações...");
           
           // Chamar o evento que será ouvido na app.component.ts
           events.publish('recarregar:solicitacoes');
         }
 
         if(data.acao == "atualizar" && data.model == "comentario"){
-          console.log(this.solicitacoes.find(i => i.id === parseInt(data.solicitacao)));
-        }
 
-        console.log(data);
+        }
 
       });
       
@@ -110,74 +106,6 @@ export class HomePage {
 
     })
     
-  }
-
-  /**
-   * Carregar as 10 solicitações mais recentes
-   */
-
-  carregarSolicitacoes(){
-
-    console.log("Chamou carregarSolicitacoes na Home");
-
-    this.gesol.getSolicitacoes().subscribe(
-      
-      res => {
-              
-        // Preencher a variável temporaria de solicitações
-
-        this.solicitacoes = res;
-
-        for(let item in this.solicitacoes){
-
-          // Criar um objeto de Data com a propriedade created_at do item
-          let data = new Date(this.solicitacoes[item].created_at);
-
-          // Formatar a data para um formato legível para seres humanos
-          this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
-
-          // Criar uma posição no vetor de novos comentários para essa solicitação
-          this.novos_comentarios[this.solicitacoes[item].id] = "";
-
-          // Criar uma posição no vetor de apoios com o id da solicitação e a quantidade de apoios
-          this.apoios[this.solicitacoes[item].id] = this.solicitacoes[item].apoiadores_count;
-
-          // Testar se o usuário está logado
-          if(this.estaLogado())
-          {
-            // Testar se o usuário apoiou esta solicitação
-            let meus = this.solicitacoes[item].apoiadores.filter(apoiador => (apoiador.id == 21));
-
-            // Adicionar ao vetor que guarda apenas os ids das solicitações apoiadas pelo usuário atualmente logado
-            if(meus.length)
-              this.meus_apoios.push(meus[0].pivot.solicitacao_id);
-          }
-
-        }
-
-        // Gravar as solicitações já preparadas no config
-        this.config.setSolicitacoes(this.solicitacoes);
-
-        // Fechar tela de loading
-
-        this.fecharLoading();
-
-        console.log("Terminou de carregar solicitações");
-      
-      }, 
-      
-      fail => {
-        
-        let alert = this.alertCtrl.create({
-          title: 'Sem Conexão',
-          subTitle: 'Nâo é possível acessar o servidor do Mesquita 360º. Verifique sua conexão com a internet e tente novamente.',
-          buttons: ['Ok']
-        });
-
-        alert.present();
-      }
-    );
-
   }
 
   adicionarSolicitacoes(infiniteScroll){
@@ -245,7 +173,6 @@ export class HomePage {
 
    tirarFoto(fab: FabContainer){
 
-      console.log("CONFIG -> ", this.diagnostic.locationMode);
       this.diagnostic.getLocationAuthorizationStatus().then(res => console.log("Authorization", res));
 
       // Obter o endereço enquanto o resto da lógica é feito
@@ -277,8 +204,6 @@ export class HomePage {
         alert.present();
 
       });
-
-      console.log("Chamou a Câmera");
      
       fab.close();
 
@@ -467,9 +392,13 @@ export class HomePage {
 
   // Enviar mensagem para o gesol
   enviarMensagem(evento, solicitacao){
+    
+    // Obter o botão que envia os comentários
+    let botao = evento.target;
+    // Desabilitar o botão para que essa mensagem não seja enviada multiplas vezes
+    botao.disabled = true;
 
     // Os novos comentários ficam guardados em um vetor
-
     if(this.novos_comentarios[solicitacao] != ""){
 
       // Fazer uma cahamda para a API e criar uma nova mensagem
@@ -477,6 +406,13 @@ export class HomePage {
         
         // Caso suceda
         res => {
+          // Adicionar o novo comentário à solicitação no Config
+          this.config.novoComentario(solicitacao, this.novos_comentarios[solicitacao], this.navCtrl.getActive().name);
+          // Zerar o input de comentários dessa solicitação
+          this.novos_comentarios[solicitacao] = "";
+          // Liberar novamente o botão de enviar comentários
+          botao.disabled = false;
+
         },
 
         //Caso Falhe
@@ -485,32 +421,6 @@ export class HomePage {
           console.log(fail);
         }
       );
-
-      // Colocar a nova mensagem na tela
-
-      for(let i = 0; i < this.solicitacoes.length; i++){
-
-        if(this.solicitacoes[i].id == solicitacao){
-
-          // Criar uma mensagem fake para adicionar na solicitação enquanto a verdadeira é enviada para o servidor
-
-          this.solicitacoes[i].comentarios.push({
-            funcionario_id : null,
-            comentario: this.novos_comentarios[solicitacao]
-          });
-
-          // Obter o tamanho da última mensagem enviada
-          let altura_da_ultima = document.querySelectorAll("#mensagens_"+solicitacao+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
-          let altura_atual = parseInt(document.getElementById("mensagens_"+solicitacao).style.height);
-
-          // Aumentar tamanho do container de mensagens
-          document.getElementById("mensagens_"+solicitacao).style.height = altura_atual + altura_da_ultima + "px";
-
-          // Zerar o input
-          this.novos_comentarios[solicitacao] = "";
-        }
-
-      }
 
     }
 

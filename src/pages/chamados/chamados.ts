@@ -71,29 +71,36 @@ export class ChamadosPage {
   }
 
  // Expandir ou encolher as mensagens
- expandirMensagens(id){
-
+  expandirMensagens(id){
 
     // Obter a Row com as mensagens da solicitação que foi clicada
-    let row = document.getElementById("mensagens_"+id);
+    let row = document.getElementById("minhas_mensagens_"+id);
 
     // Caso a Altura da div seja 0 ou não esteja definidar, abrir
 
     if(row.style.height == "0px" || !row.style.height){
 
-      // Abrir a div
-      row.style.height = "auto";
+       // Altura da div de mensagens
+      let altura = 0;
 
-      // Obter a altura correta da div aberta
-      let altura = row.scrollHeight;
+      // Obter um objeto com todoas as mensagens
+      let itens = row.childNodes;
 
-      console.log("Altura após abrir", altura);
+      // Obter a quantidade de mensagens
+      let qtd = itens.length;
 
-      // Fechar a div
-      //row.style.height = "0px";
+      // Iterar pelas mensagens e somar as suas alturas
+      for(var i = 0; i < qtd; i++){
 
-      // Abrir animando
-      //row.style.height = altura + "px";
+        if(typeof itens[i].attributes !== "undefined"){
+
+          altura += itens[i].attributes[0].ownerElement.scrollHeight;
+
+        }
+
+      }
+
+      row.style.height = altura + "px";
 
     } else {
 
@@ -107,8 +114,12 @@ export class ChamadosPage {
   // Enviar mensagem para o gesol
   enviarMensagem(evento, solicitacao){
 
-    // Os novos comentários ficam guardados em um vetor
+    // Obter o botão que envia os comentários
+    let botao = evento.target;
+    // Desabilitar o botão para que essa mensagem não seja enviada multiplas vezes
+    botao.disabled = true;
 
+    // Os novos comentários ficam guardados em um vetor
     if(this.novos_comentarios[solicitacao] != ""){
 
       // Fazer uma cahamda para a API e criar uma nova mensagem
@@ -116,41 +127,20 @@ export class ChamadosPage {
         
         // Caso suceda
         res => {
-          console.log("Mensagem Cadastrada");
+           // Adicionar o novo comentário à solicitação no Config
+           this.config.novoComentario(solicitacao, this.novos_comentarios[solicitacao], this.navCtrl.getActive().name);
+           // Zerar o input de comentários dessa solicitação
+           this.novos_comentarios[solicitacao] = "";
+           // Liberar novamente o botão de enviar comentários
+           botao.disabled = false;
         },
 
         //Caso Falhe
-        fail => {
+        fail => {console.log
           console.log("Cadastro de Mensagem Falhou:");
           console.log(fail);
         }
       );
-
-      // Colocar a nova mensagem na tela
-
-      for(let i = 0; i < this.sol.length; i++){
-
-        if(this.sol[i].id == solicitacao){
-
-          // Criar uma mensagem fake para adicionar na solicitação enquanto a verdadeira é enviada para o servidor
-          this.sol[i].comentarios.push({
-            functionario_id : null,
-            comentario: this.novos_comentarios[solicitacao]
-           });
-
-          // Zerar o input
-          this.novos_comentarios[solicitacao] = "";
-
-          // Obter o tamanho da última mensagem enviada
-          let altura_da_ultima = document.querySelectorAll("#mensagens_"+solicitacao+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
-          let altura_atual = parseInt(document.getElementById("mensagens_"+solicitacao).style.height);
-
-          // Aumentar tamanho do container de mensagens
-          document.getElementById("mensagens_"+solicitacao).style.height = altura_atual + altura_da_ultima + "px";
-
-        }
-
-      }
 
     }
 
@@ -293,6 +283,8 @@ export class ChamadosPage {
 
                   //Chamar o evento no app.component.ts para recarregar as minhas solicitações
                   this.events.publish('recarregar:minhas');
+
+                  this.fecharLoading();
 
                 }
 
