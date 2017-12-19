@@ -285,6 +285,18 @@ export class GesolProvider {
   }
 
   /**
+   * Obter o conteúdo de um comentário
+   */
+
+   getComentario(comentario_id){
+
+    let headers = this.montaHeaders();
+
+    return this.http.get(this.root_url + "/api/comentarios/" + comentario_id, {headers: headers});
+
+   }
+
+  /**
    * Retorna um cabeçalho que pode ser usado em qualquer requisição
    */
 

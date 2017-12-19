@@ -62,25 +62,6 @@ export class HomePage {
       this.meses[10] = "Outubro";
       this.meses[11] = "Novembro";
       this.meses[12] = "Dezembro";
-
-      //TODO :
-      // Receber o ID do comentário pela notificação, buscá-lo no BD e adicioná-lo no item correto do vetor
-      // Verificar o envio de comentários de mais de uma linha
-      // Só após isso voltar ao GESOL
-
-      fcm.onNotification().subscribe(data => {
-
-        if(data.tipo = "recarregar" && data.model == "solicitacoes"){
-          
-          // Chamar o evento que será ouvido na app.component.ts
-          events.publish('recarregar:solicitacoes');
-        }
-
-        if(data.acao == "atualizar" && data.model == "comentario"){
-
-        }
-
-      });
       
   }
 
@@ -360,30 +341,33 @@ export class HomePage {
     if(row.style.height == "0px" || !row.style.height){
 
        // Altura da div de mensagens
-      let altura = 0;
+      //let altura = 0;
 
       // Obter um objeto com todoas as mensagens
-      let itens = row.childNodes;
+      //let itens = row.childNodes;
 
       // Obter a quantidade de mensagens
-      let qtd = itens.length;
+      //let qtd = itens.length;
 
       // Iterar pelas mensagens e somar as suas alturas
-      for(var i = 0; i < qtd; i++){
+      //for(var i = 0; i < qtd; i++){
 
-        if(typeof itens[i].attributes !== "undefined"){
+        //if(typeof itens[i].attributes !== "undefined"){
 
-          altura += itens[i].attributes[0].ownerElement.scrollHeight;
+          //altura += itens[i].attributes[0].ownerElement.scrollHeight;
 
-        }
+       // }
 
-      }
+      //}
 
-      row.style.height = altura + "px";
+      //row.style.height = altura + "px";
+      row.style.height = 'auto';
 
     } else {
 
       // Caso contrário, setar a altura para 0px
+      //row.style.height = "0px"
+      
       row.style.height = "0px";
 
     }

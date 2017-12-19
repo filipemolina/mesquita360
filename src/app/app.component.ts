@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Events, Platform, NavController, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -36,7 +36,9 @@ export class MyApp {
       private fcm : FCM,
       public gesol : GesolProvider,
       public alertCtrl: AlertController,
-      public events: Events) {
+      public events: Events,
+      private zone: NgZone,
+      private cdr: ChangeDetectorRef) {
 
       // Inicializar o array de meses
 
@@ -65,16 +67,17 @@ export class MyApp {
 
         this.verificarVersao();
 
+        this.carregaSolicitacoes();
+
         ////////////////////////////////////////////////////////////////////////
         // Eventos                                                            //
         ////////////////////////////////////////////////////////////////////////
 
-          events.subscribe('recarregar:solicitacoes', () => {
-
-            console.log("Recebeu o evento recarregar:solicitacoes");
-
-            this.carregaSolicitacoes();
-
+          // Forçar a atualização da tela quando o evento updateScrenn for chamado
+          events.subscribe('updateScreen', () => {
+            this.zone.run(()=>{
+              console.log("================== Detectou Mudanças =====================");
+            });
           });
 
           events.subscribe('recarregar:minhas', () => {
@@ -115,7 +118,26 @@ export class MyApp {
           // Notificações FCM
           fcm.onNotification().subscribe( data => {
 
-            console.log("Recebida do Firebase", data);
+            console.log("Recebido do FCM", data);
+
+            // Recarregar Solicitações
+
+            if((data.operacao == "recarregar" || data.acao == "recarregar") && data.model == "solicitacoes"){
+              
+              console.log("Recebeu o evento recarregar:solicitacoes");
+              
+              this.carregaSolicitacoes();
+
+            }
+
+            // Atualizar Comentários
+    
+            if((data.operacao == "atualizar" || data.acao == "atualizar") && data.model == "comentario"){
+    
+              console.log("Recebeu o evento atualizar:comentario");
+              this.atualizarComentarios(data.comentario_id);
+    
+            }
 
           });
 
@@ -227,6 +249,8 @@ export class MyApp {
           this.config.setSolicitacoes(this.solicitacoes);
   
           console.log("Terminou de carregar solicitações");
+
+          this.events.publish('updateScreen');
         
         }, 
         
@@ -282,11 +306,29 @@ export class MyApp {
 
       console.log("Acabou de carregar minhas solicitações");
 
-  },
-  // Caso de falha
-  fail => {
-      console.log("Falha na solicitação (minhasSolicitacoes -> AppComponent)", fail);
-  });
+      this.events.publish('updateScreen');
+
+    },
+    // Caso de falha
+    fail => {
+        console.log("Falha na solicitação (minhasSolicitacoes -> AppComponent)", fail);
+    });
+
+  }
+
+  atualizarComentarios(comentario_id){
+
+    // Receber do Gesol um objeto com todas as informações do comentário
+    this.gesol.getComentario(comentario_id).subscribe(
+      success => {
+        
+        this.config.inserirComentario(success.json());
+
+      }, 
+      
+      error => {
+        console.log("Erro", error)
+    });
 
   }
 

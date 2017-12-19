@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from "@ionic/storage";
 import 'rxjs/add/operator/map';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Events } from 'ionic-angular';
 import { Geolocation } from "@ionic-native/geolocation";
 import { Diagnostic } from "@ionic-native/diagnostic";
 import { Http } from "@angular/http";
@@ -66,7 +66,8 @@ export class ConfigProvider {
               private geolocation: Geolocation, 
               private http: Http,
               public diagnostic: Diagnostic,
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController,
+              public events: Events) {
 
     // Ler os valores guardados no dispositivo
 
@@ -412,24 +413,71 @@ export class ConfigProvider {
 
     }
 
-    // Chamar a função com os argumentos corretos de acordo com a página que invocou o método
-    if(pagina == "ChamadosPage"){
-      this.aumentarTamanho("minhas_mensagens_"+solicitacao_id);
-    } else {
-      this.aumentarTamanho("mensagens_"+solicitacao_id);
-    }
-
   }
 
   private aumentarTamanho(id){
 
 
     // Obter o tamanho da última mensagem enviada e a altura atual do container de mensagens
-    let altura_da_ultima = document.querySelectorAll("#"+id+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
-    let altura_atual = parseInt(document.getElementById(id).style.height);
+    // let altura_da_ultima = document.querySelectorAll("#"+id+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
+    // let altura_atual = parseInt(document.getElementById(id).style.height);
 
     // Aumentar tamanho do container de mensagens
-    document.getElementById(id).style.height = altura_atual + altura_da_ultima + "px";
+    // document.getElementById(id).style.height = altura_atual + altura_da_ultima + "px";
+
+    document.getElementById(id).style.height = "auto";
+
+  }
+
+  /**
+   * Recebe do GESOL um objeto comentário e o insere no array de comentários da solicitação correta
+   * @param comentario Objeto Comentário recebido do Gesol em formato JSON
+   */
+
+  inserirComentario(comentario){
+
+    console.log("Função inserirCOmentario");
+    console.log("Comentário recebedio", comentario);
+
+    // Encontrar os índices da solicitação nos dois vetores
+    let indice1 = this.solicitacoes.findIndex(elem => { return elem.id == comentario.solicitacao_id });
+
+    console.log("ìndice encontrado", indice1);
+
+    // Adicionar o comentário nos arrays, caso os índices existam
+
+    if(indice1 >= 0){
+
+      console.log("indice é maior ou igual a zero");
+      
+      this.solicitacoes[indice1].comentarios.push(comentario);
+
+      console.log("Array de comentários após adicionar", this.solicitacoes[indice1].comentarios);
+
+      this.events.publish('updateScreen');
+
+    }
+
+    // Fazer o mesmo no vetor MinhasSolicitações apenas se ele já estiver preenchido
+
+    if(this.minhasSolicitacoes){
+
+      console.log("Entrou no inserir Comentários e está alterando minhasSolicitações");
+      console.log("Comentário", comentario);
+
+      let indice2 = this.minhasSolicitacoes.findIndex(elem => { return elem.id == comentario.solicitacao_id });
+
+      console.log("Índice", indice2);
+      
+      if(indice2 >= 0){
+  
+        this.minhasSolicitacoes[indice2].comentarios.push(comentario);
+        
+        this.events.publish('updateScreen');
+  
+      }
+
+    }
 
   }
 

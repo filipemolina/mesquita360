@@ -92,7 +92,7 @@
 				</ion-item>
 
 				<!-- Mensagem do Próprio Solicitante  -->
-				<ion-item *ngIf="comentario.funcionario_id == null">
+				<ion-item text-wrap *ngIf="comentario.funcionario_id == null">
 					<ion-avatar item-start>
 						<img src="{{ item.solicitante.foto }}">
 					</ion-avatar>

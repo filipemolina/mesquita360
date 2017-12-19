@@ -88,7 +88,7 @@
 			<div *ngFor="let comentario of item.comentarios" style="width: 100%" class="mensagens_container">
 
 				<!-- Mensagem de um funcionário da Prefeitura  -->
-				<ion-item *ngIf="comentario.funcionario_id != null">
+				<ion-item text-wrap *ngIf="comentario.funcionario_id != null">
 					<h2>{{ comentario.funcionario.setor.secretaria.nome }}</h2>
 					<p>{{ comentario.comentario }}</p>
 					<ion-avatar item-end>
@@ -97,7 +97,7 @@
 				</ion-item>
 
 				<!-- Mensagem do Próprio Solicitante  -->
-				<ion-item *ngIf="comentario.funcionario_id == null">
+				<ion-item text-wrap *ngIf="comentario.funcionario_id == null">
 					<ion-avatar item-start>
 						<img src="{{ item.solicitante.foto }}">
 					</ion-avatar>

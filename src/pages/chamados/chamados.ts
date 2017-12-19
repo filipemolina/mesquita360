@@ -80,27 +80,27 @@ export class ChamadosPage {
 
     if(row.style.height == "0px" || !row.style.height){
 
-       // Altura da div de mensagens
-      let altura = 0;
+      // Altura da div de mensagens
+      //let altura = 0;
 
       // Obter um objeto com todoas as mensagens
-      let itens = row.childNodes;
+      //let itens = row.childNodes;
 
       // Obter a quantidade de mensagens
-      let qtd = itens.length;
+      //let qtd = itens.length;
 
       // Iterar pelas mensagens e somar as suas alturas
-      for(var i = 0; i < qtd; i++){
+      //for(var i = 0; i < qtd; i++){
 
-        if(typeof itens[i].attributes !== "undefined"){
+        //if(typeof itens[i].attributes !== "undefined"){
 
-          altura += itens[i].attributes[0].ownerElement.scrollHeight;
+          //altura += itens[i].attributes[0].ownerElement.scrollHeight;
 
-        }
+        //}
 
-      }
+      //}
 
-      row.style.height = altura + "px";
+      row.style.height = 'auto';
 
     } else {
 
