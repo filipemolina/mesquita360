@@ -250,6 +250,7 @@ export class MyApp {
   
           console.log("Terminou de carregar solicitações");
 
+          //Atualizar a tela do aplicativo
           this.events.publish('updateScreen');
         
         }, 
@@ -306,6 +307,7 @@ export class MyApp {
 
       console.log("Acabou de carregar minhas solicitações");
 
+      // Atualizar a tela do aplicativo
       this.events.publish('updateScreen');
 
     },
