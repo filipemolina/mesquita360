@@ -60,8 +60,8 @@
 					<!-- Fazer esse teste quando o resultado ajax chegar e adicionar ou retirar o id do vetor -->
 					<div *ngIf="meus_apoios.includes(item.id)">Apoiado </div>
 					<div *ngIf="!meus_apoios.includes(item.id)">Apoiar </div>
-					<div class="numero" style="margin-left: 3px">({{ apoios[item.id] }})</div>
-
+					<div *ngIf="apoios[item.id] == 0 || !apoios[item.id]" class="numero" style="margin-left: 3px">(0)</div>
+					<div *ngIf="apoios[item.id] > 0" class="numero" style="margin-left: 3px">({{ apoios[item.id] }})</div>
 				</button>
 			</ion-col>
 			<ion-col>

@@ -481,4 +481,10 @@ export class ConfigProvider {
 
   }
 
+  concatenarSolicitacoes(sol){
+
+    this.solicitacoes.concat(sol);
+
+  }
+
 }

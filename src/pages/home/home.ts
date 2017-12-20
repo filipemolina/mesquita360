@@ -27,7 +27,7 @@ export class HomePage {
   public meus_apoios = [];
   public loading: boolean = true;
 
-  offset = 0;
+  offset = 10;
   toast: any;
 
   // BLOB da imagem tirada pela câmera
@@ -91,13 +91,15 @@ export class HomePage {
 
   adicionarSolicitacoes(infiniteScroll){
 
-     // Calcular o offset
+    console.log("Chamou adicionar solicitações");
 
-     this.offset += 10;
+     console.log("Offset", this.offset);
 
      this.gesol.addSolicitacoes(this.offset).subscribe(
       
       res => {
+
+        console.log("Solicitações recebidas com offset", res);
               
         // Aidioncar os novos itens à variável de solicitações
 
@@ -130,11 +132,19 @@ export class HomePage {
 
         }
 
+        console.log("Solicitações concatenadas", this.solicitacoes);
+
         // Gravar as solicitações já preparadas no config, de onde elas serão lidas pela view
-        this.config.setSolicitacoes(this.solicitacoes);
+        this.config.concatenarSolicitacoes(this.solicitacoes);
+
+        console.log("Solicitações na config após concatenar", this.config.getSolicitacoes());
 
         // Fechar o gif de loading
         infiniteScroll.complete();
+
+        // Aumentar o offset apenas se tiver recebido alguma solicitação
+        if(this.solicitacoes.length)
+          this.offset += 10;
       
       }, 
       
