@@ -141,8 +141,6 @@ export class MyApp {
 
             if((data.operacao == "recarregar" || data.acao == "recarregar") && data.model == "solicitacoes"){
               
-              console.log("Recebeu o evento recarregar:solicitacoes");
-              
               this.carregaSolicitacoes();
 
             }
@@ -150,8 +148,7 @@ export class MyApp {
             // Atualizar Comentários
     
             if((data.operacao == "atualizar" || data.acao == "atualizar") && data.model == "comentario"){
-    
-              console.log("Recebeu o evento atualizar:comentario");
+              
               this.atualizarComentarios(data.comentario_id);
     
             }
