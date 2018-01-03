@@ -91,15 +91,9 @@ export class HomePage {
 
   adicionarSolicitacoes(infiniteScroll){
 
-    console.log("Chamou adicionar solicitações");
-
-     console.log("Offset", this.offset);
-
      this.gesol.addSolicitacoes(this.offset).subscribe(
       
       res => {
-
-        console.log("Solicitações recebidas com offset", res);
               
         // Aidioncar os novos itens à variável de solicitações
 
@@ -132,12 +126,8 @@ export class HomePage {
 
         }
 
-        console.log("Solicitações concatenadas", this.solicitacoes);
-
         // Gravar as solicitações já preparadas no config, de onde elas serão lidas pela view
         this.config.concatenarSolicitacoes(this.solicitacoes);
-
-        console.log("Solicitações na config após concatenar", this.config.getSolicitacoes());
 
         // Fechar o gif de loading
         infiniteScroll.complete();
@@ -150,8 +140,8 @@ export class HomePage {
       
       fail => { 
         
-        console.log("Falhou"); 
-        console.log(fail); 
+        console.log("Falhou");
+        console.log(fail);
       }
     );
 

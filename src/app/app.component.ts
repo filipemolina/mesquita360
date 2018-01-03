@@ -70,6 +70,16 @@ export class MyApp {
         this.carregaSolicitacoes();
 
         ////////////////////////////////////////////////////////////////////////
+        // Notificações                                                       //
+        ////////////////////////////////////////////////////////////////////////
+
+        
+
+        ////////////////////////////////////////////////////////////////////////
+        // Notificações                                                       //
+        ////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////
         // Eventos                                                            //
         ////////////////////////////////////////////////////////////////////////
 
@@ -97,10 +107,18 @@ export class MyApp {
         ////////////////////////////////////////////////////////////////////////
 
           // Setar a token do FCM no ConfigProvider
-          // Ela só será enviada para o servidor quando o usuário logar
+          // Ela só será enviada para o servidor se o usuário estiver logado
           fcm.getToken().then(token => {
 
             this.config.FCM_ID = token;
+
+            console.log("TOKEN DESSE CELULAR", this.config.FCM_ID);
+
+            // Testar se o usuário está logado antes de tentar mudar a token dele no banco de dados
+            if(this.config.getLogado())
+              this.gesol.alteraFcmId(this.config.FCM_ID).subscribe(res => {
+                console.log("Solicitante após alteraçao da FCM ID", res);
+              });
 
           });
 
@@ -111,7 +129,6 @@ export class MyApp {
             // Testar se o usuário está logado antes de tentar mudar a token dele no banco de dados
             if(this.config.getLogado())
               this.gesol.alteraFcmId(this.config.FCM_ID);
-            
 
           });
           
@@ -181,7 +198,7 @@ export class MyApp {
     this.gesol.verificaVersao().subscribe(res => {
       let resposta : any = res;
 
-      if(resposta._body != this.config.versao){
+      if(resposta._body > this.config.versao){
 
         let alert = this.alertCtrl.create({
           title: "Atenção",

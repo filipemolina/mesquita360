@@ -16,10 +16,11 @@ import { Http } from "@angular/http";
 export class ConfigProvider {
 
   // Versão do aplicativo
-  public versao = "0.0.3";
+  public versao = "0.0.4";
 
   // Rota Raiz da Aplicação
-  private root_url = "https://360.mesquita.rj.gov.br/gesol";  
+  // private root_url = "https://360.mesquita.rj.gov.br/gesol";  
+  private root_url = "https://gesol.mesquita.rj.gov.br";
 
   // Objeto que guarda todas as informações do solicitante
   public solicitante:any = [];
@@ -51,8 +52,8 @@ export class ConfigProvider {
   // Credenciais e Info do Gesol
 
   private gesolClientId:     number = 1;
-  private gesolClientSecret: string = "WKVS6iv2lzuozddUBDbZ5ClADX7A5jHJf3YAjMjX";
-  private gesolUserName:     string;
+  private gesolClientSecret: string = "Avp93RdFgnIYUaBwdrzUx4hurXBNiUJLTiHYel6R";
+  private gesolUserName:     string;  
   private gesolPassword:     string;
   private gesolToken:        string;
   private gesolNome:         string;

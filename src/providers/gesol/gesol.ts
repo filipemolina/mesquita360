@@ -280,7 +280,7 @@ export class GesolProvider {
       solicitante_id: this.config.getSolicitante().id
     }
 
-    return this.http.post(this.root_url + "/api/alteraFcmId", body, {headers: headers});
+    return this.http.post(this.root_url + "/api/alteraFcmId", body, {headers: headers}).map(res => res.json());
 
   }
 
@@ -295,6 +295,24 @@ export class GesolProvider {
     return this.http.get(this.root_url + "/api/comentarios/" + comentario_id, {headers: headers});
 
    }
+
+   /**
+    * Enviar uma notificação para os navegadores
+    */
+
+  enviaNotificacao(titulo, subtitulo, dados){
+
+    let headers = this.montaHeaders();
+
+    let body = {
+      titulo: titulo,
+      subtitulo: subtitulo,
+      dados: dados
+    };
+
+    return this.http.post(this.root_url + "/api/notificacoes/enviar", body, { headers : headers }).map(res => res.json());
+
+  }
 
   /**
    * Retorna um cabeçalho que pode ser usado em qualquer requisição

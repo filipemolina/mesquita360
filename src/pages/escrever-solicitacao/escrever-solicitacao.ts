@@ -217,9 +217,13 @@ export class EscreverSolicitacaoPage {
    * Enviar a solicitação para o Gesol
    */
 
-  gravaSolicitacao(){
+  gravaSolicitacao(evento){
 
     this.abrirLoading();
+
+    // Desabilitar o botão de enviar 
+    let botao = evento.target;
+    botao.disabled = true;
 
     // Testar se o endereço já foi obtido
     if(Object.keys(this.endereco).length || Object.keys(this.config.endereco).length){
@@ -234,12 +238,14 @@ export class EscreverSolicitacaoPage {
           res => {
     
             this.fecharLoading();
+
+            //Habilitar novamente o botão
+            botao.disabled = false;
     
-            // Navegar de volta para a página inicial
-    
-            // Criar o alerta com os erros
+            // Criar o alerta
             let alert = this.alertCtrl.create({
               title: "Parabéns!",
+              enableBackdropDismiss: false,
               subTitle: "Sua solicitação foi enviada e em breve será analisada pela Prefeitura. Acompanhe o andamento do seu atendimento na página 'Minhas Solicitações' no menu principal.",
               buttons: [
                 {
@@ -257,6 +263,7 @@ export class EscreverSolicitacaoPage {
             alert.present();
     
             this.config.temEndereco = false;
+
     
           },
     
@@ -281,11 +288,15 @@ export class EscreverSolicitacaoPage {
             let alert = this.alertCtrl.create({
               title: "Atenção",
               subTitle: mensagens,
+              enableBackdropDismiss: false,
               buttons: ['ok']
             });
     
             // Mostrar o aleta
             alert.present();
+
+            //Habilitar novamente o botão
+            botao.disabled = false;
 
             this.fecharLoading();
     
@@ -297,11 +308,15 @@ export class EscreverSolicitacaoPage {
   
         let alert = this.alertCtrl.create({
           title: "Atenção",
+          enableBackdropDismiss: false,
           subTitle: "Apenas solicitações registradas no município de Mesquita podem ser registradas pelo Mesquita 360.",
           buttons: ['ok']
         });
   
         alert.present();
+
+        //Habilitar novamente o botão
+        botao.disabled = false;
 
         this.fecharLoading();
   
@@ -313,13 +328,15 @@ export class EscreverSolicitacaoPage {
 
       let alert = this.alertCtrl.create({
         title: "Atenção",
+        enableBackdropDismiss: false,
         subTitle: "Aguarde um momento enquanto estamos localizando você.",
         buttons: ['ok']
       });
 
       alert.present();
 
-      console.log("Endereço da página", this.endereco, Object.keys(this.endereco).length, "Endereço do config", this.config.endereco, Object.keys(this.endereco).length);
+      //Habilitar novamente o botão
+      botao.disabled = false;
 
       this.fecharLoading();
 
