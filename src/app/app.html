@@ -29,7 +29,11 @@
       <button *ngIf="estaLogado()" ion-item (tap)="goToPage('EditarPerfilPage')">
           <ion-icon item-start name="person"></ion-icon>
           Editar Perfil
-        </button>
+      </button>
+      <button *ngIf="estaLogado()" ion-item (tap)="goToPage('ComunicadosPage')">
+          <ion-icon item-start name="person"></ion-icon>
+          Comunicados
+      </button>
       <button *ngIf="naoEstaLogado()" ion-item (tap)="goToPage('LoginPage')">
         <ion-icon item-start name="log-in"></ion-icon>
         Login
