@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, App, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, App, ViewController, Events } from 'ionic-angular';
 import { Geolocation } from "@ionic-native/geolocation";
 import { Http } from "@angular/http";
 import { GesolProvider } from "../../providers/gesol/gesol";
@@ -54,7 +54,8 @@ export class EscreverSolicitacaoPage {
               public viewController: ViewController,
               public appCtrl: App,
               public diagnostic: Diagnostic,
-              public config : ConfigProvider) {
+              public config : ConfigProvider,
+              public events: Events) {
 
     this.imagem = this.navParams.get('imagem');
     this.setor = this.navParams.get('setor');
@@ -62,7 +63,16 @@ export class EscreverSolicitacaoPage {
   }
 
   ionViewDidLoad(){
+
+    // Tentar carregar o mapa no carregamento desta página...
     this.loadMap();
+
+    // Caso o endereço não esteja disponível, tentar carregar novamente quando isso acontecer
+    this.events.subscribe('carregarMapa', () => {
+
+      this.loadMap();
+
+    });
   }
 
   ionViewDidEnter(){
@@ -80,11 +90,13 @@ export class EscreverSolicitacaoPage {
 
     //Testar se a localização já foi obtida pelo aplicativo
 
-    if(!this.config.temEndereco){
+    // if(!this.config.temEndereco){
       
-      this.obterEnderecoECarregarMapa();
+    //   this.obterEnderecoECarregarMapa();
 
-    } else {
+    // } else {
+
+    if(this.config.temEndereco){
 
       console.log("ES -> O Endereço já foi obtido, prosseguindo", new Date());
       
@@ -226,7 +238,7 @@ export class EscreverSolicitacaoPage {
     botao.disabled = true;
 
     // Testar se o endereço já foi obtido
-    if(Object.keys(this.endereco).length || Object.keys(this.config.endereco).length){
+    if(Object.keys(this.config.endereco).length){
 
       // Testar se a foto foi tirada em Mesquita
 
@@ -310,7 +322,14 @@ export class EscreverSolicitacaoPage {
           title: "Atenção",
           enableBackdropDismiss: false,
           subTitle: "Apenas solicitações registradas no município de Mesquita podem ser registradas pelo Mesquita 360.",
-          buttons: ['ok']
+          buttons: [{
+            text: "Ok",
+            handler: () => {
+              
+              this.navCtrl.popToRoot();
+
+            }
+          }]
         });
   
         alert.present();

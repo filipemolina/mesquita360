@@ -19,11 +19,14 @@ export class ConfigProvider {
   public versao = "0.0.4";
 
   // Rota Raiz da Aplicação
-  // private root_url = "https://360.mesquita.rj.gov.br/gesol";  
+  // private root_url = "https://360.mesquita.rj.gov.br/gesol";
   private root_url = "https://gesol.mesquita.rj.gov.br";
 
   // Objeto que guarda todas as informações do solicitante
   public solicitante:any = [];
+
+  // Objeto que guarda todos os comunicados enviados pela prefeitura
+  public comunicados:any = [];
 
   // Objeto que guarda todas as solicitações recebidas do Gesol
   private solicitacoes:any;
@@ -187,6 +190,9 @@ export class ConfigProvider {
                   this.endereco['longitude']     = this.longi;
   
                   this.temEndereco = true;
+
+                  // Avisar à página "escrever-solicitacao" que o endereço já foi carregado
+                  this.events.publish('carregarMapa');
 
                   resolve(this.endereco);
   
@@ -486,6 +492,14 @@ export class ConfigProvider {
 
     this.solicitacoes.concat(sol);
 
+  }
+
+  getComunicados(){
+    return this.comunicados;
+  }
+
+  setComunicados(comunicados){
+    this.comunicados = comunicados;
   }
 
 }

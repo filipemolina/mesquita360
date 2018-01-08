@@ -15,23 +15,23 @@
 
 <ion-content padding>
 
-  <ion-card>
+  <ion-card *ngFor="let item of config.getComunicados()" ngClass="success">
 
     <ion-item>
-      <h2>Título</h2>
-      <p>Subtítulo</p>
+      <h2 text-wrap>{{ item.titulo }}</h2>
+      <p>{{ item.subtitulo }}</p>
     </ion-item>
 
     <ion-item>
-      <img src="https://www.w3schools.com/w3css/img_fjords.jpg" alt="">
+      <img src="{{ item.imagem }}" alt="">
     </ion-item>
 
     <ion-item>
-      <p>03/01/2018 15:56</p>
+      <p>{{ formatarData(item.created_at) }}</p>
     </ion-item>
 
     <ion-card-content>
-      Texto texto Texto texto Texto texto Texto texto Texto texto Texto texto Texto texto 
+      {{ item.texto }}
     </ion-card-content>
 
   </ion-card>

@@ -315,6 +315,16 @@ export class GesolProvider {
   }
 
   /**
+   * Obter os comunicados enviados pela prefeitura
+   */
+
+   getComunicados(){
+
+    return this.http.get(this.root_url + "/api/comunicados").map(res => res.json());
+
+   }
+
+  /**
    * Retorna um cabeçalho que pode ser usado em qualquer requisição
    */
 

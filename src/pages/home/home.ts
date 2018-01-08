@@ -167,8 +167,11 @@ export class HomePage {
             text: "Ok",
             handler: () => {
 
+              // Mesmo se o usuário aperte OK para mudar suas configurações de localização o aplicativo deve retornar
+              // à home, pois existe a possibilidade de o usuário não ativar o GPS e mesmo assim voltar ao aplicativo.
+              // Nesse caso não é recomendável que ele prossiga
               this.diagnostic.switchToLocationSettings();
-
+              this.navCtrl.popToRoot();
             }
           },
           {
@@ -251,7 +254,11 @@ export class HomePage {
             text: "Ok",
             handler: () => {
 
+              // Mesmo se o usuário aperte OK para mudar suas configurações de localização o aplicativo deve retornar
+              // à home, pois existe a possibilidade de o usuário não ativar o GPS e mesmo assim voltar ao aplicativo.
+              // Nesse caso não é recomendável que ele prossiga
               this.diagnostic.switchToLocationSettings();
+              this.navCtrl.popToRoot();
 
             }
           },
@@ -290,19 +297,19 @@ export class HomePage {
           .then(
             nova_imagem => {
 
-              this.toBase64(imagem).then(base64 => {
+              this.toBase64(nova_imagem).then(base64 => {
 
                 // Navegar para a página de serviços passando a imagem como parâmetro
                 this.navCtrl.push('ServicosPage', {
                   imagem: base64
                 });
 
-              })
+              });
 
             }
           );
 
-      }, 
+      },
 
       // Em caso de Errro
       (err) => {

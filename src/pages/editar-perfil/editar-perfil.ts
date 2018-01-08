@@ -154,20 +154,32 @@ export class EditarPerfilPage {
         .then(
           nova_imagem => {
 
-            this.toBase64(imagem).then(base64 => {
+            this.toBase64(nova_imagem).then(base64 => {
 
-              this.usuario.foto = nova_imagem;
+              this.usuario.foto = base64;
 
-            })
+            }).catch(err=>{
+
+              console.log("Erro na conversão para Base64", err);
+
+            });
 
           }
-        );
+        ).catch(err => {
+
+          console.log("Erro no crop", err);
+
+        });
 
     }, 
 
     // Em caso de Errro
     (err) => {
       console.log(err);
+    }).catch(err => {
+
+      console.log("Erro no retorno da imagem", err);
+
     });
 
   }

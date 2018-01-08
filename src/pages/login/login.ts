@@ -167,7 +167,28 @@ export class LoginPage {
 
       // Caso falhe
 
-      .catch(e => console.log("Login Falhou", e));
+      .catch(e => {
+
+        // Criar um alerta com as mensagens de erro concatenadas
+        let alert = this.alertCtrl.create({
+          title: "Atenção!",
+          subTitle: "Infelizmente não foi possível realizar o login pelo Facebook, por favor preencha seus dados para se cadastrar no site.",
+          buttons: [{
+            text: "Ok",
+            handler: () => {
+
+              this.navCtrl.push("RegisterPage");
+              
+              console.log("Login Falhou", e)
+
+            }
+          }]
+        });
+
+        // Mostrar o alerta
+        alert.present();
+
+      });
   }
 
   voltarHome(){

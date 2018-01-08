@@ -19,6 +19,7 @@ export class ServicosPage {
 
   public imagem: string;
   public setores = [];
+  public loading = true;
   public cores = {
     1: '',
     2: 'preto',
@@ -55,6 +56,7 @@ export class ServicosPage {
       res => {
 
         this.setores = res;
+        this.loading = false;
 
       },
 

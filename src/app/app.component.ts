@@ -70,16 +70,6 @@ export class MyApp {
         this.carregaSolicitacoes();
 
         ////////////////////////////////////////////////////////////////////////
-        // Notificações                                                       //
-        ////////////////////////////////////////////////////////////////////////
-
-        
-
-        ////////////////////////////////////////////////////////////////////////
-        // Notificações                                                       //
-        ////////////////////////////////////////////////////////////////////////
-
-        ////////////////////////////////////////////////////////////////////////
         // Eventos                                                            //
         ////////////////////////////////////////////////////////////////////////
 
@@ -236,9 +226,9 @@ export class MyApp {
   
             // Criar um objeto de Data com a propriedade created_at do item
             let data = new Date(this.solicitacoes[item].created_at);
-  
+            console.log("Data criada para a solicitação " + this.solicitacoes[item].id, data);
             // Formatar a data para um formato legível para seres humanos
-            this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+            this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth() + 1] + " de " + data.getFullYear();
   
             // Criar uma posição no vetor de novos comentários para essa solicitação
             this.novos_comentarios[this.solicitacoes[item].id] = "";
