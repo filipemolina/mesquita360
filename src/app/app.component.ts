@@ -127,6 +127,21 @@ export class MyApp {
 
             console.log("Recebido do FCM", data);
 
+            // Caso a notificação tenha sido recebida em segundo plano e clicada pelo usuário
+
+            if(data.wasTapped){
+
+              // Caso a notificação seja referente a um novo comunicado navegar para a página de comunicados
+
+              if((data.operacao == "atualizar" || data.acao == "atualizar" ) && data.model == "comunicado"){
+                
+                console.log("Ir para a página de comunicados");
+                this.nav.push("ComunicadosPage");
+
+              }
+
+            }
+
             // Recarregar Solicitações
 
             if((data.operacao == "recarregar" || data.acao == "recarregar") && data.model == "solicitacoes"){
@@ -142,6 +157,10 @@ export class MyApp {
               this.atualizarComentarios(data.comentario_id);
     
             }
+
+          }, err => {
+
+            console.log("Erro no FCM", err);
 
           });
 

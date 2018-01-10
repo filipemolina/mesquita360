@@ -7,7 +7,6 @@ import { Diagnostic } from "@ionic-native/diagnostic";
 import { Camera } from "@ionic-native/camera";
 import { Crop } from "@ionic-native/crop";
 import { Storage } from "@ionic/storage";
-import { FCM } from '@ionic-native/fcm';
 
 
 @Component({
@@ -16,9 +15,6 @@ import { FCM } from '@ionic-native/fcm';
 })
 
 export class HomePage {
-
-  // Variáveis usadas no pusher
-  private pusher;
 
   public solicitacoes = [];
   public meses = [];
@@ -45,7 +41,6 @@ export class HomePage {
               private storage: Storage,
               private camera: Camera,
               private diagnostic: Diagnostic,
-              private fcm: FCM,
               public events: Events) {
 
       // Inicializar o array de meses

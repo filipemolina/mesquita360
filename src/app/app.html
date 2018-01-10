@@ -26,12 +26,12 @@
         <ion-icon item-start name="clipboard"></ion-icon>
         Minhas Solicitações
       </button>
-      <button *ngIf="estaLogado()" ion-item (tap)="goToPage('EditarPerfilPage')">
+      <button *ngIf="estaLogado()" ion-item (tap)="goToPage('EscreverSolicitacaoPage')">
           <ion-icon item-start name="person"></ion-icon>
           Editar Perfil
       </button>
       <button *ngIf="estaLogado()" ion-item (tap)="goToPage('ComunicadosPage')">
-          <ion-icon item-start name="speakerphone"></ion-icon>
+          <ion-icon item-start name="megaphone"></ion-icon>
           Comunicados
       </button>
       <button *ngIf="naoEstaLogado()" ion-item (tap)="goToPage('LoginPage')">

@@ -16,7 +16,7 @@ import { Http } from "@angular/http";
 export class ConfigProvider {
 
   // Versão do aplicativo
-  public versao = "0.0.4";
+  public versao = "0.1.0";
 
   // Rota Raiz da Aplicação
   // private root_url = "https://360.mesquita.rj.gov.br/gesol";
@@ -42,7 +42,6 @@ export class ConfigProvider {
   public longi: any;
   public endereco : any[] = [];
   public temEndereco: boolean = false;
-  private GPSAtivado = false;
 
   // Credenciais e Info do Facebook
   
@@ -156,23 +155,35 @@ export class ConfigProvider {
 
    getLatLong(nav? : NavController){
 
+    console.log("CONFIG -> Chamou a getLatLong");
+
     // Retornar uma promessa
     return new Promise((resolve, reject) => {
   
       this.diagnostic.isLocationEnabled()
-        .then(success => {
-  
+        .then(success => {  
           // GPS está ativado e disponível, obter a localização normalmente
           if(success){
+
+            console.log("Localização disponível, obtendo coordenadas...");
+
+            let inicio = new Date();
   
             // Obter a localização
             this.geolocation.getCurrentPosition()
             .then(resp => {
+
+              let fim = new Date();
+
+              console.log("Começou em ", inicio, "Terminou em ", fim);
   
               this.lati = resp.coords.latitude;
               this.longi = resp.coords.longitude;
 
+              console.log("Obteve as coordenadas", this.lati, this.longi);
+
               // Chamada à API do Google
+              console.log("Chamou a API do Google...");
               this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lati+","+this.longi+"&sensor=true&key=AIzaSyDcdW2PsrS1fbsXKmZ6P9Ii8zub5FDu3WQ")
                 .map(res => res.json())
                 .subscribe(data => {
@@ -191,8 +202,11 @@ export class ConfigProvider {
   
                   this.temEndereco = true;
 
+                  console.log("Recebeu os dados", this.endereco);
+
                   // Avisar à página "escrever-solicitacao" que o endereço já foi carregado
                   this.events.publish('carregarMapa');
+                  console.log("CONFIG -> Chamou o evento carregarMapa");
 
                   resolve(this.endereco);
   
@@ -249,7 +263,7 @@ export class ConfigProvider {
   }
 
   getLogado(){
-    return this.logado;
+    return this.logado && this.gesolToken;
   }
 
   getRootUrl(){
@@ -419,20 +433,6 @@ export class ConfigProvider {
       }
 
     }
-
-  }
-
-  private aumentarTamanho(id){
-
-
-    // Obter o tamanho da última mensagem enviada e a altura atual do container de mensagens
-    // let altura_da_ultima = document.querySelectorAll("#"+id+" .mensagens_container:nth-last-of-type(1)")[0].scrollHeight;
-    // let altura_atual = parseInt(document.getElementById(id).style.height);
-
-    // Aumentar tamanho do container de mensagens
-    // document.getElementById(id).style.height = altura_atual + altura_da_ultima + "px";
-
-    document.getElementById(id).style.height = "auto";
 
   }
 

@@ -8,12 +8,6 @@
 
   <ion-navbar>
 
-    <!-- <ion-buttons left>
-      <button ion-button clear icon-olny large (tap)="voltar()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </button>
-    </ion-buttons> -->
-
     <ion-title>
       Detalhes
     </ion-title>
@@ -28,12 +22,33 @@
 
 </ion-header>
 
-
 <ion-content padding>
 
   <div #map id="map"></div>
   
   <ion-list>
+
+    <ion-grid ngClass="gridBotoes">
+
+      <ion-row>
+
+        <ion-col col-6>
+          <button ion-button block icon-left>
+            <ion-icon name="refresh"></ion-icon>
+            Recarregar
+          </button>
+        </ion-col>
+
+        <ion-col col-6>
+          <button (click)="apontar()" ion-button block icon-left>
+            <span class="mdi mdi-map-marker"></span>
+            Apontar
+          </button>
+        </ion-col>
+
+      </ion-row>
+
+    </ion-grid>
 
     <ion-item class="centralizar" [style.background-color]="cor_setor">
       <span [class]="'mdi ' + icone_setor"></span>

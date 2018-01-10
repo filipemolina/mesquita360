@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, NavParams } from 'ionic-angular';
 import { GesolProvider } from '../../providers/gesol/gesol';
 import { ConfigProvider } from '../../providers/config/config';
 
@@ -18,19 +18,30 @@ export class ComunicadosPage {
 
   datas:any = [];
 
+  loading: any;
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
     public gesol: GesolProvider,
-    public config: ConfigProvider) {
+    public config: ConfigProvider,
+    public loadingCtrl: LoadingController) {
+
+      this.loading = this.loadingCtrl.create({
+        content: "Carregando comunicados..."
+      });
 
   }
 
   ionViewDidEnter() {
+
+    this.loading.present();
     
     this.gesol.getComunicados().subscribe(res => {
       
       this.config.setComunicados(res);
+
+      this.loading.dismiss();
 
       for(let i = 0; i < this.config.getComunicados().length; i++){
         

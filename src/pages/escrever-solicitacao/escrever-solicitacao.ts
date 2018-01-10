@@ -34,6 +34,7 @@ export class EscreverSolicitacaoPage {
   longi: any;
   @ViewChild('map') mapElement: ElementRef;
   map: any;
+  marker:any;
 
   // Informações do Setor para o qual essa solicitação foi aberta
   imagem: any;
@@ -60,19 +61,24 @@ export class EscreverSolicitacaoPage {
     this.imagem = this.navParams.get('imagem');
     this.setor = this.navParams.get('setor');
 
+    // Caso o endereço não esteja disponível, tentar carregar novamente quando isso acontecer
+    this.events.subscribe('carregarMapa', () => {
+      console.log("Ouviu o evento Carregar Mapa");
+      this.loadMap();
+    });
+
+    this.events.subscribe('centralizarMapa', () => {
+
+      this.centralizar(new google.maps.LatLng(this.config.lati, this.config.longi));
+
+    });
+
   }
 
   ionViewDidLoad(){
 
     // Tentar carregar o mapa no carregamento desta página...
     this.loadMap();
-
-    // Caso o endereço não esteja disponível, tentar carregar novamente quando isso acontecer
-    this.events.subscribe('carregarMapa', () => {
-
-      this.loadMap();
-
-    });
   }
 
   ionViewDidEnter(){
@@ -80,28 +86,26 @@ export class EscreverSolicitacaoPage {
     // Obter todas as informações do setor
 
     this.getSetor(this.setor);
+    this.loadMap();
 
+  }
+
+  apontar(){
+    this.navCtrl.push("ApontarPage");
   }
 
   loadMap(){
 
-    console.log("ES -> Chamou o LoadMap", new Date());
-    console.log("ES -> Config nesse momento", this.config, new Date());
-
     //Testar se a localização já foi obtida pelo aplicativo
-
-    // if(!this.config.temEndereco){
-      
-    //   this.obterEnderecoECarregarMapa();
-
-    // } else {
 
     if(this.config.temEndereco){
 
-      console.log("ES -> O Endereço já foi obtido, prosseguindo", new Date());
+      this.events.publish('centralizarMapa');
       
       // Criar um objeto com as coordenadas do chamado
       let latLng = new google.maps.LatLng(this.config.lati, this.config.longi);
+
+      console.log("LATLNG", this.config.lati, this.config.longi);
 
       // Salvar o endereço em uma propriedade desta classe
       this.endereco = this.config.endereco;
@@ -117,17 +121,20 @@ export class EscreverSolicitacaoPage {
   
       // Adicionar um marcador central
   
-      let marker = new google.maps.Marker({
+      this.marker = new google.maps.Marker({
         map: this.map,
         animation: google.maps.Animation.DROP,
         position: this.map.getCenter()
       });
 
+    } else {
+      console.log("A Config não tem Endereço");
     }
 
   }
 
   obterEnderecoECarregarMapa(){
+
 
     console.log("Não tinha endereço, precisou chamar a função com nome ridiculamente longo");
     
@@ -173,7 +180,7 @@ export class EscreverSolicitacaoPage {
         
             // Adicionar um marcador central
         
-            let marker = new google.maps.Marker({
+            this.marker = new google.maps.Marker({
               map: this.map,
               animation: google.maps.Animation.DROP,
               position: this.map.getCenter()
@@ -226,6 +233,26 @@ export class EscreverSolicitacaoPage {
   }
 
   /**
+   * Centraliar o mapa na nova localidade e criar um marcador
+   */
+
+   centralizar(latLng){
+
+    if(typeof this.map !== 'undefined'){
+
+      this.map.setCenter(latLng);
+      
+      this.marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: this.map.getCenter()
+      });
+
+    }
+
+   }
+
+  /**
    * Enviar a solicitação para o Gesol
    */
 
@@ -242,9 +269,9 @@ export class EscreverSolicitacaoPage {
 
       // Testar se a foto foi tirada em Mesquita
 
-      if(this.endereco['municipio'] == "Mesquita"){
+      if(this.config.endereco['municipio'] == "Mesquita"){
       
-        this.gesol.enviaSolicitacao(this.imagem, this.servico, this.texto, this.endereco).subscribe(
+        this.gesol.enviaSolicitacao(this.imagem, this.servico, this.texto, this.config.endereco).subscribe(
           
           // Caso de sucesso
           res => {
