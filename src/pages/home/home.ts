@@ -92,7 +92,7 @@ export class HomePage {
               
         // Aidioncar os novos itens à variável de solicitações
 
-        this.solicitacoes = this.solicitacoes.concat(res);
+        this.solicitacoes = res;
 
         for(let item in this.solicitacoes){
 
@@ -342,26 +342,6 @@ export class HomePage {
 
     if(row.style.height == "0px" || !row.style.height){
 
-       // Altura da div de mensagens
-      //let altura = 0;
-
-      // Obter um objeto com todoas as mensagens
-      //let itens = row.childNodes;
-
-      // Obter a quantidade de mensagens
-      //let qtd = itens.length;
-
-      // Iterar pelas mensagens e somar as suas alturas
-      //for(var i = 0; i < qtd; i++){
-
-        //if(typeof itens[i].attributes !== "undefined"){
-
-          //altura += itens[i].attributes[0].ownerElement.scrollHeight;
-
-       // }
-
-      //}
-
       //row.style.height = altura + "px";
       row.style.height = 'auto';
 
@@ -381,34 +361,44 @@ export class HomePage {
     
     // Obter o botão que envia os comentários
     let botao = evento.target;
+    
     // Desabilitar o botão para que essa mensagem não seja enviada multiplas vezes
-    botao.disabled = true;
+    this.desabilitarBotao(botao);
+
+    // Zerar o input de comentários dessa solicitação e salvar o comentário em uma variável
+    let comentario = this.novos_comentarios[solicitacao];
+    this.novos_comentarios[solicitacao] = "";
 
     // Os novos comentários ficam guardados em um vetor
-    if(this.novos_comentarios[solicitacao] != ""){
+    if(typeof comentario !== 'undefined' && comentario.replace(/\s/g,'') != ""){
+
+      // Adicionar o novo comentário à solicitação no Config
+      this.config.novoComentario(solicitacao, comentario);
 
       // Fazer uma cahamda para a API e criar uma nova mensagem
-      this.gesol.enviaMensagem(this.novos_comentarios[solicitacao], solicitacao).subscribe(
+      this.gesol.enviaMensagem(comentario, solicitacao).subscribe(
         
         // Caso suceda
         res => {
-          // Adicionar o novo comentário à solicitação no Config
-          this.config.novoComentario(solicitacao, this.novos_comentarios[solicitacao], this.navCtrl.getActive().name);
-          // Zerar o input de comentários dessa solicitação
-          this.novos_comentarios[solicitacao] = "";
+          
           // Liberar novamente o botão de enviar comentários
-          botao.disabled = false;
-
+          this.habilitarBotao(botao);
         },
 
         //Caso Falhe
-        fail => {
+        fail => {console.log
           console.log("Cadastro de Mensagem Falhou:");
           console.log(fail);
+
+          // Liberar novamente o botão de enviar comentários
+          this.habilitarBotao(botao);
         }
       );
 
     }
+
+    // Liberar novamente o botão de enviar comentários
+    this.habilitarBotao(botao);
 
   }
 
@@ -528,6 +518,29 @@ export class HomePage {
 
   naoEstaLogado(){
     return !this.config.getLogado() || this.config.getLogado() == null;
+  }
+
+  /**
+   * O Ionic nem sempre envia o botão como target do evento click. Para isso é necessário testar se a span.button-inner
+   * não foi enviada em seu lugar
+   */
+
+  desabilitarBotao(elem){
+    
+    if(elem.tagName == "SPAN")
+      elem.parentElement.disabled = true;
+    else
+      elem.disabled = true;
+
+  }
+
+  habilitarBotao(elem){
+
+    if(elem.tagName == "SPAN")
+      elem.parentElement.disabled = false;
+    else
+      elem.disabled = false;
+
   }
 
 }

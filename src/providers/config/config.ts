@@ -395,7 +395,7 @@ export class ConfigProvider {
   }
 
   // Cadastra uma nova mensagem no vetor de mensagens da solicitação especificada
-  public novoComentario(solicitacao_id, comentario, pagina){
+  public novoComentario(solicitacao_id, comentario){
 
      // Encontar o índice da solicitação no array de solicitaçoes
     let indice = this.solicitacoes.findIndex(elem => {
@@ -490,7 +490,11 @@ export class ConfigProvider {
 
   concatenarSolicitacoes(sol){
 
-    this.solicitacoes.concat(sol);
+    console.log("CONFIG -> Solicitações recebidas", sol);
+
+    this.solicitacoes = this.solicitacoes.concat(sol);
+
+    console.log("CONFIG -> Solicitações após concatenar", this.solicitacoes);
 
   }
 

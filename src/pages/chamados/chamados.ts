@@ -116,33 +116,44 @@ export class ChamadosPage {
 
     // Obter o botão que envia os comentários
     let botao = evento.target;
+
     // Desabilitar o botão para que essa mensagem não seja enviada multiplas vezes
-    botao.disabled = true;
+    this.desabilitarBotao(botao);
+
+    // Zerar o input de comentários dessa solicitação e salvar o comentário em uma variável
+    let comentario = this.novos_comentarios[solicitacao];
+    this.novos_comentarios[solicitacao] = "";
 
     // Os novos comentários ficam guardados em um vetor
-    if(this.novos_comentarios[solicitacao] != ""){
+    if(typeof comentario !== 'undefined' && comentario.replace(/\s/g,'') != ""){
+
+      // Adicionar o novo comentário à solicitação no Config
+      this.config.novoComentario(solicitacao, comentario);
 
       // Fazer uma cahamda para a API e criar uma nova mensagem
-      this.gesol.enviaMensagem(this.novos_comentarios[solicitacao], solicitacao).subscribe(
+      this.gesol.enviaMensagem(comentario, solicitacao).subscribe(
         
         // Caso suceda
         res => {
-           // Adicionar o novo comentário à solicitação no Config
-           this.config.novoComentario(solicitacao, this.novos_comentarios[solicitacao], this.navCtrl.getActive().name);
-           // Zerar o input de comentários dessa solicitação
-           this.novos_comentarios[solicitacao] = "";
-           // Liberar novamente o botão de enviar comentários
-           botao.disabled = false;
+          
+          // Liberar novamente o botão de enviar comentários
+          this.habilitarBotao(botao);
         },
 
         //Caso Falhe
         fail => {console.log
           console.log("Cadastro de Mensagem Falhou:");
           console.log(fail);
+
+          // Liberar novamente o botão de enviar comentários
+          this.habilitarBotao(botao);
         }
       );
 
     }
+
+    // Liberar novamente o botão de enviar comentários
+    this.habilitarBotao(botao);
 
   }
 
@@ -300,6 +311,24 @@ export class ChamadosPage {
     });
 
     alert.present();
+
+  }
+
+  desabilitarBotao(elem){
+
+    if(elem.tagName == "SPAN")
+      elem.parentElement.disabled = true;
+    else
+      elem.disabled = true;
+
+  }
+
+  habilitarBotao(elem){
+
+    if(elem.tagName == "SPAN")
+      elem.parentElement.disabled = false;
+    else
+      elem.disabled = false;
 
   }
 }
