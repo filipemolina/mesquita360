@@ -506,4 +506,67 @@ export class ConfigProvider {
     this.comunicados = comunicados;
   }
 
+  apagarComentario(comentario_id, solicitacao_id){
+
+    console.log("Comentário", comentario_id, "Solicitacao", solicitacao_id);
+
+    let indice;
+    
+    // Tenta encontrar no vetor de Minhas Solicitações, o índice da solicitação que possui o comentário à ser apagado
+    if(typeof this.minhasSolicitacoes !== 'undefined'){
+
+      console.log("Existem minhas solicitações");
+      
+      indice = this.minhasSolicitacoes.findIndex((elem, index, array)=>{
+  
+        return elem.id == solicitacao_id;
+  
+      });
+
+      console.log("ìndice no vetor de minhas solicitações", indice);
+  
+      // Encontrou no vetor "MinhasSolicitações". Prosseguindo...
+      if(indice >= 0){
+
+        console.log("Encontrou em minhas solicitações")
+  
+        // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
+        let i = this.minhasSolicitacoes[indice].comentarios.findIndex((elem, index, array) => {
+          
+          return elem.id == comentario_id;
+  
+        });
+  
+        // Substituir o comentário 
+        this.minhasSolicitacoes[indice].comentarios[i].comentario = "Comentário apagado pelo usuário";
+        this.minhasSolicitacoes[indice].comentarios[i].apagado = true;
+  
+      }
+    }
+
+    // Tenta encontrar no vetor de Solicitações, o índice da solicitação que possui o comentário à ser apagado
+    indice = this.solicitacoes.findIndex((elem, index, array)=>{
+    
+      return elem.id == solicitacao_id;
+    
+    });
+
+    console.log("Indice no vetor de solicitações", indice);
+    console.log("Solicitação", this.solicitacoes[indice]);
+
+    // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
+    let i = this.solicitacoes[indice].comentarios.findIndex((elem, index, array) => {
+      
+      return elem.id == comentario_id;
+
+    });
+
+    console.log("Comentario", this.solicitacoes[indice].comentarios[i]);
+
+    // Substituir o comentário 
+    this.solicitacoes[indice].comentarios[i].comentario = "Comentário apagado pelo usuário";
+    this.solicitacoes[indice].comentarios[i].apagado = true;
+
+  }
+
 }

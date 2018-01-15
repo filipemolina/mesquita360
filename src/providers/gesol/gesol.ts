@@ -324,6 +324,23 @@ export class GesolProvider {
 
    }
 
+   /**
+    * Apagar um comentário no gesol
+    */
+
+  apagarComentario(comentario_id){
+
+    let headers = this.montaHeaders();
+
+    let body = { 
+      comentario_id,
+      _method: "DELETE"
+    };
+
+    return this.http.post(this.root_url + "/api/comentarios/" + comentario_id, body, { headers }).map(res=>res.json());
+
+  }
+
   /**
    * Retorna um cabeçalho que pode ser usado em qualquer requisição
    */

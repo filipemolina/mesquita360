@@ -33,14 +33,14 @@
       <ion-row>
 
         <ion-col col-6>
-          <button ion-button block icon-left>
+          <button (tap)="obterEnderecoECarregarMapa()" ion-button block icon-left>
             <ion-icon name="refresh"></ion-icon>
             Recarregar
           </button>
         </ion-col>
 
         <ion-col col-6>
-          <button (click)="apontar()" ion-button block icon-left>
+          <button (tap)="apontar()" ion-button block icon-left>
             <span class="mdi mdi-map-marker"></span>
             Apontar
           </button>

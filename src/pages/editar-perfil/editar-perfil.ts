@@ -59,7 +59,7 @@ export class EditarPerfilPage {
   // Executar o chamado para alterar os dados do usuário quando este sair da página de alteração
 
   ionViewDidLeave(){
-    this.salvarInfoUsuario();
+    // this.salvarInfoUsuario();
   }
 
   abrirActionSheet(){
@@ -286,48 +286,77 @@ export class EditarPerfilPage {
 
   salvarInfoUsuario(){
 
-    // Adicionar as informações de endereço e telefones no objeto do usuário
+    return new Promise((resolve, reject) => {
 
-    this.usuario.endereco = this.endereco;
-    this.usuario.telefones = [this.telefone_fixo, this.telefone_celular];
+      console.log("Salvando usuário...");
 
-    console.log("Info do usuário antes de enviar", this.usuario);
+      // Adicionar as informações de endereço e telefones no objeto do usuário
 
-    this.gesol.editaSolicitante(this.usuario).subscribe(
+      this.usuario.endereco = this.endereco;
+      this.usuario.telefones = [this.telefone_fixo, this.telefone_celular];
 
-      res => {
+      this.gesol.editaSolicitante(this.usuario).subscribe(
 
-        console.log("Resposta do Gesol", res);
+        res => {
 
-        this.config.setSolicitante(res);
+          this.config.setSolicitante(res);
+          console.log("Informação salva", res);
+          resolve();
 
-        console.log("Info do usuário depois de alterar", this.config.getSolicitante());
+        },
 
-      },
+        erro => {
 
-      erro => {
+          console.log("Ocorreu um erro!");
 
-        console.log("Ocorreu um erro!");
+          // Objeto com todos os erros
+          let erros = JSON.parse(erro._body);
+          let mensagem: string = "";
 
-        // Objeto com todos os erros
-        let erros = JSON.parse(erro._body);
-        let mensagem: string = "";
+          //Iterar pelos erros e concatenar em uma variável de texto
 
-        //Iterar pelos erros e concatenar em uma variável de texto
+          // Iterar pelas propriedades do objeto com os erros
+          for(var campo in erros){
+            if(erros.hasOwnProperty(campo)){
 
-        // Iterar pelas propriedades do objeto com os erros
-        for(var campo in erros){
-          if(erros.hasOwnProperty(campo)){
+              // Montar uma variável com todas as mensagens de erro
+              mensagem += erros[campo][0] + "<br>";
 
-            // Montar uma variável com todas as mensagens de erro
-            mensagem += erros[campo][0] + "<br>";
-
+            }
           }
+
+          reject([erros, mensagem]);
+
         }
 
-      }
+      );
 
-    );
+    });
+
+  }
+
+  salvarInfoEVoltar(){
+
+    // Esperar que a informação do usuário seja salva e então voltar à home page
+
+    // Montar o loading
+    this.loading = this.loadingCtrl.create({
+      content: "Salvando dados. Por favor aguarde..."
+    });
+    
+    // Mostrar o Loading
+    this.loading.present();
+
+    //Salvar as informações no banco
+    this.salvarInfoUsuario().then(()=>{
+
+      // Retirar o loading
+      this.loading.dismiss();
+
+      // Voltar par a homepage
+      this.navCtrl.popToRoot();
+
+    })
 
   }
 

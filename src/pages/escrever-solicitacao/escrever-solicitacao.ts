@@ -135,6 +135,11 @@ export class EscreverSolicitacaoPage {
 
   obterEnderecoECarregarMapa(){
 
+    let loading = this.loadingCtrl.create({
+      content: "Obtendo localização..."
+    });
+
+    loading.present();
 
     console.log("Não tinha endereço, precisou chamar a função com nome ridiculamente longo");
     
@@ -156,13 +161,13 @@ export class EscreverSolicitacaoPage {
           // this.location = address.formatted_address;
 
           // Separar os dados do endereço
-          this.endereco['numero']        = address.address_components[0].long_name;
-          this.endereco['logradouro']    = address.address_components[1].long_name;
-          this.endereco['bairro']        = address.address_components[2].long_name;
-          this.endereco['municipio']     = address.address_components[4].long_name;
-          this.endereco['uf']            = address.address_components[5].short_name;
-          this.endereco['latitude']      = this.lati;
-          this.endereco['longitude']     = this.longi;
+          this.config.endereco['numero']        = address.address_components[0].long_name;
+          this.config.endereco['logradouro']    = address.address_components[1].long_name;
+          this.config.endereco['bairro']        = address.address_components[2].long_name;
+          this.config.endereco['municipio']     = address.address_components[4].long_name;
+          this.config.endereco['uf']            = address.address_components[5].short_name;
+          this.config.endereco['latitude']      = this.lati;
+          this.config.endereco['longitude']     = this.longi;
 
           ////////////////////////////////// Criar o mapa
 
@@ -186,20 +191,26 @@ export class EscreverSolicitacaoPage {
               position: this.map.getCenter()
             });
 
+            loading.dismiss();
+
         }, erro => {
 
           console.log("CONFIG -> Erro da API do Google:", erro, new Date());
+
+          loading.dismiss();
 
         })
 
     }, erro => {
 
       console.log("CONFIG -> Erro do MAPA:", erro, new Date());
+      loading.dismiss();
 
     })
     .catch(erro => {
       
       console.log("CONFIG -> Erro na linha 143: ", erro, new Date());
+      loading.dismiss();
 
     });
   }
@@ -350,14 +361,7 @@ export class EscreverSolicitacaoPage {
           title: "Atenção",
           enableBackdropDismiss: false,
           subTitle: "Apenas solicitações registradas no município de Mesquita podem ser registradas pelo Mesquita 360.",
-          buttons: [{
-            text: "Ok",
-            handler: () => {
-              
-              this.navCtrl.popToRoot();
-
-            }
-          }]
+          buttons: ['ok']
         });
   
         alert.present();

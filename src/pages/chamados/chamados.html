@@ -102,7 +102,10 @@
 						<img src="{{ item.solicitante.foto }}">
 					</ion-avatar>
 					<h2>{{ item.solicitante.nome }}</h2>
-					<p>{{ comentario.comentario }}</p>
+					<p id="p_comentario_{{ comentario.id }}">{{ comentario.comentario }}</p>
+					<button (tap)="apagarComentario(comentario.id, item.id)" *ngIf="!comentario.apagado" item-end ion-button small icon-only color="danger">
+						<ion-icon name="trash"></ion-icon>
+					</button>
 				</ion-item>
 				
 			</div>

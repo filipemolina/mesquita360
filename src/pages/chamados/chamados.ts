@@ -290,12 +290,8 @@ export class ChamadosPage {
 
                 if(res.status){
 
-                  this.abrirLoading();
-
                   //Chamar o evento no app.component.ts para recarregar as minhas solicitações
                   this.events.publish('recarregar:minhas');
-
-                  this.fecharLoading();
 
                 }
 
@@ -306,6 +302,38 @@ export class ChamadosPage {
             );
 
           }
+        }
+      ]
+    });
+
+    alert.present();
+
+  }
+
+  apagarComentario(comentario_id, solicitacao_id){
+
+    // Mostrar um alert pedindo para o usuário confirmar a exclusão do comentário    
+    let alert = this.alertController.create({
+      title: "Atenção!",
+      message: "Deseja realmente apagar esse comentário?",
+      buttons: [
+        {
+          text: "Sim",
+          handler: ()=>{
+
+            // Fazer uma chamada para a API apagar o comentário            
+            this.gesol.apagarComentario(comentario_id).subscribe(()=>{
+
+            // Substituir o texto do comentário apagado no vetor de solicitações do aplicativo
+            this.config.apagarComentario(comentario_id, solicitacao_id);
+
+            });
+
+          }
+        },
+        {
+          text: "Cancelar",
+          role: 'cancel'
         }
       ]
     });

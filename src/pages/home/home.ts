@@ -100,7 +100,7 @@ export class HomePage {
           let data = new Date(this.solicitacoes[item].created_at);
 
           // Formatar a data para um formato legível para seres humanos
-          this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+          this.solicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth() + 1] + " de " + data.getFullYear();
 
           // Criar uma posição no vetor de novos comentários para essa solicitação
           this.novos_comentarios[this.solicitacoes[item].id] = "";
@@ -540,6 +540,37 @@ export class HomePage {
       elem.parentElement.disabled = false;
     else
       elem.disabled = false;
+
+  }
+
+  apagarComentario(comentario_id, solicitacao_id){
+
+    let alert = this.alertCtrl.create({
+      title: "Atenção!",
+      message: "Deseja realmente apagar esse comentário?",
+      buttons: [
+        {
+          text: "Sim",
+          handler: ()=>{
+            
+            // Fazer uma chamada para a API apagar o comentário            
+            this.gesol.apagarComentario(comentario_id).subscribe(()=>{
+              
+              // Substituir o texto do comentário apagado no vetor de solicitações do aplicativo
+              this.config.apagarComentario(comentario_id, solicitacao_id);
+
+            });
+
+          },
+        },
+        {
+          text: "Cancelar",
+          role: 'cancel'
+        }
+      ]
+    });
+
+    alert.present();
 
   }
 

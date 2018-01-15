@@ -98,6 +98,9 @@
 					</ion-avatar>
 					<h2>{{ item.solicitante.nome }}</h2>
 					<p>{{ comentario.comentario }}</p>
+					<button (tap)="apagarComentario(comentario.id, item.id)" *ngIf="estaLogado() && item.solicitante.id == config.getSolicitante().id && !comentario.apagado" item-end ion-button small icon-only color="danger">
+						<ion-icon name="trash"></ion-icon>
+					</button>
 				</ion-item>
 				
 			</div>

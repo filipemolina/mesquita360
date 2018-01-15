@@ -50,6 +50,28 @@ export class ServicosPage {
     //Obter a imagem nos parâmetros
     this.imagem = this.navParams.get('imagem');
 
+    this.obterSetores();
+
+  }
+
+  ionViewDidEnter(){
+   
+    this.obterSetores();
+
+  }
+
+  // Abrir o modal para selecionar o serviço
+
+  abrirModal(setor){
+
+    this.navCtrl.push('EscreverSolicitacaoPage', {
+      imagem: this.imagem,
+      setor: setor
+    });
+    
+  }
+
+  obterSetores(){
     // Obter a lista de setores do servidor
     this.gesol.getSetores().subscribe(
       // Sucesso
@@ -68,26 +90,6 @@ export class ServicosPage {
 
       }
     );
-  }
-
-  // Abrir o modal para selecionar o serviço
-
-  abrirModal(setor){
-
-    // Criar o modal com a página 
-    // let modal = this.modalCtrl.create(EscreverSolicitacaoPage, {
-    //   imagem: this.imagem,
-    //   setor: setor
-    // });
-
-    // Mostrar o modal
-    // modal.present();
-
-    this.navCtrl.push('EscreverSolicitacaoPage', {
-      imagem: this.imagem,
-      setor: setor
-    });
-    
   }
 
 }
