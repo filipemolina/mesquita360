@@ -207,6 +207,12 @@ export class MyApp {
     return !this.config.getLogado();
   }
 
+  goToAtendimento(id){
+    this.nav.push('AtendimentoPage', {
+      solicitacao: id
+    });
+  }
+
   verificarVersao(){
 
     this.gesol.verificaVersao().subscribe(res => {
@@ -283,6 +289,8 @@ export class MyApp {
 
           //Atualizar a tela do aplicativo
           this.events.publish('updateScreen');
+
+          console.log("ARRAY DE SOLICITACOES", this.solicitacoes);
         
         }, 
         

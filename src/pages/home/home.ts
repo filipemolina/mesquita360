@@ -442,35 +442,29 @@ export class HomePage {
 
   // Enviar o id de uma solicitação e de um solicitante e adicionar ou remover o apoio
 
-  apoiar(solicitacao, solicitante){
+  apoiar(evento, item){
+
+    // Obter o botão de apoio e desabilitá-lo
+    let botao = evento.target;
+    this.desabilitarBotao(botao);
+
+    // Obter o id do solicitante
+    let solicitante = this.config.getSolicitante().id;
+
+    // Testar se o usuário já apoiou essa solicitação
+    if(this.config.usuarioApoiouSolicitacao(item))
+      // Remover o apoio do vetor de solicitações antes da resposta da API
+      this.config.removerApoio(item.id, solicitante, this.config.getSolicitacoes());
+    else
+      // Adicionar o apoio no vetor de solicitações antes da resposta da API
+      this.config.adicionarApoio(item.id, solicitante, this.config.getSolicitacoes());
 
     //Fazer a chamada AJAX
-    this.gesol.apoiar(solicitacao, solicitante).subscribe(
+    this.gesol.apoiar(item.id, solicitante).subscribe(
 
-      res => {
-
-        let resposta = res;
-
-        // A resposta desse AJAX é o número de apoios que a solicitação possui.
-        // Atribuir esse número ao vetor na posição correta para que o valor seja atualizado na tela
-        this.apoios[solicitacao] = resposta.qtd;
-
-        // Caso o usuário já tenha apoiado essa solicitação, excluir o seu id do vetor de apoios
-        if(resposta.remover)
-        {
-           // Obter o índice do item para excluir
-           let index = this.meus_apoios.indexOf(solicitacao);
-
-           // Excluir o apoio
-          this.meus_apoios.splice(index, 1);
-
-        } else {
-
-          // Caso contrário, adicionar
-          this.meus_apoios.push(solicitacao);
-
-        }
-      }
+      // Habilitar novamente o botão
+      res => { this.habilitarBotao(botao) },
+      err => { this.habilitarBotao(botao) }
 
     );
 

@@ -54,18 +54,19 @@
 
 		<ion-row>
 			<ion-col>
-				<button (tap)="apoiar(item.id, item.solicitante.id)" ion-button icon-left clear small>
+				<button (tap)="apoiar($event, item)" ion-button icon-left clear small>
 					
 					<!-- Caso a solicitação não esteja na lista de apoios do usuário, mostrar o ícone "+" -->
 					<!-- Caso contrário mostrar o ícone "-" -->
-					<ion-icon *ngIf="!meus_apoios.includes(item.id)" name="add"></ion-icon>
-					<ion-icon *ngIf="meus_apoios.includes(item.id)" name="thumbs-up"></ion-icon>
+					<ion-icon *ngIf="!config.usuarioApoiouSolicitacao(item)" name="add"></ion-icon>
+					<ion-icon *ngIf="config.usuarioApoiouSolicitacao(item)" name="thumbs-up"></ion-icon>
 
 					<!-- TODO: Testar se usuário já apoiou essa solicitação e atualizar a palavra Apoiar/Apoiado -->
 					<!-- Fazer esse teste quando o resultado ajax chegar e adicionar ou retirar o id do vetor -->
-					<div *ngIf="meus_apoios.includes(item.id)">Apoiado </div>
-					<div *ngIf="!meus_apoios.includes(item.id)">Apoiar </div>
-					<div class="numero" style="margin-left: 3px">({{ apoios[item.id] }})</div>
+					<div *ngIf="config.usuarioApoiouSolicitacao(item)">Apoiado </div>
+					<div *ngIf="!config.usuarioApoiouSolicitacao(item)">Apoiar </div>
+					<div *ngIf="item.apoiadores_count == 0" class="numero" style="margin-left: 3px">(0)</div>
+					<div *ngIf="item.apoiadores_count > 0" class="numero" style="margin-left: 3px">({{ item.apoiadores_count }})</div>
 
 				</button>
 			</ion-col>

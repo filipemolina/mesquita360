@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ConfigProvider } from "../../providers/config/config";
+import { GesolProvider } from "../../providers/gesol/gesol";
 
 /**
  * Generated class for the AtendimentoPage page.
@@ -22,32 +24,26 @@ export class AtendimentoPage {
   };
   public status;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              public config: ConfigProvider,
+              public gesol: GesolProvider) {
     
     // Obter o id enviado através do navController usando navParams
-    this.solicitacao = this.navParams.data;
-
-    // Decidir qual classe utilizar dependendo do status
-
-    if(this.solicitacao.status == 0)
-    {
-      this.classes.danger = true;
-      this.status = "Solicitação Criada";
-    }
-    else if(this.solicitacao.status == 1)
-    {
-      this.classes.warning = true;
-      this.status = "Analisando Solicitação";
-    }
-    else if(this.solicitacao.status == 2)
-    {
-      this.classes.success = true;
-      this.status = "Solicitação Fechada";
-    }
+    this.solicitacao = this.navParams.data.solicitacao;
 
   }
 
   ionViewDidLoad() {
+
+    console.log("Solicitações no config", this.config.getSolicitacoes());
+    console.log("Solicitação selecionada", this.solicitacao);
+
+    this.gesol.showSolicitacao(this.solicitacao).subscribe(sol => {
+
+      console.log("Solicitação recebida do Gesol", sol);
+
+    });
 
   }
 

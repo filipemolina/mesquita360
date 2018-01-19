@@ -269,7 +269,6 @@ export class EscreverSolicitacaoPage {
 
   gravaSolicitacao(evento){
 
-
     this.abrirLoading();
 
     // Desabilitar o botão de enviar 

@@ -508,27 +508,19 @@ export class ConfigProvider {
 
   apagarComentario(comentario_id, solicitacao_id){
 
-    console.log("Comentário", comentario_id, "Solicitacao", solicitacao_id);
-
     let indice;
     
     // Tenta encontrar no vetor de Minhas Solicitações, o índice da solicitação que possui o comentário à ser apagado
     if(typeof this.minhasSolicitacoes !== 'undefined'){
-
-      console.log("Existem minhas solicitações");
       
       indice = this.minhasSolicitacoes.findIndex((elem, index, array)=>{
   
         return elem.id == solicitacao_id;
   
       });
-
-      console.log("ìndice no vetor de minhas solicitações", indice);
   
       // Encontrou no vetor "MinhasSolicitações". Prosseguindo...
       if(indice >= 0){
-
-        console.log("Encontrou em minhas solicitações")
   
         // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
         let i = this.minhasSolicitacoes[indice].comentarios.findIndex((elem, index, array) => {
@@ -551,9 +543,6 @@ export class ConfigProvider {
     
     });
 
-    console.log("Indice no vetor de solicitações", indice);
-    console.log("Solicitação", this.solicitacoes[indice]);
-
     // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
     let i = this.solicitacoes[indice].comentarios.findIndex((elem, index, array) => {
       
@@ -561,11 +550,59 @@ export class ConfigProvider {
 
     });
 
-    console.log("Comentario", this.solicitacoes[indice].comentarios[i]);
-
     // Substituir o comentário 
     this.solicitacoes[indice].comentarios[i].comentario = "Comentário apagado pelo usuário";
     this.solicitacoes[indice].comentarios[i].apagado = true;
+
+  }
+
+  // Função usada pelas telas Home e Minhas Solicitações para calcular o ícone a ser mostrado
+
+  usuarioApoiouSolicitacao(solicitacao){
+
+    let usuario_id = this.solicitante.id;
+
+    let resultado = solicitacao.apoiadores.filter(item => item.id == usuario_id)
+
+    return resultado.length;
+
+  }
+
+  // Função que remove o apoio do solicitante à uma solicitaçao
+  // Recebe o ID da solicitação e o ID do solicitante
+
+  removerApoio(solicitacao_id, solicitante_id, vetor){
+
+    // Encontrar o índice da solicitação no vetor de solicitações principal
+    let indice_sol = vetor.findIndex((item) => { return item.id == solicitacao_id });
+
+    // Encontrar o índice do apoio dentro do array de apoios da solicitação
+    let indice_apoio = vetor[indice_sol].apoiadores.findIndex((item) => {return item.id == solicitante_id});
+
+    // Remover o apoio do usuário atual
+    vetor[indice_sol].apoiadores.splice(indice_apoio, 1);
+
+    // Diminuir o contador de apoios
+    vetor[indice_sol].apoiadores_count--;
+
+    // Atualiar a tela depois dessas mudanças
+    this.events.publish('updateScreen');
+
+  }
+
+  adicionarApoio(solicitacao_id, solicitante_id, vetor){
+
+     // Encontrar o índice da solicitação no vetor de solicitações principal
+     let indice_sol = vetor.findIndex((item) => { return item.id == solicitacao_id });
+
+     // Adicionar um apoio à solicitação
+     vetor[indice_sol].apoiadores.push({ id: solicitante_id });
+
+     // Incrementar o contador de apoios
+     vetor[indice_sol].apoiadores_count++;
+
+     // Atualizar a tela depois dessas mudanças
+     this.events.publish('updateScreen');
 
   }
 

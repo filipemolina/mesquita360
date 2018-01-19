@@ -342,6 +342,18 @@ export class GesolProvider {
   }
 
   /**
+   * Obter os dados de uma solicitação em particular
+   */
+
+   showSolicitacao(id){
+
+    let headers = this.montaHeaders();
+
+    return this.http.get(this.root_url + "/api/solicitacoes/" + id, { headers }).map(res=>res.json());
+
+   }
+
+  /**
    * Retorna um cabeçalho que pode ser usado em qualquer requisição
    */
 
