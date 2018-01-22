@@ -37,6 +37,8 @@
 
 			<img src="{{ item.foto }}">
 
+			<img src="assets/img/resolvida.png" class="img-resolvida" *ngIf="item.status == 'Solucionada'">
+
 			<div class="tipo-servico" [ngStyle]="{ 'background-color': item.servico.setor.cor }">
 			    <span [ngClass]="'icone mdi ' + item.servico.setor.icone "></span> <span class="nome-servico">{{ item.servico.nome }}</span>
 			</div>

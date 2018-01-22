@@ -273,7 +273,7 @@ export class EscreverSolicitacaoPage {
 
     // Desabilitar o botão de enviar 
     let botao = evento.target;
-    botao.disabled = true;
+    this.desabilitarBotao(botao);
 
     // Testar se o endereço já foi obtido
     if(Object.keys(this.config.endereco).length){
@@ -308,12 +308,12 @@ export class EscreverSolicitacaoPage {
                 }
               ]
             });
-    
-            // Mostrar o aleta
-            alert.present();
-    
+            
+            this.habilitarBotao(botao);
             this.config.temEndereco = false;
 
+            // Mostrar o aleta
+            alert.present();
     
           },
     
@@ -415,6 +415,29 @@ export class EscreverSolicitacaoPage {
   fecharLoading(){
 
     this.loading.dismiss();
+
+  }
+
+   /**
+   * O Ionic nem sempre envia o botão como target do evento click. Para isso é necessário testar se a span.button-inner
+   * não foi enviada em seu lugar
+   */
+
+  desabilitarBotao(elem){
+    
+    if(elem.tagName == "SPAN")
+      elem.parentElement.disabled = true;
+    else
+      elem.disabled = true;
+
+  }
+
+  habilitarBotao(elem){
+
+    if(elem.tagName == "SPAN")
+      elem.parentElement.disabled = false;
+    else
+      elem.disabled = false;
 
   }
 
