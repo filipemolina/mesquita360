@@ -15,6 +15,10 @@
 
 <ion-content padding id="page-chamados">
 
+	<!-- Imagem da Lupa -->
+
+	<div id="lupa" *ngIf="loading"></div>
+
   	<!-- Cards -->
 
 	<ion-card *ngFor="let item of config.getMinhasSolicitacoes()" ngClass="success">

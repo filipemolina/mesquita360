@@ -4,6 +4,17 @@ page-chamados {
 		transition: 0.2s all ease-in;
 	}
 
+	div#lupa{
+		background-image: url("../assets/img/ajax-loader.gif");
+		width: 90%;
+		height: 100px;
+		background-repeat: no-repeat;
+		background-position: center;
+		position: absolute;
+		top: 50%;
+		margin-top: -50px;
+	}
+
 	ion-card {
 		
 		ion-item{

@@ -22,7 +22,7 @@ export class ChamadosPage {
   public novos_comentarios = [];
   public apoios = [];
   public meus_apoios = [];
-  public loading: any;
+  public loading: boolean = true;
 
   //////////////////////// Esta página mostra apenas as solicitações do próprio usuário logado, independente do status
 
@@ -175,17 +175,13 @@ export class ChamadosPage {
 
   abrirLoading(){
     
-    this.loading = this.loadingCtrl.create({
-      content: "Carregando..."
-    });
-
-    this.loading.present();
+    this.loading = true;
 
   }
 
   fecharLoading(){
 
-    this.loading.dismiss();
+    this.loading = false;
 
   }
 

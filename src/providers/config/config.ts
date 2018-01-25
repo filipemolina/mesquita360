@@ -509,50 +509,63 @@ export class ConfigProvider {
   apagarComentario(comentario_id, solicitacao_id){
 
     let indice;
+    let indice_minhas;
     
     // Tenta encontrar no vetor de Minhas Solicitações, o índice da solicitação que possui o comentário à ser apagado
     if(typeof this.minhasSolicitacoes !== 'undefined'){
       
-      indice = this.minhasSolicitacoes.findIndex((elem, index, array)=>{
+      indice_minhas = this.minhasSolicitacoes.findIndex((elem, index, array)=>{
   
         return elem.id == solicitacao_id;
   
       });
   
       // Encontrou no vetor "MinhasSolicitações". Prosseguindo...
-      if(indice >= 0){
+      if(indice_minhas >= 0){
   
         // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
-        let i = this.minhasSolicitacoes[indice].comentarios.findIndex((elem, index, array) => {
+        let i = this.minhasSolicitacoes[indice_minhas].comentarios.findIndex((elem, index, array) => {
           
           return elem.id == comentario_id;
   
         });
-  
-        // Substituir o comentário 
-        this.minhasSolicitacoes[indice].comentarios[i].comentario = "Comentário apagado pelo usuário";
-        this.minhasSolicitacoes[indice].comentarios[i].apagado = true;
+
+        if(i >= 0){
+
+          // Substituir o comentário 
+          this.minhasSolicitacoes[indice_minhas].comentarios[i].comentario = "Comentário apagado pelo usuário";
+          this.minhasSolicitacoes[indice_minhas].comentarios[i].apagado = true;
+
+        }
   
       }
     }
 
     // Tenta encontrar no vetor de Solicitações, o índice da solicitação que possui o comentário à ser apagado
-    indice = this.solicitacoes.findIndex((elem, index, array)=>{
+    indice = this.solicitacoes.findIndex((elem, index, array) => {
     
       return elem.id == solicitacao_id;
     
     });
 
-    // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
-    let i = this.solicitacoes[indice].comentarios.findIndex((elem, index, array) => {
-      
-      return elem.id == comentario_id;
+    if(indice >= 0){
 
-    });
+      // Tenta encontrar o índice da mensagem a ser apagada na solicitaçao encontada nas linhas acima
+      let i = this.solicitacoes[indice].comentarios.findIndex((elem, index, array) => {
+        
+        return elem.id == comentario_id;
 
-    // Substituir o comentário 
-    this.solicitacoes[indice].comentarios[i].comentario = "Comentário apagado pelo usuário";
-    this.solicitacoes[indice].comentarios[i].apagado = true;
+      });
+
+      if(i >= 0){
+
+        // Substituir o comentário 
+        this.solicitacoes[indice].comentarios[i].comentario = "Comentário apagado pelo usuário";
+        this.solicitacoes[indice].comentarios[i].apagado = true;
+
+      }
+
+    }
 
   }
 
