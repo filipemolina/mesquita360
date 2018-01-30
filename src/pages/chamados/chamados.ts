@@ -176,7 +176,7 @@ export class ChamadosPage {
   abrirLoading(){
     
     this.loading = true;
-
+    
   }
 
   fecharLoading(){

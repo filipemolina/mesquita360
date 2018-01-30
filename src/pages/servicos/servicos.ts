@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { GesolProvider } from "../../providers/gesol/gesol";
 import { ModalController } from "ionic-angular";
 // import { EscreverSolicitacaoPage } from "../escrever-solicitacao/escrever-solicitacao";
@@ -45,7 +45,8 @@ export class ServicosPage {
   constructor(public navCtrl:   NavController, 
               public navParams: NavParams, 
               public gesol:     GesolProvider,
-              public modalCtrl: ModalController) {
+              public modalCtrl: ModalController,
+              public alertCtrl: AlertController) {
 
     //Obter a imagem nos parâmetros
     this.imagem = this.navParams.get('imagem');
@@ -60,9 +61,9 @@ export class ServicosPage {
 
   }
 
-  // Abrir o modal para selecionar o serviço
+  // Navegar para a página de Escrever Solicitação
 
-  abrirModal(setor){
+  navegar(setor){
 
     this.navCtrl.push('EscreverSolicitacaoPage', {
       imagem: this.imagem,
@@ -85,8 +86,16 @@ export class ServicosPage {
       // Falha
       fail => {
 
-        console.log("Erro");
-        console.log(fail);
+        let alert = this.alertCtrl.create({
+          title: 'Atenção',
+          subTitle: 'Houve um problema de conexão com os servidores. Tente novamente.',
+          buttons: [{
+            text: 'Ok',
+            handler: () => {
+              this.navCtrl.popToRoot();
+            }
+          }]
+        })
 
       }
     );

@@ -22,7 +22,7 @@
     <!-- Ícones  -->
     <ion-row>
       <ion-col *ngFor="let item of setores" col-4>
-        <button ion-button icon-only (tap)="abrirModal(item.id)" round [style.background-color]="item.cor" large>
+        <button ion-button icon-only (tap)="navegar(item.id)" round [style.background-color]="item.cor" large>
           <span [class]="'mdi '+item.icone"></span>
         </button>
         <ion-row>

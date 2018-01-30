@@ -323,7 +323,7 @@ export class MyApp {
           let data = new Date(this.minhasSolicitacoes[item].created_at);
 
           // Formatar a data para um formato legível para seres humands
-          this.minhasSolicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth()] + " de " + data.getFullYear();
+          this.minhasSolicitacoes[item].data = data.getDate() + " de " + this.meses[data.getMonth() + 1] + " de " + data.getFullYear();
 
           // Criar uma posição no vetor de novos comentários para essa solicitação
           this.novos_comentarios[this.minhasSolicitacoes[item].id] = "";
