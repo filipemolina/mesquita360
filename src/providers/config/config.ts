@@ -16,7 +16,7 @@ import { Http } from "@angular/http";
 export class ConfigProvider {
 
   // Versão do aplicativo
-  public versao = "0.1.0";
+  public versao = "0.1.1";
 
   // Rota Raiz da Aplicação
   // private root_url = "https://360.mesquita.rj.gov.br/gesol";
