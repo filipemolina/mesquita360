@@ -1,31 +1,3 @@
-<<<<<<< HEAD
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+# Mesquita 360°
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
-```
-
-Then, to run it, cd into `myBlank` and run:
-
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
-
-Substitute ios for android if not on a Mac.
-
-=======
-# mesquita360
-Mesquita 360º
->>>>>>> 192a9a484cb929f1da88ae6435bcea01698e0185
+Mesquita 360° é um aplicativo para dispositivos Android desenvolvido pela equipe de desenvolvimento da Subsecretaria Municipal de Tecnologia da Informação da Prefeitura Muncipal de Mesquita. Esse aplicativo permite que os cidadãos mesquitenses possam fotografar problemas da sua cidade e enviar suas opiniões diretamente para o Prefeito de Mesquita e seus Secretários. Se conecta diretamente com o GESOL que fornece uma API RESTful que alimenta o aplicativo bem como uma interface de moderação e comunicação entre os funcionários habilitados da prefeitura e os munícipes. Aplicativo construído usando [Ionic](https://ionicframework.com/).
